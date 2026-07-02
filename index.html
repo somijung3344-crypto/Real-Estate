@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Antigravity Real Estate | 스마트 부동산 조회 서비스</title>
+  <title>대구 Real Estate | 스마트 대구 부동산 조회 서비스</title>
   <!-- 구글 폰트 (Outfit, Noto Sans KR) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -17,24 +17,41 @@
   <!-- 메인 스타일시트 -->
   <link rel="stylesheet" href="style.css">
 </head>
-<body class="bg-slate-950 text-slate-100 font-sans overflow-hidden">
+<body class="bg-slate-50 text-slate-900 font-sans overflow-y-auto">
 
   <!-- ==================== TOP HEADER ==================== -->
-  <header class="h-16 border-b border-slate-900 bg-slate-950/80 backdrop-blur-md flex items-center justify-between px-6 z-40 relative">
-    <div class="flex items-center gap-3">
-      <div class="w-8 h-8 bg-gradient-to-tr from-indigo-500 to-teal-400 rounded-lg flex items-center justify-center shadow-lg shadow-indigo-500/20">
+  <header class="h-16 border-b border-slate-200/80 bg-white/95 backdrop-blur-md flex items-center justify-between px-8 z-40 sticky top-0 shadow-sm shadow-slate-100/50">
+    <!-- 서비스 로고 -->
+    <div class="flex items-center gap-3 cursor-pointer" onclick="switchSection('home')">
+      <div class="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center shadow-lg shadow-indigo-600/20">
         <i data-lucide="building-2" class="text-white w-4 h-4"></i>
       </div>
-      <h1 class="text-lg font-bold tracking-tight bg-gradient-to-r from-indigo-400 to-teal-400 bg-clip-text text-transparent font-display">
-        Antigravity Real Estate
+      <h1 class="text-lg font-bold tracking-tight text-slate-800 font-display">
+        대구 Real Estate
       </h1>
     </div>
+
+    <!-- 메뉴 내비게이션 -->
+    <nav class="flex items-center gap-1 bg-slate-100 border border-slate-200/60 p-1 rounded-xl">
+      <button id="nav-home" onclick="switchSection('home')" class="nav-link active">
+        <i data-lucide="home" class="w-3.5 h-3.5"></i>
+        <span>홈</span>
+      </button>
+      <button id="nav-analysis" onclick="switchSection('analysis')" class="nav-link">
+        <i data-lucide="line-chart" class="w-3.5 h-3.5"></i>
+        <span>분석실</span>
+      </button>
+      <button id="nav-bookmarks" onclick="switchSection('bookmarks')" class="nav-link">
+        <i data-lucide="folder-heart" class="w-3.5 h-3.5"></i>
+        <span>내 저장소</span>
+      </button>
+    </nav>
     
     <!-- 인증 상태 영역 -->
     <div id="auth-header-area" class="flex items-center gap-3">
       <!-- (비로그인 상태) -->
       <div id="auth-logged-out" class="flex items-center gap-2">
-        <button onclick="openModal('login-modal')" class="px-4 py-2 text-xs font-semibold text-slate-300 hover:text-white transition-colors">
+        <button onclick="openModal('login-modal')" class="px-4 py-2 text-xs font-semibold text-slate-600 hover:text-slate-900 transition-colors">
           로그인
         </button>
         <button onclick="openModal('signup-modal')" class="px-4 py-2 text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-500 rounded-lg transition-all shadow-md shadow-indigo-600/10">
@@ -42,228 +59,470 @@
         </button>
       </div>
       <!-- (로그인 상태) -->
-      <div id="auth-logged-in" class="hidden flex items-center gap-4">
-        <div class="flex items-center gap-2 px-3 py-1 bg-slate-900 border border-slate-800 rounded-full">
-          <i data-lucide="user" class="w-3.5 h-3.5 text-teal-400"></i>
-          <span id="user-display-email" class="text-xs font-mono text-slate-300">test@example.com</span>
+      <div id="auth-logged-in" class="hidden flex items-center gap-3">
+        <div class="flex items-center gap-2 px-3 py-1 bg-slate-100 border border-slate-200/80 rounded-full">
+          <i data-lucide="user" class="w-3.5 h-3.5 text-indigo-600"></i>
+          <span id="user-display-email" class="text-xs font-mono text-slate-600">test@example.com</span>
         </div>
-        <button onclick="openModal('mypage-modal')" class="px-3.5 py-1.5 text-xs font-semibold border border-slate-800 hover:border-slate-700 hover:bg-slate-900 rounded-lg transition-all">
+        <button onclick="openModal('mypage-modal')" class="px-3.5 py-1.5 text-xs font-semibold border border-slate-200 bg-white hover:bg-slate-50 rounded-lg transition-all">
           마이페이지
         </button>
-        <button onclick="handleLogout()" class="p-2 text-slate-400 hover:text-red-400 hover:bg-red-950/20 rounded-lg transition-all" title="로그아웃">
+        <button onclick="handleLogout()" class="p-2 text-slate-500 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all" title="로그아웃">
           <i data-lucide="log-out" class="w-4 h-4"></i>
         </button>
       </div>
     </div>
   </header>
 
-  <!-- ==================== MAIN WORKSPACE ==================== -->
-  <main class="h-[calc(100vh-4rem)] flex overflow-hidden">
-    
-    <!-- 1. 좌측 사이드바: 아파트 목록 & 필터 -->
-    <section class="w-96 border-r border-slate-900 flex flex-col h-full bg-slate-950/40 relative z-30">
-      
-      <!-- 필터 헤더 -->
-      <div class="p-4 border-b border-slate-900 space-y-3">
-        <div class="flex items-center justify-between">
-          <h2 class="text-sm font-semibold text-slate-300 flex items-center gap-2">
-            <i data-lucide="filter" class="w-4 h-4 text-indigo-400"></i>
-            <span>지역 검색 필터</span>
-          </h2>
-          <span id="region-tag" class="text-[10px] font-semibold bg-indigo-950 text-indigo-300 border border-indigo-900 px-2 py-0.5 rounded-full">
-            서울 강남구
-          </span>
+  <!-- ==================== PAGE SECTIONS ==================== -->
+
+  <!-- [SECTION 1] HOME VIEW -->
+  <section id="section-home" class="min-h-[calc(100vh-8rem)] flex flex-col justify-center items-center px-4 py-10 relative overflow-hidden bg-slate-50">
+    <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-indigo-600/5 rounded-full blur-3xl pointer-events-none"></div>
+    <div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-teal-500/5 rounded-full blur-3xl pointer-events-none"></div>
+
+    <div class="w-full max-w-3xl text-center space-y-8 relative z-10">
+      <div class="space-y-3">
+        <span class="px-3 py-1 bg-indigo-50 border border-indigo-100 text-indigo-600 text-xs font-semibold rounded-full inline-block">
+          공공데이터 & Supabase 기반 무료 플랫폼
+        </span>
+        <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-800 leading-tight">
+          대구 아파트 실거래가 및 지도 조회 서비스
+        </h2>
+        <p class="text-slate-500 text-sm max-w-lg mx-auto">
+          아래의 대화형 미니 지도나 자치구별 정보 카드를 클릭하여 원하시는 지역의 실거래가 분석실로 즉시 진입해 보세요.
+        </p>
+      </div>
+
+      <div class="flex items-center justify-center gap-6 text-xs text-slate-400 pt-1">
+        <div class="flex items-center gap-1.5"><i data-lucide="check" class="w-4 h-4 text-emerald-500"></i><span>대구 100% 무료 데이터</span></div>
+        <div class="flex items-center gap-1.5"><i data-lucide="check" class="w-4 h-4 text-emerald-500"></i><span>Supabase 실시간 북마크</span></div>
+        <div class="flex items-center gap-1.5"><i data-lucide="check" class="w-4 h-4 text-emerald-500"></i><span>수성/중구/달서/북구 특화</span></div>
+      </div>
+
+      <!-- 시각적 자치구 빠른 탐색 영역 -->
+      <div id="home-visual-explorer" class="w-full max-w-3xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-6 items-center pt-8 border-t border-slate-200 mt-6">
+        <!-- 왼쪽: 대구 미니 SVG 지도 -->
+        <div class="md:col-span-5 flex flex-col items-center gap-2">
+          <div class="text-[11px] font-bold text-slate-400 uppercase tracking-widest flex items-center gap-1.5 mb-1.5">
+            <i data-lucide="map" class="w-3.5 h-3.5 text-indigo-600"></i>
+            <span>대구시 4대 핵심 권역</span>
+          </div>
+          <div class="w-full aspect-[4/3] bg-white border border-slate-200 rounded-2xl p-3.5 flex items-center justify-center relative shadow-sm">
+            <svg viewBox="0 0 400 300" class="w-full h-full select-none" xmlns="http://www.w3.org/2000/svg">
+              <!-- 강 가이드 라인 (금호강/신천) -->
+              <path d="M 20,90 C 120,90 180,100 240,60 C 280,30 350,20 380,30" fill="none" stroke="#e2e8f0" stroke-width="8" stroke-linecap="round" opacity="0.8"/>
+              <path d="M 220,65 L 220,280" fill="none" stroke="#e2e8f0" stroke-width="8" stroke-linecap="round" opacity="0.8"/>
+              
+              <!-- 북구 -->
+              <path id="map-path-bukgu" onclick="selectHomeDistrict('bukgu')" d="M 120,30 L 260,30 L 220,110 L 140,110 Z" class="home-map-path" title="북구"/>
+              <text x="180" y="70" fill="#64748b" font-size="11" font-weight="bold" pointer-events="none" class="map-label">북구</text>
+              
+              <!-- 중구 -->
+              <path id="map-path-junggu" onclick="selectHomeDistrict('junggu')" d="M 175,115 L 235,115 L 235,160 L 175,160 Z" class="home-map-path" title="중구"/>
+              <text x="205" y="142" fill="#64748b" font-size="11" font-weight="bold" pointer-events="none" class="map-label">중구</text>
+              
+              <!-- 달서구 -->
+              <path id="map-path-dalseo" onclick="selectHomeDistrict('dalseo')" d="M 70,120 L 170,120 L 170,250 L 90,250 Z" class="home-map-path" title="달서구"/>
+              <text x="120" y="190" fill="#64748b" font-size="11" font-weight="bold" pointer-events="none" class="map-label">달서</text>
+              
+              <!-- 수성구 -->
+              <path id="map-path-suseong" onclick="selectHomeDistrict('suseong')" d="M 240,120 L 340,120 L 320,250 L 240,250 Z" class="home-map-path" title="수성구"/>
+              <text x="280" y="190" fill="#64748b" font-size="11" font-weight="bold" pointer-events="none" class="map-label">수성</text>
+            </svg>
+          </div>
         </div>
         
-        <!-- 검색 셀렉트 박스 -->
+        <!-- 오른쪽: 대구 자치구별 퀵 선택 카드 그리드 -->
+        <div class="md:col-span-7 flex flex-col gap-2 text-left">
+          <div class="text-[11px] font-bold text-slate-400 uppercase tracking-widest flex items-center gap-1.5 mb-1.5">
+            <i data-lucide="layout-grid" class="w-3.5 h-3.5 text-indigo-600"></i>
+            <span>지역별 매물 분석 요약</span>
+          </div>
+          <div class="grid grid-cols-2 gap-2.5">
+            <div onclick="selectHomeDistrict('suseong')" class="home-district-card group">
+              <div class="flex justify-between items-center">
+                <span class="font-bold text-xs text-slate-700 group-hover:text-indigo-600 transition-all">대구 수성구</span>
+                <i data-lucide="arrow-right" class="w-3.5 h-3.5 text-slate-400 group-hover:text-indigo-600 group-hover:translate-x-0.5 transition-all"></i>
+              </div>
+              <div class="flex justify-between items-center text-[10px] text-slate-400 mt-2 font-mono">
+                <span>평당 평균시세</span>
+                <span class="text-indigo-600 font-bold">2,420만</span>
+              </div>
+            </div>
+            <div onclick="selectHomeDistrict('junggu')" class="home-district-card group">
+              <div class="flex justify-between items-center">
+                <span class="font-bold text-xs text-slate-700 group-hover:text-indigo-600 transition-all">대구 중구</span>
+                <i data-lucide="arrow-right" class="w-3.5 h-3.5 text-slate-400 group-hover:text-indigo-600 group-hover:translate-x-0.5 transition-all"></i>
+              </div>
+              <div class="flex justify-between items-center text-[10px] text-slate-400 mt-2 font-mono">
+                <span>평당 평균시세</span>
+                <span class="text-indigo-600 font-bold">1,850만</span>
+              </div>
+            </div>
+            <div onclick="selectHomeDistrict('dalseo')" class="home-district-card group">
+              <div class="flex justify-between items-center">
+                <span class="font-bold text-xs text-slate-700 group-hover:text-indigo-600 transition-all">대구 달서구</span>
+                <i data-lucide="arrow-right" class="w-3.5 h-3.5 text-slate-400 group-hover:text-indigo-600 group-hover:translate-x-0.5 transition-all"></i>
+              </div>
+              <div class="flex justify-between items-center text-[10px] text-slate-400 mt-2 font-mono">
+                <span>평당 평균시세</span>
+                <span class="text-indigo-600 font-bold">1,480만</span>
+              </div>
+            </div>
+            <div onclick="selectHomeDistrict('bukgu')" class="home-district-card group">
+              <div class="flex justify-between items-center">
+                <span class="font-bold text-xs text-slate-700 group-hover:text-indigo-600 transition-all">대구 북구</span>
+                <i data-lucide="arrow-right" class="w-3.5 h-3.5 text-slate-400 group-hover:text-indigo-600 group-hover:translate-x-0.5 transition-all"></i>
+              </div>
+              <div class="flex justify-between items-center text-[10px] text-slate-400 mt-2 font-mono">
+                <span>평당 평균시세</span>
+                <span class="text-indigo-600 font-bold">1,250만</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- [SECTION 2] ANALYSIS VIEW -->
+  <section id="section-analysis" class="hidden h-[calc(100vh-4rem)] flex overflow-hidden bg-slate-50">
+    <!-- 좌측 리스트 바 -->
+    <aside class="w-96 border-r border-slate-200/80 flex flex-col h-full bg-white relative z-30">
+      <div class="p-4 border-b border-slate-200/80 space-y-3">
+        <div class="flex items-center justify-between">
+          <h2 class="text-sm font-semibold text-slate-700 flex items-center gap-2">
+            <i data-lucide="filter" class="w-4 h-4 text-indigo-600"></i>
+            <span>지역 검색 필터</span>
+          </h2>
+          <span id="region-tag" class="text-[10px] font-semibold bg-indigo-50 text-indigo-600 border border-indigo-100 px-2.5 py-0.5 rounded-full">
+            대구 수성구
+          </span>
+        </div>
         <div class="grid grid-cols-2 gap-2">
-          <select id="select-city" class="bg-slate-900 border border-slate-800 focus:border-indigo-500 rounded-lg px-3 py-2 text-xs outline-none text-white transition-all">
-            <option value="seoul">서울특별시</option>
+          <select id="select-city" class="bg-slate-50 border border-slate-200 focus:border-indigo-500 rounded-lg px-3 py-2 text-xs outline-none text-slate-700">
+            <option value="daegu">대구광역시</option>
           </select>
-          <select id="select-district" onchange="changeDistrict(this.value)" class="bg-slate-900 border border-slate-800 focus:border-indigo-500 rounded-lg px-3 py-2 text-xs outline-none text-white transition-all">
-            <option value="gangnam">강남구</option>
-            <option value="seocho">서초구</option>
-            <option value="mapo">마포구</option>
-            <option value="yongsan">용산구</option>
+          <select id="select-district" onchange="changeDistrict(this.value)" class="bg-slate-50 border border-slate-200 focus:border-indigo-500 rounded-lg px-3 py-2 text-xs outline-none text-slate-700">
+            <option value="suseong">수성구</option>
+            <option value="junggu">중구</option>
+            <option value="dalseo">달서구</option>
+            <option value="bukgu">북구</option>
           </select>
         </div>
       </div>
 
-      <!-- 아파트 단지 리스트 -->
-      <div class="flex-1 overflow-y-auto p-4 space-y-3 custom-scrollbar" id="apartment-list-container">
-        <!-- JS에서 동적 렌더링 -->
+      <!-- 아파트 목록 -->
+      <div class="flex-1 overflow-y-auto p-4 space-y-3 custom-scrollbar bg-slate-50/50" id="apartment-list-container">
+        <!-- JS 동적 렌더링 -->
       </div>
-    </section>
+    </aside>
 
-    <!-- 2. 우측 메인 영역: 지도 & 하단 실거래 정보 차트 -->
-    <section class="flex-1 flex flex-col h-full relative">
-      
+    <!-- 우측 상세 분석 정보 (지도가 상단 절반, 데이터가 하단 절반) -->
+    <div class="flex-1 flex flex-col h-full relative">
       <!-- 상단 지도 캔버스 -->
       <div class="flex-1 relative z-10" id="map-area-container">
-        <!-- JS에서 카카오 지도 SDK 또는 가상 지도 주입 -->
-      </div>
-
-      <!-- 하단 실거래 상세 정보 & 가격 추세 그래프 -->
-      <div class="h-80 border-t border-slate-900 bg-slate-950/80 backdrop-blur-md p-6 flex flex-col z-20 relative">
-        <div class="flex items-center justify-between mb-4">
-          <div class="flex items-center gap-3">
-            <div id="chart-apt-icon" class="w-10 h-10 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-center text-teal-400">
-              <i data-lucide="trending-up" class="w-5 h-5"></i>
-            </div>
-            <div>
-              <h3 id="chart-apt-name" class="font-bold text-base text-white">단지를 선택해 주세요</h3>
-              <p id="chart-apt-address" class="text-xs text-slate-500 mt-0.5">상세 실거래가 추이와 시세 변동 동향이 표시됩니다.</p>
-            </div>
+        
+        <!-- 지도 위 플로팅 검색창 (사용성 극대화) -->
+        <div id="analysis-search-wrapper" class="absolute top-4 right-4 w-80 z-20">
+          <div class="relative flex items-center bg-white border border-slate-200/80 focus-within:border-indigo-500 rounded-xl px-3.5 py-2.5 shadow-lg shadow-slate-200/60 transition-all">
+            <i data-lucide="search" class="text-slate-400 w-4 h-4 mr-2"></i>
+            <input 
+              type="text" 
+              id="analysis-search-input" 
+              oninput="handleAnalysisSearch(this.value)"
+              placeholder="대구 아파트 검색 (예: 두산위브더제니스)" 
+              class="w-full bg-transparent border-none text-slate-800 text-xs outline-none placeholder:text-slate-400"
+              autocomplete="off"
+            >
+            <button id="search-clear-btn" onclick="clearAnalysisSearch()" class="hidden p-0.5 text-slate-400 hover:text-slate-700 rounded-lg">
+              <i data-lucide="x" class="w-3.5 h-3.5"></i>
+            </button>
           </div>
           
-          <!-- 추세 요약 뱃지 -->
-          <div id="chart-trend-badge" class="hidden flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold">
-            <!-- 동적 삽입 -->
+          <!-- Autocomplete 결과 드롭다운 -->
+          <div id="analysis-autocomplete-box" class="hidden absolute top-full left-0 right-0 mt-1.5 bg-white border border-slate-200 rounded-xl shadow-xl overflow-hidden max-h-52 overflow-y-auto z-50 text-left divide-y divide-slate-100 custom-scrollbar">
+            <!-- JS 동적 렌더링 -->
           </div>
         </div>
 
-        <!-- 가격 그래프 차트 영역 (Pure SVG 렌더링) -->
-        <div class="flex-1 bg-slate-900/40 border border-slate-850 rounded-xl p-4 flex items-center justify-center relative" id="trend-chart-canvas">
-          <div class="text-slate-500 text-xs text-center flex flex-col items-center gap-2">
-            <i data-lucide="bar-chart-3" class="w-8 h-8 opacity-40"></i>
-            <span>지도의 마커나 왼쪽 단지 목록을 클릭하면 시세 상승/하락 추이 그래프가 나타납니다.</span>
+      </div>
+
+      <!-- 하단 분석실 대시보드 -->
+      <div class="h-[23rem] border-t border-slate-200/80 bg-white p-6 flex gap-6 z-20 relative overflow-hidden shadow-md">
+        
+        <!-- 왼쪽 패널: 아파트 정보 요약 & 평형 필터 -->
+        <div class="w-80 flex flex-col gap-4">
+          <!-- 아파트 세부 사양 카드 -->
+          <div class="bg-slate-50 border border-slate-200/80 rounded-2xl p-4.5 space-y-3">
+            <div class="flex items-start justify-between">
+              <div class="flex items-center gap-2">
+                <i data-lucide="building" class="w-4 h-4 text-indigo-600"></i>
+                <h3 id="detail-apt-name" class="font-bold text-sm text-slate-800">단지를 선택하세요</h3>
+              </div>
+              <div class="flex items-center gap-1.5">
+                <!-- 로드뷰 보기 버튼 -->
+                <button id="btn-roadview-trigger" onclick="triggerRoadviewAction()" class="p-1.5 hover:bg-slate-200/60 text-slate-500 hover:text-slate-800 rounded-lg transition-all" title="거리 전경 로드뷰 보기">
+                  <i data-lucide="eye" class="w-4.5 h-4.5"></i>
+                </button>
+                <!-- 북마크 찜하기 하트 버튼 -->
+                <button id="btn-bookmark-toggle" onclick="toggleBookmarkAction()" class="p-1.5 hover:bg-slate-200/60 text-slate-400 rounded-lg transition-all" title="관심 단지 찜하기">
+                  <i data-lucide="heart" id="bookmark-heart-icon" class="w-4.5 h-4.5"></i>
+                </button>
+              </div>
+            </div>
+            <div class="space-y-1.5 text-xs text-slate-500 border-t border-slate-200/60 pt-3">
+              <div class="flex justify-between"><span>준공 연도</span><span id="detail-apt-year" class="text-slate-800 font-semibold font-mono">-</span></div>
+              <div class="flex justify-between"><span>총 세대수</span><span id="detail-apt-households" class="text-slate-800 font-semibold font-mono">-</span></div>
+              <div class="flex justify-between"><span>도로명 주소</span><span id="detail-apt-address" class="text-slate-600 text-right">-</span></div>
+            </div>
+          </div>
+
+          <!-- 평형별 필터 토글 -->
+          <div class="space-y-2">
+            <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider">평형 선택</label>
+            <div class="grid grid-cols-3 gap-1.5 bg-slate-100 border border-slate-200/80 p-1.5 rounded-xl" id="pyeong-filter-wrapper">
+              <button onclick="changePyeongFilter(59)" class="pyeong-btn active">59㎡</button>
+              <button onclick="changePyeongFilter(84)" class="pyeong-btn">84㎡</button>
+              <button onclick="changePyeongFilter(114)" class="pyeong-btn">114㎡</button>
+            </div>
           </div>
         </div>
+
+        <!-- 중앙 패널: 가격 추이 그래프 (SVG) -->
+        <div class="flex-1 flex flex-col">
+          <div class="flex justify-between items-center mb-3">
+            <h4 class="text-xs font-semibold text-slate-500 flex items-center gap-1.5">
+              <i data-lucide="line-chart" class="w-3.5 h-3.5 text-indigo-600"></i>
+              <span>연도별 실거래가 시세 동향</span>
+            </h4>
+            <div id="chart-trend-badge" class="hidden px-2.5 py-0.5 rounded-full text-[10px] font-semibold"></div>
+          </div>
+          <div class="flex-1 bg-slate-50/50 border border-slate-200/80 rounded-2xl p-4 flex items-center justify-center relative" id="trend-chart-canvas">
+            <div class="text-slate-400 text-xs text-center flex flex-col items-center gap-2">
+              <i data-lucide="bar-chart-3" class="w-7 h-7 opacity-50"></i>
+              <span>아파트 단지를 선택하면 거래 가격 추이가 여기에 시각화됩니다.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 오른쪽 패널: 최근 거래 이력 표(Table) -->
+        <div class="w-80 flex flex-col">
+          <h4 class="text-xs font-semibold text-slate-500 flex items-center gap-1.5 mb-3">
+            <i data-lucide="table" class="w-3.5 h-3.5 text-indigo-600"></i>
+            <span>최근 실거래 이력 (최근 5건)</span>
+          </h4>
+          <div class="flex-1 bg-slate-50/50 border border-slate-200/80 rounded-2xl overflow-hidden overflow-y-auto custom-scrollbar">
+            <table class="w-full text-left border-collapse text-xs">
+              <thead>
+                <tr class="bg-slate-100 border-b border-slate-200 text-slate-500">
+                  <th class="p-2.5 text-center font-medium">거래일</th>
+                  <th class="p-2.5 text-right font-medium">거래금액</th>
+                  <th class="p-2.5 text-center font-medium">층수</th>
+                </tr>
+              </thead>
+              <tbody id="transaction-table-body" class="divide-y divide-slate-200/50">
+                <tr>
+                  <td colspan="3" class="p-6 text-center text-slate-400">조회된 거래 내역이 없습니다.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
       </div>
-    </section>
-  </main>
+    </div>
+  </section>
+
+  <!-- [SECTION 3] BOOKMARKS VIEW (내 저장소) -->
+  <section id="section-bookmarks" class="hidden min-h-[calc(100vh-8rem)] px-8 py-10 max-w-5xl mx-auto space-y-6">
+    <div class="flex justify-between items-center border-b border-slate-200 pb-4">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 bg-rose-50 border border-rose-100 text-rose-500 rounded-xl flex items-center justify-center">
+          <i data-lucide="heart" class="w-5 h-5 fill-current"></i>
+        </div>
+        <div>
+          <h2 class="text-xl font-bold text-slate-800">내 저장소 (관심 단지)</h2>
+          <p class="text-xs text-slate-500 mt-0.5">내가 찜한 아파트 단지들의 최신 시세 동향을 한눈에 관리합니다.</p>
+        </div>
+      </div>
+      <span id="bookmark-count-badge" class="text-xs font-semibold bg-slate-100 border border-slate-200 text-slate-650 px-3 py-1 rounded-full font-mono">
+        0개 단지 저장됨
+      </span>
+    </div>
+
+    <!-- 북마크 그리드 대시보드 -->
+    <div id="bookmarks-grid-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <!-- 동적 주입 -->
+    </div>
+    
+    <!-- 저장된 북마크가 없을 때 나타나는 엠프티 뷰 -->
+    <div id="bookmarks-empty-view" class="hidden text-center py-20 bg-slate-50 border border-dashed border-slate-200 rounded-2xl flex flex-col items-center gap-3 text-slate-400">
+      <i data-lucide="folder" class="w-10 h-10 opacity-40"></i>
+      <span class="text-sm font-semibold text-slate-600">현재 찜한 아파트 단지가 없습니다.</span>
+      <p class="text-xs text-slate-400">분석실에서 아파트를 선택한 뒤 하트(찜하기) 버튼을 누르면 여기에 저장됩니다.</p>
+      <button onclick="switchSection('analysis')" class="mt-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-500 rounded-lg text-xs font-semibold text-white transition-all shadow-md shadow-indigo-600/10">
+        분석실로 이동
+      </button>
+    </div>
+  </section>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="h-16 border-t border-slate-200/80 bg-white text-slate-400 text-xs px-8 flex items-center justify-between z-30 relative shadow-inner">
+    <p>출처: <strong class="text-slate-500">국토교통부 아파트 실거래가 Open API (공공데이터포털)</strong></p>
+    <div class="flex gap-4">
+      <a href="#" onclick="alert('이용약관: 본 사이트는 개인 개발 및 공공데이터 조회용 모의 프로젝트이며, 실제 거래의 법적 책임을 지지 않습니다.')" class="hover:text-slate-600">이용약관</a>
+      <span>|</span>
+      <p>© 2026 대구 Real Estate. All rights reserved.</p>
+    </div>
+  </footer>
 
   <!-- ==================== MODALS AREA ==================== -->
   
-  <!-- 배경 오버레이 -->
-  <div id="modal-overlay" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden transition-all" onclick="closeAllModals()"></div>
+  <div id="modal-overlay" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 hidden transition-all" onclick="closeAllModals()"></div>
 
   <!-- 1. 로그인 모달 -->
   <div id="login-modal" class="modal-card">
-    <div class="flex justify-between items-center mb-6">
-      <h3 class="text-lg font-bold text-white">로그인</h3>
-      <button onclick="closeModal('login-modal')" class="p-1 hover:bg-slate-800 rounded-lg text-slate-400 hover:text-white"><i data-lucide="x" class="w-4 h-4"></i></button>
+    <div class="flex justify-between items-center mb-2">
+      <h3 class="text-base font-bold text-slate-800">로그인</h3>
+      <button onclick="closeModal('login-modal')" class="p-1 hover:bg-slate-100 rounded-lg text-slate-400 hover:text-slate-700"><i data-lucide="x" class="w-4 h-4"></i></button>
     </div>
-    <form onsubmit="submitLogin(event)" class="space-y-4">
+    <form onsubmit="submitLogin(event)">
       <div id="login-error-box" class="error-box"></div>
-      <div>
-        <label class="block text-[11px] font-medium text-slate-400 mb-1.5">이메일 주소</label>
-        <input type="email" id="login-email" required placeholder="name@example.com" class="input-field">
+      <div class="form-group">
+        <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider">이메일 주소</label>
+        <input type="email" id="login-email" required placeholder="name@example.com" class="input-field text-slate-800">
       </div>
-      <div>
-        <label class="block text-[11px] font-medium text-slate-400 mb-1.5">비밀번호</label>
-        <input type="password" id="login-password" required placeholder="••••••••" class="input-field">
+      <div class="form-group">
+        <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider">비밀번호</label>
+        <input type="password" id="login-password" required placeholder="••••••••" class="input-field text-slate-800">
       </div>
-      <button type="submit" id="login-submit-btn" class="submit-btn">로그인</button>
+      <button type="submit" id="login-submit-btn" class="submit-btn mt-1">로그인</button>
     </form>
-    <div class="mt-6 pt-5 border-t border-slate-800 flex flex-col gap-2 text-center text-xs text-slate-400">
-      <div>아직 회원이 아니신가요? <a href="#" onclick="switchModal('login-modal', 'signup-modal')" class="text-teal-400 hover:underline">회원가입하기</a></div>
-      <div>가입 메일이 기억나지 않나요? <a href="#" onclick="switchModal('login-modal', 'find-email-modal')" class="text-indigo-400 hover:underline">이메일 찾기</a></div>
+    <div class="mt-2 pt-3 border-t border-slate-100 flex flex-col gap-2 text-center text-xs text-slate-500">
+      <div>아직 회원이 아니신가요? <a href="#" onclick="switchModal('login-modal', 'signup-modal')" class="text-indigo-600 hover:underline font-semibold">회원가입하기</a></div>
+      <div>가입 메일이 기억나지 않나요? <a href="#" onclick="switchModal('login-modal', 'find-email-modal')" class="text-indigo-500 hover:underline">이메일 찾기</a></div>
     </div>
   </div>
 
   <!-- 2. 회원가입 모달 -->
   <div id="signup-modal" class="modal-card">
-    <div class="flex justify-between items-center mb-6">
-      <h3 class="text-lg font-bold text-white">회원가입</h3>
-      <button onclick="closeModal('signup-modal')" class="p-1 hover:bg-slate-800 rounded-lg text-slate-400 hover:text-white"><i data-lucide="x" class="w-4 h-4"></i></button>
+    <div class="flex justify-between items-center mb-2">
+      <h3 class="text-base font-bold text-slate-800">회원가입</h3>
+      <button onclick="closeModal('signup-modal')" class="p-1 hover:bg-slate-100 rounded-lg text-slate-400 hover:text-slate-700"><i data-lucide="x" class="w-4 h-4"></i></button>
     </div>
-    <form onsubmit="submitSignup(event)" class="space-y-4">
+    <form onsubmit="submitSignup(event)">
       <div id="signup-error-box" class="error-box"></div>
       <div id="signup-success-box" class="success-box"></div>
-      <div>
-        <label class="block text-[11px] font-medium text-slate-400 mb-1.5">이메일 주소</label>
-        <input type="email" id="signup-email" required placeholder="name@example.com" class="input-field">
+      <div class="form-group">
+        <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider">이메일 주소</label>
+        <input type="email" id="signup-email" required placeholder="name@example.com" class="input-field text-slate-800">
       </div>
-      <div>
-        <label class="block text-[11px] font-medium text-slate-400 mb-1.5">비밀번호</label>
-        <input type="password" id="signup-password" required placeholder="6자 이상 입력" class="input-field">
+      <div class="form-group">
+        <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider">비밀번호</label>
+        <input type="password" id="signup-password" required placeholder="6자 이상 입력" class="input-field text-slate-800">
       </div>
-      <div>
-        <label class="block text-[11px] font-medium text-slate-400 mb-1.5">비밀번호 확인</label>
-        <input type="password" id="signup-confirm" required placeholder="비밀번호 재입력" class="input-field">
+      <div class="form-group">
+        <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider">비밀번호 확인</label>
+        <input type="password" id="signup-confirm" required placeholder="비밀번호 재입력" class="input-field text-slate-800">
       </div>
-      <button type="submit" id="signup-submit-btn" class="submit-btn bg-teal-600 hover:bg-teal-500">가입하기</button>
+      <button type="submit" id="signup-submit-btn" class="submit-btn bg-teal-600 hover:bg-teal-500 mt-1">가입하기</button>
     </form>
-    <div class="mt-6 pt-5 border-t border-slate-800 text-center text-xs text-slate-400">
-      이미 회원이신가요? <a href="#" onclick="switchModal('signup-modal', 'login-modal')" class="text-indigo-400 hover:underline">로그인하러 가기</a>
+    <div class="mt-2 pt-3 border-t border-slate-100 text-center text-xs text-slate-500">
+      이미 회원이신가요? <a href="#" onclick="switchModal('signup-modal', 'login-modal')" class="text-indigo-600 hover:underline font-semibold">로그인하러 가기</a>
     </div>
   </div>
 
   <!-- 3. 이메일 찾기 모달 -->
   <div id="find-email-modal" class="modal-card">
-    <div class="flex justify-between items-center mb-6">
-      <h3 class="text-lg font-bold text-white">이메일(아이디) 찾기</h3>
-      <button onclick="closeModal('find-email-modal')" class="p-1 hover:bg-slate-800 rounded-lg text-slate-400 hover:text-white"><i data-lucide="x" class="w-4 h-4"></i></button>
+    <div class="flex justify-between items-center mb-2">
+      <h3 class="text-base font-bold text-slate-800">이메일(아이디) 찾기</h3>
+      <button onclick="closeModal('find-email-modal')" class="p-1 hover:bg-slate-100 rounded-lg text-slate-400 hover:text-slate-700"><i data-lucide="x" class="w-4 h-4"></i></button>
     </div>
-    <form onsubmit="submitFindEmail(event)" class="space-y-4">
-      <p class="text-xs text-slate-400 leading-relaxed mb-2">가입 시 등록했던 이메일 주소의 키워드(앞자리 일부분)를 입력해 대조된 정보를 확인합니다.</p>
+    <form onsubmit="submitFindEmail(event)">
+      <p class="text-xs text-slate-400 leading-relaxed mb-1">가입 시 등록했던 이메일 주소의 키워드를 입력해 가입 계정을 조회합니다.</p>
       <div id="find-email-error-box" class="error-box"></div>
       <div id="find-email-success-box" class="success-box"></div>
-      <div>
-        <label class="block text-[11px] font-medium text-slate-400 mb-1.5">이메일 검색 키워드</label>
-        <input type="text" id="find-email-hint" required placeholder="예: test" class="input-field">
+      <div class="form-group">
+        <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider">이메일 검색 키워</label>
+        <input type="text" id="find-email-hint" required placeholder="예: test" class="input-field text-slate-800">
       </div>
-      <button type="submit" class="submit-btn">이메일 조회</button>
+      <button type="submit" class="submit-btn mt-1">이메일 조회</button>
     </form>
-    <div class="mt-6 pt-5 border-t border-slate-800 text-center text-xs text-slate-400">
-      <a href="#" onclick="switchModal('find-email-modal', 'login-modal')" class="text-indigo-400 hover:underline">로그인으로 돌아가기</a>
+    <div class="mt-2 pt-3 border-t border-slate-100 text-center text-xs text-slate-500">
+      <a href="#" onclick="switchModal('find-email-modal', 'login-modal')" class="text-indigo-650 hover:underline">로그인으로 돌아가기</a>
     </div>
   </div>
 
-  <!-- 4. 마이페이지 모달 (비밀번호 변경 / 회원탈퇴) -->
+  <!-- 4. 마이페이지 모달 -->
   <div id="mypage-modal" class="modal-card">
-    <div class="flex justify-between items-center mb-6">
-      <h3 class="text-lg font-bold text-white">마이페이지</h3>
-      <button onclick="closeModal('mypage-modal')" class="p-1 hover:bg-slate-800 rounded-lg text-slate-400 hover:text-white"><i data-lucide="x" class="w-4 h-4"></i></button>
+    <div class="flex justify-between items-center mb-2">
+      <h3 class="text-base font-bold text-slate-800">마이페이지</h3>
+      <button onclick="closeModal('mypage-modal')" class="p-1 hover:bg-slate-100 rounded-lg text-slate-400 hover:text-slate-700"><i data-lucide="x" class="w-4 h-4"></i></button>
     </div>
-    
-    <div class="space-y-5">
-      <!-- 기본 정보 영역 -->
-      <div class="bg-slate-900 border border-slate-800 rounded-xl p-4 flex items-center gap-3">
-        <div class="w-12 h-12 bg-gradient-to-tr from-indigo-500 to-teal-400 rounded-xl flex items-center justify-center text-white">
-          <i data-lucide="user" class="w-6 h-6"></i>
+    <div class="space-y-4">
+      <div class="bg-slate-50 border border-slate-200/80 rounded-xl p-4 flex items-center gap-3">
+        <div class="w-10 h-10 bg-indigo-50 text-indigo-600 rounded-xl flex items-center justify-center">
+          <i data-lucide="user" class="w-5 h-5"></i>
         </div>
         <div>
-          <p class="text-[10px] text-slate-500">접속 중인 계정</p>
-          <p id="mypage-email" class="text-sm font-semibold font-mono text-slate-100">test@example.com</p>
+          <p class="text-[10px] text-slate-400 uppercase tracking-wider">현재 계정</p>
+          <p id="mypage-email" class="text-xs font-semibold font-mono text-slate-800">-</p>
         </div>
       </div>
-
-      <!-- 비밀번호 변경 영역 -->
-      <div class="border border-slate-800 rounded-xl p-4 space-y-3">
-        <h4 class="text-xs font-semibold text-slate-300 flex items-center gap-2">
-          <i data-lucide="key-round" class="w-3.5 h-3.5 text-indigo-400"></i>
+      <div class="border border-slate-200/80 rounded-xl p-4 space-y-3">
+        <h4 class="text-xs font-semibold text-slate-700 flex items-center gap-1.5">
+          <i data-lucide="key-round" class="w-3.5 h-3.5 text-indigo-600"></i>
           <span>비밀번호 재설정</span>
         </h4>
-        <form onsubmit="submitChangePassword(event)" class="space-y-3">
+        <form onsubmit="submitChangePassword(event)" class="space-y-2">
           <div id="password-error-box" class="error-box"></div>
           <div id="password-success-box" class="success-box"></div>
-          <input type="password" id="change-password-new" required placeholder="새로운 비밀번호" class="input-field text-xs">
-          <input type="password" id="change-password-confirm" required placeholder="비밀번호 확인" class="input-field text-xs">
-          <button type="submit" class="w-full py-2 bg-indigo-600 hover:bg-indigo-500 rounded-lg text-xs font-semibold text-white transition-all">비밀번호 변경 적용</button>
+          <input type="password" id="change-password-new" required placeholder="새 비밀번호" class="input-field text-xs text-slate-800 bg-white">
+          <input type="password" id="change-password-confirm" required placeholder="비밀번호 확인" class="input-field text-xs text-slate-800 bg-white">
+          <button type="submit" class="w-full py-2.5 bg-indigo-600 hover:bg-indigo-500 rounded-xl text-xs font-semibold text-white transition-all shadow-md shadow-indigo-600/10">비밀번호 변경 적용</button>
         </form>
       </div>
-
-      <!-- 회원 탈퇴 영역 -->
-      <div class="border border-red-950/40 bg-red-950/5 rounded-xl p-4">
-        <div id="withdraw-confirm-area" class="space-y-3">
-          <h4 class="text-xs font-semibold text-red-400 flex items-center gap-2">
-            <i data-lucide="shield-alert" class="w-3.5 h-3.5 text-red-400"></i>
+      <div class="border border-red-100 bg-red-50/50 rounded-xl p-4">
+        <div id="withdraw-confirm-area" class="space-y-2">
+          <h4 class="text-xs font-semibold text-red-600 flex items-center gap-1.5">
+            <i data-lucide="shield-alert" class="w-3.5 h-3.5 text-red-500"></i>
             <span>회원 탈퇴</span>
           </h4>
-          <p class="text-[11px] text-slate-500 leading-relaxed">회원 탈퇴 시 Supabase DB 및 모든 계정 데이터가 완전 소멸되어 복구할 수 없습니다.</p>
-          <button onclick="toggleWithdrawConfirm(true)" class="px-4 py-2 border border-red-900/60 hover:bg-red-950/40 rounded-lg text-xs font-semibold text-red-400 transition-all">회원 탈퇴 진행</button>
+          <p class="text-[10px] text-slate-400 leading-relaxed">탈퇴 완료 시 찜한 단지 정보 및 계정은 영구 소멸됩니다.</p>
+          <button onclick="toggleWithdrawConfirm(true)" class="px-3 py-1.5 border border-red-200 hover:bg-red-100/30 rounded-lg text-xs font-semibold text-red-600 transition-all">회원 탈퇴 진행</button>
         </div>
-        
-        <!-- 회원 탈퇴 더블체크 영역 -->
-        <div id="withdraw-check-area" class="hidden space-y-3">
-          <p class="text-xs text-red-200 font-semibold">정말로 회원 탈퇴를 하시겠습니까?</p>
+        <div id="withdraw-check-area" class="hidden space-y-2">
+          <p class="text-xs text-red-600 font-semibold">정말로 회원 탈퇴를 하시겠습니까?</p>
           <div class="flex gap-2">
             <button onclick="submitWithdraw()" class="px-3 py-1.5 bg-red-600 hover:bg-red-500 rounded-lg text-xs font-semibold text-white transition-all">탈퇴 승인</button>
-            <button onclick="toggleWithdrawConfirm(false)" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 rounded-lg text-xs font-semibold text-slate-300 transition-all">취소</button>
+            <button onclick="toggleWithdrawConfirm(false)" class="px-3 py-1.5 bg-slate-200 hover:bg-slate-350 rounded-lg text-xs font-semibold text-slate-600 transition-all">취소</button>
           </div>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5. 카카오 3D 로드뷰 모달 (신규 추가) -->
+  <div id="roadview-modal" class="modal-card !max-w-2xl !w-11/12">
+    <div class="flex justify-between items-center mb-2">
+      <div class="flex items-center gap-2">
+        <i data-lucide="eye" class="text-indigo-600 w-4.5 h-4.5"></i>
+        <h3 class="text-base font-bold text-slate-800" id="roadview-modal-title">두산위브더제니스 주변 거리 전경 (로드뷰)</h3>
+      </div>
+      <button onclick="closeModal('roadview-modal')" class="p-1 hover:bg-slate-100 rounded-lg text-slate-400 hover:text-slate-700"><i data-lucide="x" class="w-4 h-4"></i></button>
+    </div>
+    <!-- 로드뷰 드로잉 영역 -->
+    <div id="roadview-canvas" class="w-full h-96 bg-slate-150 rounded-2xl overflow-hidden border border-slate-200 shadow-inner relative">
+      <!-- 카카오 API를 사용한 로드뷰가 여기에 렌더링되거나 에러 시 모크 배경 렌더링 -->
+      <div id="roadview-fallback" class="hidden absolute inset-0 flex flex-col items-center justify-center bg-slate-100 text-center p-6 gap-3 text-slate-500">
+        <i data-lucide="map" class="w-10 h-10 opacity-30 text-indigo-600"></i>
+        <span class="text-sm font-semibold">공식 로드뷰 서비스를 연동하는 중입니다...</span>
+        <p class="text-xs text-slate-400">카카오 맵 API 로드가 실패했거나 로드뷰를 지원하지 않는 위치일 경우,<br>아래 링크를 통해 외부 공식 지도로 직접 보실 수 있습니다.</p>
+        <a id="roadview-external-link" href="#" target="_blank" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 rounded-lg text-xs font-semibold text-white transition-all shadow-md shadow-indigo-600/10">
+          카카오 지도에서 직접 보기
+        </a>
       </div>
     </div>
   </div>
