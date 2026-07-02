@@ -662,15 +662,21 @@ async function submitSignup(e) {
     const submitBtn = document.getElementById('signup-submit-btn');
     submitBtn.disabled = true;
     try {
-      const { error } = await supabaseClient.auth.signUp({
+      const { data, error } = await supabaseClient.auth.signUp({
         email: emailInput,
         password: passwordInput
       });
       if (error) throw error;
-      showBoxMessage(successBox, '회원가입 완료! 인증 메일을 발송했습니다.');
-      setTimeout(() => {
-        switchModal('signup-modal', 'login-modal');
-      }, 2500);
+      // 이메일 인증 없이 세션이 바로 생성된 경우(autoconfirm ON) -> 자동 로그인
+      if (data && data.session) {
+        currentUser = data.user;
+        updateAuthUI();
+        closeModal('signup-modal');
+        switchSection('analysis');
+      } else {
+        showBoxMessage(successBox, '가입 완료! 이메일 인증 후 로그인하세요.<br><small style="opacity:.7">메일이 안 오면 스팸함을 확인해 주세요.</small>');
+        setTimeout(() => { switchModal('signup-modal', 'login-modal'); }, 3000);
+      }
     } catch (err) {
       showBoxMessage(errorBox, err.message || '가입 도중 에러가 발생했습니다.');
     } finally {
