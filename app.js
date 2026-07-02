@@ -479,7 +479,7 @@ function applyConfigOverrides() {
 // ==================== APP INITIALIZATION ====================
 function initApp() {
   // 0-A. 데이터 버전 관리 및 로컬 저장소 캐시 강제 리셋
-  const APP_VERSION = 'v2.5.0';
+  const APP_VERSION = 'v2.6.0';
   if (localStorage.getItem('ESTATE_APP_VERSION') !== APP_VERSION) {
     localStorage.removeItem('dummy_listings_db');
     localStorage.setItem('ESTATE_APP_VERSION', APP_VERSION);
@@ -1365,15 +1365,12 @@ function initKakaoRoadview(lat, lng) {
 }
 
 function showRoadviewFallback(container, lat, lng) {
-  const isApt = selectedApartment ? !(selectedApartment.name.includes('주택') || selectedApartment.name.includes('한옥') || selectedApartment.name.includes('빌라') || selectedApartment.name.includes('타운하우스') || selectedApartment.name.includes('원룸') || selectedApartment.name.includes('하우스') || selectedApartment.name.includes('빌딩')) : true;
-  const iconName = isApt ? 'apartment' : 'bungalow';
   const aptName = selectedApartment ? selectedApartment.name : '선택 단지';
 
   container.innerHTML = `
     <div class="absolute inset-0 flex flex-col items-center justify-center bg-slate-100 text-center p-6 gap-3 text-slate-500">
-      <div class="w-full max-w-sm h-44 bg-gradient-to-br from-slate-100 to-slate-200 rounded-2xl flex flex-col items-center justify-center text-slate-400 gap-1.5 border border-slate-200 shadow-sm mb-1">
-        <span class="material-symbols-outlined text-[42px] text-slate-350">${iconName}</span>
-        <span class="text-[10px] font-bold text-slate-400 tracking-wider">단지 전경 이미지 준비중</span>
+      <div class="w-full max-w-sm h-44 bg-slate-50 rounded-2xl flex items-center justify-center p-4 border border-slate-200 shadow-sm mb-1">
+        <img class="w-full h-full object-contain" src="${getAptImage(selectedApartment?.id)}" alt="단지 대표 사진">
       </div>
       <span class="text-sm font-bold text-slate-700">${aptName} 주변 환경</span>
       <p class="text-xs text-text-muted leading-relaxed mb-3">
@@ -1588,35 +1585,7 @@ async function toggleBookmarkAction() {
 // 아파트 대표 이미지 반환
 // 아파트 대표 이미지 반환
 function getAptImage(aptId) {
-  const img1 = 'https://lh3.googleusercontent.com/aida-public/AB6AXuB7gM7P1E3g_HBRnAtZK5XA0ttEiVRY4byaS\QoXhXyfqJsb5r1U_A5a5Y85trN6FinOGGS4CnozbSgXayrcEfIfk4uiD9OIOC7eTQ4KNLJiD2mh2_SZmZnXMHFInT33MH9dzp5hukP-OBvL-GFO6Y\KERqltGulOlSYrHFiJluA8NJQ2r_q3hzPbOGuP0B7HBC-TVxPFyguHe-rMqT452LDq5PMfcEfwu-4-gCRObLUZMgsq2uiDc7ph-aKZksfD9eBh0sr\KFMI2-hY';
-  const img2 = 'https://lh3.googleusercontent.com/aida-public/AB6AXuC7ouLEZi-RK94AxesM9GYOU3N350IEALFc\FWFz1urUsUTG87hnNkV6ijG5nyFYZOscWVbxqc0eSBA_jru4IR3d_TvE-cA4aWvBxFf91ohSEZJAB4bNLAilgqyHV7k80lUBnyCRHxxyTPmMb2C\QRWlcRRoJpi5ykVRO02jbcesnOQKSICJGjWTEHagAhr0DYdqVt9_SvRaFFs4tJNGS4Wg-cMbuvCXeHfcmyx1vn5Vf73j1JU8Jv_K-I4sXrndokhTG\e47iQ9BEp9Q';
-  const img3 = 'https://lh3.googleusercontent.com/aida-public/AB6AXuBHK9nEjDKpky8XrzSy1Clg0FvVKs1S1xCU\nQZgrvxMJGl-yDvs3pufihRgNO4hWm-DrNF5iZ669q9E1jhEDPunqrPvywrNvqIiG1pjYNypbVL4NjnOeMH6K5BGmjc84Fx_pLCyYPgoK8jL9QUJIT\nBU9x6di2x20_vgv7n9s3M-GJzLUyQIsqwNn_4wgl_KAQs0g83RAvUwpHOTrHvj9ZGG0xbq2r6kHENN-28OXS_RgwKzjfQcq4-oNqi9t5BCshqrQIq_a\nRyXysY';
-  const img4 = 'https://lh3.googleusercontent.com/aida-public/AB6AXuCkby8FE76Lrn-VoFI8cBgSZld7biVcePnp\nTlcxbpxveZFNO5w1-Runt_2-x85I2n5fPCY3TM18uID9sjekTjsR-XjOETN2eeCiHmOX07gOvRqG0-4V6MLz-rBnDTYKeMsioNAl-HboTH0Ei7koaD\nqQfDO7_MQENXJP_aLqOVSR4nKN0pacmg-kEwYbqHrA7MtTgk1xd_TRNfbrhNw_VNmEms6mB7RK8vu8KEFs0r3MsyGQDtoY5wlrzWwjrlBn0oNhaVre\n9EQHLvQ';
-  const img5 = 'https://lh3.googleusercontent.com/aida-public/AB6AXuDSCCqgR0cg3YuMDyeI-IouRplkYkinMXKK\nfEtlKOaG6wxwwe1VlA-wYvWBUB0jmHhKrvDvwqHxIq8LK8l8vrju6y4FkJ2YDHABrl9H76FvVY9WaMP_ryjJSErprgHsJiiMio4VbuM2wky2UzV1EV\ngq-m9Ryz4wUuX2YgGAaClaDZgTm8A8lWTc72RDBrmrnSF5gThe7f_dPNbAud5EqE9AxzkE1yq8RQUE71LhmTC3erCNaoRvt4xJC8Z-O2N4VAyxyV3\nr_1ZxV4o';
-
-  const images = {
-    'ss-1': img1,
-    'ss-2': img2,
-    'ss-3': img3,
-    'ss-4': img4,
-    'ss-5': img5,
-    'jg-1': img1,
-    'jg-2': img2,
-    'jg-3': img3,
-    'jg-4': img4,
-    'jg-5': img5,
-    'ds-1': img1,
-    'ds-2': img2,
-    'ds-3': img3,
-    'ds-4': img4,
-    'ds-5': img5,
-    'bg-1': img1,
-    'bg-2': img2,
-    'bg-3': img3,
-    'bg-4': img4,
-    'bg-5': img5
-  };
-  return images[aptId] || img1;
+  return 'https://png.pngtree.com/png-clipart/20221216/big/pngtree-house-property-logo-real-estate-design-buildings-clipart-png-image_8750111.png';
 }
 
 // 북마크 객체 규격화
@@ -1700,8 +1669,8 @@ async function renderBookmarksView() {
       const regionText = item.address.split(' ')[1] || '대구시';
       
       card.innerHTML = `
-        <div class="relative h-40 w-full overflow-hidden bg-slate-100">
-          <img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" src="${getAptImage(item.aptId)}" alt="${item.aptName}">
+        <div class="relative h-40 w-full overflow-hidden bg-slate-50 flex items-center justify-center p-3 border-b border-outline-variant/30">
+          <img class="w-full h-full object-contain transition-transform duration-500 group-hover:scale-105" src="${getAptImage(item.aptId)}" alt="${item.aptName}">
           <div class="absolute top-3 left-3 bg-primary-container/85 backdrop-blur-md px-2.5 py-0.5 rounded-full">
             <span class="text-[10px] font-semibold text-white">${regionText}</span>
           </div>
@@ -1735,7 +1704,7 @@ async function renderBookmarksView() {
             <button onclick="removeBookmarkDirectly('${item.aptId}')" class="py-2.5 rounded-lg bg-surface-container-high text-on-surface hover:bg-surface-variant font-label-md text-label-md transition-colors flex items-center justify-center gap-1.5 border border-outline-variant/30">
               <span class="material-symbols-outlined text-[16px]">delete</span> 삭제
             </button>
-            <button onclick="selectSearchApartment('${item.districtKey}', '${item.aptId}')" class="py-2.5 rounded-lg bg-primary text-white hover:opacity-90 font-label-md text-label-md transition-opacity flex items-center justify-center gap-1.5 shadow-sm">
+            <button onclick="selectSearchApartment('${item.districtKey}', '${item.aptId}'); switchSection('analysis')" class="py-2.5 rounded-lg bg-primary text-white hover:opacity-90 font-label-md text-label-md transition-opacity flex items-center justify-center gap-1.5 shadow-sm">
               <span class="material-symbols-outlined text-[16px]">analytics</span> 분석실 이동
             </button>
           </div>
@@ -2224,13 +2193,10 @@ function renderListings() {
       });
     }
 
-    const iconName = item.type === 'apt' ? 'apartment' : 'bungalow';
-
     card.innerHTML = `
-      <div class="relative h-44 w-full bg-gradient-to-br from-slate-100 to-slate-200/90 flex flex-col items-center justify-center text-slate-400 select-none border-b border-slate-100 group">
-        <span class="material-symbols-outlined text-[36px] text-slate-350 transition-transform duration-500 group-hover:scale-110">${iconName}</span>
-        <span class="text-[9px] font-bold text-slate-400 mt-1 uppercase tracking-wider">대표 이미지 준비중</span>
-
+      <div class="relative h-44 w-full bg-slate-50 flex items-center justify-center p-3 border-b border-outline-variant/30 overflow-hidden group">
+        <img class="w-full h-full object-contain transition-transform duration-500 group-hover:scale-105" src="${getAptImage(item.aptId)}" alt="${item.title}">
+        
         <div class="absolute top-3 left-3 bg-primary-container/85 backdrop-blur-md px-2.5 py-0.5 rounded-full flex items-center gap-1 z-10">
           <span class="text-[9px] font-bold text-white">${districtText}</span>
         </div>
@@ -2239,7 +2205,7 @@ function renderListings() {
         </div>
         <!-- 찜하기(관심매물) 버튼 -->
         <button onclick="toggleListingBookmarkAction(event, '${item.aptId}', '${item.title}', '${item.price}', '${item.district}')" class="absolute top-2.5 right-2.5 w-8 h-8 bg-black/35 hover:bg-black/50 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:scale-110 transition-all z-20" title="관심매물 저장">
-          <span class="material-symbols-outlined text-[18px] ${isBookmarked ? 'text-rose-500 fill-current' : ''}">favorite</span>
+          <span class="material-symbols-outlined text-[18px] ${isBookmarked ? 'text-rose-500 fill-current' : 'text-white'}">favorite</span>
         </button>
       </div>
       <div class="p-5 flex flex-col flex-grow justify-between space-y-4">
@@ -2525,16 +2491,17 @@ async function toggleListingBookmarkAction(event, aptId, aptName, price, distric
 
   const isBookmarked = checkIsBookmarked(aptId);
   let bookmarks = getBookmarksFromStorage();
+  const matchedApt = DISTRICT_DATA[districtKey]?.apts.find(a => a.id === aptId);
+  const cleanAptName = matchedApt ? matchedApt.name : aptName;
 
   if (isDummyAuth) {
     if (isBookmarked) {
       bookmarks = bookmarks.filter(b => b.aptId !== aptId);
     } else {
       // DISTRICT_DATA에서 단지 주소 및 평형 매핑 정보 찾기
-      const matchedApt = DISTRICT_DATA[districtKey]?.apts.find(a => a.id === aptId);
       bookmarks.push({
         aptId: aptId,
-        aptName: aptName.split(' ')[0], // 단지명만 간략 노출
+        aptName: cleanAptName,
         recentPrice: `${price}억`,
         districtKey: districtKey,
         address: matchedApt ? matchedApt.address : '대구시',
@@ -2559,7 +2526,7 @@ async function toggleListingBookmarkAction(event, aptId, aptName, price, distric
           .insert({
             user_id: currentUser.id,
             apt_id: aptId,
-            apt_name: aptName.split(' ')[0],
+            apt_name: cleanAptName,
             recent_price: `${price}억`
           });
         if (error) throw error;
