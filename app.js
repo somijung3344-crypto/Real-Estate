@@ -193,16 +193,21 @@ function initMockDataset() {
   }
 }
 
-// 로컬 저장소 API 키 오버라이드 병합
+// 로컬 저장소 API 키 병합 (setup.html에서 입력한 키를 읽어옴)
 function applyConfigOverrides() {
-  const saved = localStorage.getItem('APP_CONFIG_OVERRIDE');
-  if (saved) {
+  // setup.html에서 저장한 키 우선 읽기
+  const primary = localStorage.getItem('ESTATE_API_CONFIG');
+  // 구버전 키 폴백
+  const legacy = localStorage.getItem('APP_CONFIG_OVERRIDE');
+  const raw = primary || legacy;
+  if (raw) {
     try {
-      const parsed = JSON.parse(saved);
-      window.APP_CONFIG = { ...window.APP_CONFIG, ...parsed };
-      console.log('API 설정 오버라이드 병합 완료', window.APP_CONFIG);
+      const parsed = JSON.parse(raw);
+      if (parsed.SUPABASE_URL) window.APP_CONFIG.SUPABASE_URL = parsed.SUPABASE_URL;
+      if (parsed.SUPABASE_ANON_KEY) window.APP_CONFIG.SUPABASE_ANON_KEY = parsed.SUPABASE_ANON_KEY;
+      if (parsed.KAKAO_MAP_CLIENT_KEY) window.APP_CONFIG.KAKAO_MAP_CLIENT_KEY = parsed.KAKAO_MAP_CLIENT_KEY;
     } catch (e) {
-      console.error('API 오버라이드 복원 실패', e);
+      console.error('로컬 API 설정 불러오기 실패', e);
     }
   }
 }

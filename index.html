@@ -290,10 +290,6 @@
 
     <!-- 인증 상태 영역 -->
     <div id="auth-header-area" class="flex items-center gap-3">
-      <!-- API 설정 버튼 -->
-      <button onclick="openApiConfigModal()" class="p-2 text-slate-500 hover:text-primary hover:bg-slate-100 rounded-lg transition-all" title="API 설정">
-        <span class="material-symbols-outlined text-[20px]">settings</span>
-      </button>
       <!-- (비로그인 상태) -->
       <div id="auth-logged-out" class="flex items-center gap-2">
         <button onclick="openModal('login-modal')" class="px-3.5 py-2 text-xs font-semibold text-slate-600 hover:text-slate-900 transition-colors">
@@ -998,6 +994,8 @@
         <span class="material-symbols-outlined text-[20px]">close</span>
       </button>
     </div>
+    <!-- DB 연결 상태 배지 -->
+    <div id="signup-db-status" class="mb-3 px-3 py-2 rounded-lg text-[10px] font-bold flex items-center gap-1.5 border"></div>
     <form onsubmit="submitSignup(event)" class="space-y-4">
       <div id="signup-error-box" class="error-box"></div>
       <div id="signup-success-box" class="success-box"></div>
