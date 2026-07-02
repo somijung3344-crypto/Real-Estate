@@ -290,6 +290,10 @@
 
     <!-- 인증 상태 영역 -->
     <div id="auth-header-area" class="flex items-center gap-3">
+      <!-- API 설정 버튼 -->
+      <button onclick="openApiConfigModal()" class="p-2 text-slate-500 hover:text-primary hover:bg-slate-100 rounded-lg transition-all" title="API 설정">
+        <span class="material-symbols-outlined text-[20px]">settings</span>
+      </button>
       <!-- (비로그인 상태) -->
       <div id="auth-logged-out" class="flex items-center gap-2">
         <button onclick="openModal('login-modal')" class="px-3.5 py-2 text-xs font-semibold text-slate-600 hover:text-slate-900 transition-colors">
@@ -1089,6 +1093,17 @@
           </div>
         </div>
       </div>
+      <!-- API 설정 관리 -->
+      <div class="border border-outline-variant/40 rounded-xl p-4 space-y-3">
+        <h4 class="text-xs font-bold text-slate-700 flex items-center gap-1.5">
+          <span class="material-symbols-outlined text-secondary text-[16px]">settings</span>
+          <span>API 및 데이터베이스 설정</span>
+        </h4>
+        <p class="text-[10px] text-slate-400 leading-relaxed">실제 Supabase DB 및 지도 API Key 값을 직접 입력하고 연동해 보세요.</p>
+        <button onclick="switchModal('api-config-modal', 'mypage-modal')" class="w-full py-2.5 bg-slate-100 hover:bg-slate-200 rounded-lg text-xs font-bold text-slate-700 transition-all flex items-center justify-center gap-1">
+          <span class="material-symbols-outlined text-[15px]">settings</span> API 설정창 열기
+        </button>
+      </div>
     </div>
   </div>
 
@@ -1309,6 +1324,46 @@
         </div>
       </div>
     </div>
+  </div>
+
+  <!-- 8. API 설정 모달 (Supabase, Kakao Map 등) -->
+  <div id="api-config-modal" class="modal-card !max-w-md">
+    <div class="flex justify-between items-center mb-4 border-b border-outline-variant/30 pb-3">
+      <div class="flex items-center gap-2">
+        <span class="material-symbols-outlined text-secondary text-[22px]">settings</span>
+        <h3 class="text-base font-bold text-primary">API 및 데이터베이스 설정</h3>
+      </div>
+      <button onclick="closeModal('api-config-modal')" class="p-1 hover:bg-slate-100 rounded-lg text-slate-400 hover:text-slate-700">
+        <span class="material-symbols-outlined text-[20px]">close</span>
+      </button>
+    </div>
+    <form onsubmit="submitApiConfig(event)" class="space-y-4 text-left">
+      <p class="text-[11px] text-text-muted leading-relaxed">
+        Supabase 및 Kakao Map 등 서비스 API 키를 설정합니다.<br>
+        실제 Supabase Key를 입력하면 해당 데이터베이스 회원 연동이 자동 활성화됩니다. 빈칸 시 로컬 시뮬레이션 모드로 작동합니다.
+      </p>
+
+      <div class="space-y-1.5">
+        <label class="block text-[10px] font-bold text-slate-500 uppercase tracking-wider">Supabase Project URL</label>
+        <input type="text" id="cfg-supabase-url" placeholder="예: https://xxxxxx.supabase.co" class="w-full bg-slate-50 border border-outline-variant rounded-xl px-4 py-2.5 text-xs outline-none focus:border-secondary font-mono">
+      </div>
+
+      <div class="space-y-1.5">
+        <label class="block text-[10px] font-bold text-slate-500 uppercase tracking-wider">Supabase Anon Key (API Key)</label>
+        <input type="password" id="cfg-supabase-key" placeholder="Supabase Anon Key 입력" class="w-full bg-slate-50 border border-outline-variant rounded-xl px-4 py-2.5 text-xs outline-none focus:border-secondary font-mono">
+      </div>
+
+      <div class="space-y-1.5">
+        <label class="block text-[10px] font-bold text-slate-500 uppercase tracking-wider">Kakao Map Client Key (JavaScript Key)</label>
+        <input type="text" id="cfg-kakao-key" placeholder="카카오 지도 JavaScript 키 입력" class="w-full bg-slate-50 border border-outline-variant rounded-xl px-4 py-2.5 text-xs outline-none focus:border-secondary font-mono">
+      </div>
+
+      <div class="bg-blue-50 border border-blue-150 rounded-xl p-3 text-[10px] text-blue-600 leading-relaxed">
+        * 입력된 API 정보는 사용자의 브라우저 로컬 저장소(localStorage)에만 안전하게 저장되며, 소스코드나 서버로 유출되지 않습니다.
+      </div>
+
+      <button type="submit" class="w-full py-3 bg-primary hover:opacity-90 rounded-xl text-xs font-bold text-white transition-all shadow-md mt-2">설정 저장 및 새로고침</button>
+    </form>
   </div>
 
   <!-- 메인 스크립트 파일 로드 -->

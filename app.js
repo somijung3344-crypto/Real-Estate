@@ -193,9 +193,26 @@ function initMockDataset() {
   }
 }
 
+// 로컬 저장소 API 키 오버라이드 병합
+function applyConfigOverrides() {
+  const saved = localStorage.getItem('APP_CONFIG_OVERRIDE');
+  if (saved) {
+    try {
+      const parsed = JSON.parse(saved);
+      window.APP_CONFIG = { ...window.APP_CONFIG, ...parsed };
+      console.log('API 설정 오버라이드 병합 완료', window.APP_CONFIG);
+    } catch (e) {
+      console.error('API 오버라이드 복원 실패', e);
+    }
+  }
+}
+
 // ==================== APP INITIALIZATION ====================
 function initApp() {
-  // 0. 로컬 더미 데이터 초기화
+  // 0. 로컬 저장소 API 키 오버라이드 병합
+  applyConfigOverrides();
+
+  // 0-B. 로컬 더미 데이터 초기화
   initMockDataset();
   initListingsDataset();
 
@@ -2147,4 +2164,29 @@ function renderLeafletMap() {
       leafletMarkers.push(marker);
     });
   });
+}
+
+function openApiConfigModal() {
+  document.getElementById('cfg-supabase-url').value = window.APP_CONFIG.SUPABASE_URL || '';
+  document.getElementById('cfg-supabase-key').value = window.APP_CONFIG.SUPABASE_ANON_KEY && !window.APP_CONFIG.SUPABASE_ANON_KEY.includes('dummy') ? window.APP_CONFIG.SUPABASE_ANON_KEY : '';
+  document.getElementById('cfg-kakao-key').value = window.APP_CONFIG.KAKAO_MAP_CLIENT_KEY || '';
+  
+  openModal('api-config-modal');
+}
+
+function submitApiConfig(e) {
+  e.preventDefault();
+  const url = document.getElementById('cfg-supabase-url').value.trim();
+  const key = document.getElementById('cfg-supabase-key').value.trim();
+  const kakaoKey = document.getElementById('cfg-kakao-key').value.trim();
+  
+  const configOverride = {
+    SUPABASE_URL: url || 'https://tccsssdwegnehlzetjdh.supabase.co',
+    SUPABASE_ANON_KEY: key || 'dummy-anon-key-12345',
+    KAKAO_MAP_CLIENT_KEY: kakaoKey || ''
+  };
+  
+  localStorage.setItem('APP_CONFIG_OVERRIDE', JSON.stringify(configOverride));
+  alert('설정이 저장되었습니다. 시스템을 적용하기 위해 페이지가 새로고침됩니다.');
+  window.location.reload();
 }
