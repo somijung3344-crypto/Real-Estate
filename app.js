@@ -479,7 +479,7 @@ function applyConfigOverrides() {
 // ==================== APP INITIALIZATION ====================
 function initApp() {
   // 0-A. 데이터 버전 관리 및 로컬 저장소 캐시 강제 리셋
-  const APP_VERSION = 'v2.2.0';
+  const APP_VERSION = 'v2.3.0';
   if (localStorage.getItem('ESTATE_APP_VERSION') !== APP_VERSION) {
     localStorage.removeItem('dummy_listings_db');
     localStorage.setItem('ESTATE_APP_VERSION', APP_VERSION);
@@ -1591,30 +1591,37 @@ async function toggleBookmarkAction() {
 }
 
 // 아파트 대표 이미지 반환
+// 아파트 대표 이미지 반환
 function getAptImage(aptId) {
+  const img1 = 'https://lh3.googleusercontent.com/aida-public/AB6AXuB7gM7P1E3g_HBRnAtZK5XA0ttEiVRY4byaS\QoXhXyfqJsb5r1U_A5a5Y85trN6FinOGGS4CnozbSgXayrcEfIfk4uiD9OIOC7eTQ4KNLJiD2mh2_SZmZnXMHFInT33MH9dzp5hukP-OBvL-GFO6Y\KERqltGulOlSYrHFiJluA8NJQ2r_q3hzPbOGuP0B7HBC-TVxPFyguHe-rMqT452LDq5PMfcEfwu-4-gCRObLUZMgsq2uiDc7ph-aKZksfD9eBh0sr\KFMI2-hY';
+  const img2 = 'https://lh3.googleusercontent.com/aida-public/AB6AXuC7ouLEZi-RK94AxesM9GYOU3N350IEALFc\FWFz1urUsUTG87hnNkV6ijG5nyFYZOscWVbxqc0eSBA_jru4IR3d_TvE-cA4aWvBxFf91ohSEZJAB4bNLAilgqyHV7k80lUBnyCRHxxyTPmMb2C\QRWlcRRoJpi5ykVRO02jbcesnOQKSICJGjWTEHagAhr0DYdqVt9_SvRaFFs4tJNGS4Wg-cMbuvCXeHfcmyx1vn5Vf73j1JU8Jv_K-I4sXrndokhTG\e47iQ9BEp9Q';
+  const img3 = 'https://lh3.googleusercontent.com/aida-public/AB6AXuBHK9nEjDKpky8XrzSy1Clg0FvVKs1S1xCU\nQZgrvxMJGl-yDvs3pufihRgNO4hWm-DrNF5iZ669q9E1jhEDPunqrPvywrNvqIiG1pjYNypbVL4NjnOeMH6K5BGmjc84Fx_pLCyYPgoK8jL9QUJIT\nBU9x6di2x20_vgv7n9s3M-GJzLUyQIsqwNn_4wgl_KAQs0g83RAvUwpHOTrHvj9ZGG0xbq2r6kHENN-28OXS_RgwKzjfQcq4-oNqi9t5BCshqrQIq_a\nRyXysY';
+  const img4 = 'https://lh3.googleusercontent.com/aida-public/AB6AXuCkby8FE76Lrn-VoFI8cBgSZld7biVcePnp\nTlcxbpxveZFNO5w1-Runt_2-x85I2n5fPCY3TM18uID9sjekTjsR-XjOETN2eeCiHmOX07gOvRqG0-4V6MLz-rBnDTYKeMsioNAl-HboTH0Ei7koaD\nqQfDO7_MQENXJP_aLqOVSR4nKN0pacmg-kEwYbqHrA7MtTgk1xd_TRNfbrhNw_VNmEms6mB7RK8vu8KEFs0r3MsyGQDtoY5wlrzWwjrlBn0oNhaVre\n9EQHLvQ';
+  const img5 = 'https://lh3.googleusercontent.com/aida-public/AB6AXuDSCCqgR0cg3YuMDyeI-IouRplkYkinMXKK\nfEtlKOaG6wxwwe1VlA-wYvWBUB0jmHhKrvDvwqHxIq8LK8l8vrju6y4FkJ2YDHABrl9H76FvVY9WaMP_ryjJSErprgHsJiiMio4VbuM2wky2UzV1EV\ngq-m9Ryz4wUuX2YgGAaClaDZgTm8A8lWTc72RDBrmrnSF5gThe7f_dPNbAud5EqE9AxzkE1yq8RQUE71LhmTC3erCNaoRvt4xJC8Z-O2N4VAyxyV3\nr_1ZxV4o';
+
   const images = {
-    'ss-1': 'https://upload.wikimedia.org/wikipedia/commons/d/da/Busan_Marine_City_2014.jpg', // 두산위브더제니스 범어 (초고층)
-    'ss-2': 'https://upload.wikimedia.org/wikipedia/commons/6/67/Acro_River_Park_20160803.jpg', // 범어센트럴푸르지오 (신축아파트)
-    'ss-3': 'https://upload.wikimedia.org/wikipedia/commons/a/ae/Jongno-gu_ordinary_houses.jpg', // 만촌전원주택 (한국 단독주택 전경)
-    'ss-4': 'https://upload.wikimedia.org/wikipedia/commons/6/60/Ordinary_villa_building_in_Korea.jpg', // 범어신축빌라 (한국 다세대 빌라)
-    'ss-5': 'https://upload.wikimedia.org/wikipedia/commons/6/60/Ordinary_villa_building_in_Korea.jpg', // 범어빌라
-    'jg-1': 'https://upload.wikimedia.org/wikipedia/commons/1/14/Ordinary_apartments_in_korea.JPG', // 남산자이하늘채 (한국 대단지 아파트)
-    'jg-2': 'https://upload.wikimedia.org/wikipedia/commons/f/f6/Korea-Seoul-Wangsimni.jpg', // 대구역센트럴자이 (진짜 한국 대단지 자이 아파트 전경)
-    'jg-3': 'https://upload.wikimedia.org/wikipedia/commons/a/ae/Jongno-gu_ordinary_houses.jpg', // 삼덕동상가주택
-    'jg-4': 'https://upload.wikimedia.org/wikipedia/commons/e/ec/Bukchon_Hanok_Village_2013-09-02.jpg', // 대봉동한옥 (진짜 리모델링 한옥)
-    'jg-5': 'https://upload.wikimedia.org/wikipedia/commons/a/ae/Jongno-gu_ordinary_houses.jpg', // 남산동주택
-    'ds-1': 'https://upload.wikimedia.org/wikipedia/commons/1/14/Ordinary_apartments_in_korea.JPG', // 월성푸르지오 (대단지아파트)
-    'ds-2': 'https://upload.wikimedia.org/wikipedia/commons/a/ae/Jongno-gu_ordinary_houses.jpg', // 송현동주택
-    'ds-3': 'https://upload.wikimedia.org/wikipedia/commons/a/ae/Jongno-gu_ordinary_houses.jpg', // 상인동상가주택
-    'ds-4': 'https://upload.wikimedia.org/wikipedia/commons/6/60/Ordinary_villa_building_in_Korea.jpg', // 이곡동빌라
-    'ds-5': 'https://upload.wikimedia.org/wikipedia/commons/a/ae/Jongno-gu_ordinary_houses.jpg', // 달서구주택
-    'bg-1': 'https://upload.wikimedia.org/wikipedia/commons/f/f6/Korea-Seoul-Wangsimni.jpg', // 침산푸르지오1차 (아파트전경)
-    'bg-2': 'https://upload.wikimedia.org/wikipedia/commons/f/f6/Korea-Seoul-Wangsimni.jpg', // 침산푸르지오복층
-    'bg-3': 'https://upload.wikimedia.org/wikipedia/commons/a/ae/Jongno-gu_ordinary_houses.jpg', // 칠성동주택
-    'bg-4': 'https://upload.wikimedia.org/wikipedia/commons/6/60/Ordinary_villa_building_in_Korea.jpg', // 복현동원룸 (한국형 원룸빌라)
-    'bg-5': 'https://upload.wikimedia.org/wikipedia/commons/6/60/Ordinary_villa_building_in_Korea.jpg'  // 침산동빌라
+    'ss-1': img1,
+    'ss-2': img2,
+    'ss-3': img3,
+    'ss-4': img4,
+    'ss-5': img5,
+    'jg-1': img1,
+    'jg-2': img2,
+    'jg-3': img3,
+    'jg-4': img4,
+    'jg-5': img5,
+    'ds-1': img1,
+    'ds-2': img2,
+    'ds-3': img3,
+    'ds-4': img4,
+    'ds-5': img5,
+    'bg-1': img1,
+    'bg-2': img2,
+    'bg-3': img3,
+    'bg-4': img4,
+    'bg-5': img5
   };
-  return images[aptId] || 'https://upload.wikimedia.org/wikipedia/commons/1/14/Ordinary_apartments_in_korea.JPG';
+  return images[aptId] || img1;
 }
 
 // 북마크 객체 규격화
@@ -1783,7 +1790,7 @@ const DEFAULT_LISTINGS = [
     pyeong: 34,
     floor: '41층 / 54층',
     direction: '남동향',
-    image: 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=800&q=80',
+    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuB7gM7P1E3g_HBRnAtZK5XA0ttEiVRY4byaSQoXhXyfqJsb5r1U_A5a5Y85trN6FinOGGS4CnozbSgXayrcEfIfk4uiD9OIOC7eTQ4KNLJiD2mh2_SZmZnXMHFInT33MH9dzp5hukP-OBvL-GFO6YKERqltGulOlSYrHFiJluA8NJQ2r_q3hzPbOGuP0B7HBC-TVxPFyguHe-rMqT452LDq5PMfcEfwu-4-gCRObLUZMgsq2uiDc7ph-aKZksfD9eBh0srKFMI2-hY',
     description: '앞산과 수성못 조망이 매우 우수한 최고급 세대입니다. 거실 대리석 마감 및 프리미엄 올수리 상태입니다.',
     broker: '제니스명품공인중개사',
     contact: '053-745-1234',
@@ -1799,7 +1806,7 @@ const DEFAULT_LISTINGS = [
     pyeong: 45,
     floor: '28층 / 54층',
     direction: '남서향',
-    image: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800&q=80',
+    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuB7gM7P1E3g_HBRnAtZK5XA0ttEiVRY4byaSQoXhXyfqJsb5r1U_A5a5Y85trN6FinOGGS4CnozbSgXayrcEfIfk4uiD9OIOC7eTQ4KNLJiD2mh2_SZmZnXMHFInT33MH9dzp5hukP-OBvL-GFO6YKERqltGulOlSYrHFiJluA8NJQ2r_q3hzPbOGuP0B7HBC-TVxPFyguHe-rMqT452LDq5PMfcEfwu-4-gCRObLUZMgsq2uiDc7ph-aKZksfD9eBh0srKFMI2-hY',
     description: '소유주 사정상 급매로 진행하는 특가 매물입니다. 방 4개, 욕실 2개 구조로 넓고 아늑합니다.',
     broker: '수성탑공인중개사',
     contact: '053-741-5588',
@@ -1815,7 +1822,7 @@ const DEFAULT_LISTINGS = [
     pyeong: 34,
     floor: '18층 / 49층',
     direction: '남향',
-    image: 'https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&w=800&q=80',
+    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuC7ouLEZi-RK94AxesM9GYOU3N350IEALFcFWFz1urUsUTG87hnNkV6ijG5nyFYZOscWVbxqc0eSBA_jru4IR3d_TvE-cA4aWvBxFf91ohSEZJAB4bNLAilgqyHV7k80lUBnyCRHxxyTPmMb2CQRWlcRRoJpi5ykVRO02jbcesnOQKSICJGjWTEHagAhr0DYdqVt9_SvRaFFs4tJNGS4Wg-cMbuvCXeHfcmyx1vn5Vf73j1JU8Jv_K-I4sXrndokhTGe47iQ9BEp9Q',
     description: '2호선 범어역 도보 2분 거리의 초역세권 대단지입니다. 젊은 신혼부부에게 강력 추천하는 깨끗한 매물입니다.',
     broker: '범어푸르지오공인',
     contact: '053-752-9900',
@@ -1831,7 +1838,7 @@ const DEFAULT_LISTINGS = [
     pyeong: 34,
     floor: '35층 / 49층',
     direction: '남서향',
-    image: 'https://images.unsplash.com/photo-1600565193348-f74bd3c7ccdf?auto=format&fit=crop&w=800&q=80',
+    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuC7ouLEZi-RK94AxesM9GYOU3N350IEALFcFWFz1urUsUTG87hnNkV6ijG5nyFYZOscWVbxqc0eSBA_jru4IR3d_TvE-cA4aWvBxFf91ohSEZJAB4bNLAilgqyHV7k80lUBnyCRHxxyTPmMb2CQRWlcRRoJpi5ykVRO02jbcesnOQKSICJGjWTEHagAhr0DYdqVt9_SvRaFFs4tJNGS4Wg-cMbuvCXeHfcmyx1vn5Vf73j1JU8Jv_K-I4sXrndokhTGe47iQ9BEp9Q',
     description: '채광과 통풍이 우수한 판상형 구조입니다. 선호 학군인 범어초 배정 단지로 입지가 최상입니다.',
     broker: '학군단지전문중개',
     contact: '053-759-4400',
@@ -1847,7 +1854,7 @@ const DEFAULT_LISTINGS = [
     pyeong: 65,
     floor: '지하 1층 ~ 지상 2층',
     direction: '남동향',
-    image: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80',
+    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBHK9nEjDKpky8XrzSy1Clg0FvVKs1S1xCUKQZgrvxMJGl-yDvs3pufihRgNO4hWm-DrNF5iZ669q9E1jhEDPunqrPvywrNvqIiG1pjYNypbVL4NjnOeMH6K5BGmjc84Fx_pLCyYPgoK8jL9QUJITBU9x6di2x20_vgv7n9s3M-GJzLUyQIsqwNn_4wgl_KAQs0g83RAvUwpHOTrHvj9ZGG0xbq2r6kHENN-28OXS_RgwKzjfQcq4-oNqi9t5BCshqrQIq_aRyXysY',
     description: '만촌동 고급 단독주택지 내에 위치한 대저택입니다. 넓은 전용 마당과 2대 전용 차고지가 완비되어 있습니다.',
     broker: '만촌헤리티지공인중개사',
     contact: '053-744-8899',
@@ -1863,7 +1870,7 @@ const DEFAULT_LISTINGS = [
     pyeong: 28,
     floor: '3층 / 5층',
     direction: '남향',
-    image: 'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=800&q=80',
+    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBHK9nEjDKpky8XrzSy1Clg0FvVKs1S1xCUKQZgrvxMJGl-yDvs3pufihRgNO4hWm-DrNF5iZ669q9E1jhEDPunqrPvywrNvqIiG1pjYNypbVL4NjnOeMH6K5BGmjc84Fx_pLCyYPgoK8jL9QUJITBU9x6di2x20_vgv7n9s3M-GJzLUyQIsqwNn_4wgl_KAQs0g83RAvUwpHOTrHvj9ZGG0xbq2r6kHENN-28OXS_RgwKzjfQcq4-oNqi9t5BCshqrQIq_aRyXysY',
     description: '최신 트렌드 인테리어와 엘리베이터가 완비된 신축 빌라입니다. 주차 대수 세대당 1.2대 가능합니다.',
     broker: '범어에셋공인',
     contact: '053-756-1122',
@@ -1879,7 +1886,7 @@ const DEFAULT_LISTINGS = [
     pyeong: 34,
     floor: '22층 / 36층',
     direction: '남향',
-    image: 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=800&q=80',
+    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCkby8FE76Lrn-VoFI8cBgSZld7biVcePnpTlcxbpxveZFNO5w1-Runt_2-x85I2n5fPCY3TM18uID9sjekTjsR-XjOETN2eeCiHmOX07gOvRqG0-4V6MLz-rBnDTYKeMsioNAl-HboTH0Ei7koaDqQfDO7_MQENXJP_aLqOVSR4nKN0pacmg-kEwYbqHrA7MtTgk1xd_TRNfbrhNw_VNmEms6mB7RK8vu8KEFs0r3MsyGQDtoY5wlrzWwjrlBn0oNhaVre9EQHLvQ',
     description: '남산동 대장 단지로 준공 4년 차의 명품 자이 대단지입니다. 막힘없는 해가 잘 드는 로얄 매물입니다.',
     broker: '남산자이공인중개사',
     contact: '053-255-8800',
@@ -1895,7 +1902,7 @@ const DEFAULT_LISTINGS = [
     pyeong: 24,
     floor: '12층 / 36층',
     direction: '동향',
-    image: 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=800&q=80',
+    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCkby8FE76Lrn-VoFI8cBgSZld7biVcePnpTlcxbpxveZFNO5w1-Runt_2-x85I2n5fPCY3TM18uID9sjekTjsR-XjOETN2eeCiHmOX07gOvRqG0-4V6MLz-rBnDTYKeMsioNAl-HboTH0Ei7koaDqQfDO7_MQENXJP_aLqOVSR4nKN0pacmg-kEwYbqHrA7MtTgk1xd_TRNfbrhNw_VNmEms6mB7RK8vu8KEFs0r3MsyGQDtoY5wlrzWwjrlBn0oNhaVre9EQHLvQ',
     description: '군더더기 없는 확장형 평면 구조로 관리비가 저렴하고 매우 깨끗한 컨디션입니다.',
     broker: '가온공인중개사',
     contact: '053-253-1133',
@@ -1911,7 +1918,7 @@ const DEFAULT_LISTINGS = [
     pyeong: 34,
     floor: '15층 / 39층',
     direction: '남서향',
-    image: 'https://images.unsplash.com/photo-1554469384-e58fac16e23a?auto=format&fit=crop&w=800&q=80',
+    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuB7gM7P1E3g_HBRnAtZK5XA0ttEiVRY4byaSQoXhXyfqJsb5r1U_A5a5Y85trN6FinOGGS4CnozbSgXayrcEfIfk4uiD9OIOC7eTQ4KNLJiD2mh2_SZmZnXMHFInT33MH9dzp5hukP-OBvL-GFO6YKERqltGulOlSYrHFiJluA8NJQ2r_q3hzPbOGuP0B7HBC-TVxPFyguHe-rMqT452LDq5PMfcEfwu-4-gCRObLUZMgsq2uiDc7ph-aKZksfD9eBh0srKFMI2-hY',
     description: '대구역 도보 5분 거리로 출퇴근 및 상권 이용이 매우 극대화된 최고 명문 대단지 아파트입니다.',
     broker: '센트럴자이공인',
     contact: '053-424-7700',
@@ -1927,7 +1934,7 @@ const DEFAULT_LISTINGS = [
     pyeong: 40,
     floor: '지상 1층 ~ 2층',
     direction: '남향',
-    image: 'https://images.unsplash.com/photo-1605276374104-dee2a0ed3cd6?auto=format&fit=crop&w=800&q=80',
+    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBHK9nEjDKpky8XrzSy1Clg0FvVKs1S1xCUKQZgrvxMJGl-yDvs3pufihRgNO4hWm-DrNF5iZ669q9E1jhEDPunqrPvywrNvqIiG1pjYNypbVL4NjnOeMH6K5BGmjc84Fx_pLCyYPgoK8jL9QUJITBU9x6di2x20_vgv7n9s3M-GJzLUyQIsqwNn_4wgl_KAQs0g83RAvUwpHOTrHvj9ZGG0xbq2r6kHENN-28OXS_RgwKzjfQcq4-oNqi9t5BCshqrQIq_aRyXysY',
     description: '삼덕동 핫플레이스 내에 위치한 단독주택으로, 1층을 이색 카페나 공방으로 개조하기 적합합니다.',
     broker: '삼덕부동산 공인중개사',
     contact: '053-252-0088',
@@ -1943,7 +1950,7 @@ const DEFAULT_LISTINGS = [
     pyeong: 32,
     floor: '1층 단층 한옥',
     direction: '남동향',
-    image: 'https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?auto=format&fit=crop&w=800&q=80',
+    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBHK9nEjDKpky8XrzSy1Clg0FvVKs1S1xCUKQZgrvxMJGl-yDvs3pufihRgNO4hWm-DrNF5iZ669q9E1jhEDPunqrPvywrNvqIiG1pjYNypbVL4NjnOeMH6K5BGmjc84Fx_pLCyYPgoK8jL9QUJITBU9x6di2x20_vgv7n9s3M-GJzLUyQIsqwNn_4wgl_KAQs0g83RAvUwpHOTrHvj9ZGG0xbq2r6kHENN-28OXS_RgwKzjfQcq4-oNqi9t5BCshqrQIq_aRyXysY',
     description: '전통 한옥의 목조 서까래를 그대로 보존하며 내부 화장실과 주방을 전면 현대식 올수리한 유니크한 주택입니다.',
     broker: '한옥전문 공인중개사',
     contact: '053-421-4900',
