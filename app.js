@@ -1592,28 +1592,29 @@ async function toggleBookmarkAction() {
 
 // 아파트 대표 이미지 반환
 function getAptImage(aptId) {
-    'ss-1': 'https://images.unsplash.com/photo-1582407947304-fd86f028f716?auto=format&fit=crop&w=800&q=80', // 범어두산위브더제니스 (초고층)
-    'ss-2': 'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=800&q=80', // 범어센트럴푸르지오 (신축아파트)
-    'ss-3': 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80', // 만촌전원주택
-    'ss-4': 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=800&q=80', // 범어신축빌라
-    'ss-5': 'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=800&q=80', // 범어빌라
-    'jg-1': 'https://images.unsplash.com/photo-1513584684374-8bab748fbf90?auto=format&fit=crop&w=800&q=80', // 남산자이하늘채 (대단지아파트)
-    'jg-2': 'https://images.unsplash.com/photo-1554469384-e58fac16e23a?auto=format&fit=crop&w=800&q=80', // 대구역센트럴자이 (사용자 점검 - 도심 아파트 빌딩 전경)
-    'jg-3': 'https://images.unsplash.com/photo-1605276374104-dee2a0ed3cd6?auto=format&fit=crop&w=800&q=80', // 삼덕동상가주택
-    'jg-4': 'https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?auto=format&fit=crop&w=800&q=80', // 대봉동한옥
-    'jg-5': 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=800&q=80', // 남산동주택
-    'ds-1': 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800&q=80', // 월성푸르지오 (대단지아파트)
-    'ds-2': 'https://images.unsplash.com/photo-1580587771525-78b9dba3b914?auto=format&fit=crop&w=800&q=80', // 송현동주택
-    'ds-3': 'https://images.unsplash.com/photo-1507089947368-19c1da9775ae?auto=format&fit=crop&w=800&q=80', // 상인동상가주택
-    'ds-4': 'https://images.unsplash.com/photo-1600585154526-990dced4db0d?auto=format&fit=crop&w=800&q=80', // 이곡동빌라
-    'ds-5': 'https://images.unsplash.com/photo-1600585154363-67eb9e2e2099?auto=format&fit=crop&w=800&q=80', // 달서구주택
-    'bg-1': 'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=800&q=80', // 침산푸르지오1차 (아파트전경)
-    'bg-2': 'https://images.unsplash.com/photo-1572120360610-d971b9d7767c?auto=format&fit=crop&w=800&q=80', // 침산푸르지오복층
-    'bg-3': 'https://images.unsplash.com/photo-1512915922686-57c11dde9b6b?auto=format&fit=crop&w=800&q=80', // 칠성동주택
-    'bg-4': 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=800&q=80', // 복현동원룸
-    'bg-5': 'https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&w=800&q=80'  // 침산동빌라
+  const images = {
+    'ss-1': 'https://upload.wikimedia.org/wikipedia/commons/d/da/Busan_Marine_City_2014.jpg', // 두산위브더제니스 범어 (초고층)
+    'ss-2': 'https://upload.wikimedia.org/wikipedia/commons/6/67/Acro_River_Park_20160803.jpg', // 범어센트럴푸르지오 (신축아파트)
+    'ss-3': 'https://upload.wikimedia.org/wikipedia/commons/a/ae/Jongno-gu_ordinary_houses.jpg', // 만촌전원주택 (한국 단독주택 전경)
+    'ss-4': 'https://upload.wikimedia.org/wikipedia/commons/6/60/Ordinary_villa_building_in_Korea.jpg', // 범어신축빌라 (한국 다세대 빌라)
+    'ss-5': 'https://upload.wikimedia.org/wikipedia/commons/6/60/Ordinary_villa_building_in_Korea.jpg', // 범어빌라
+    'jg-1': 'https://upload.wikimedia.org/wikipedia/commons/1/14/Ordinary_apartments_in_korea.JPG', // 남산자이하늘채 (한국 대단지 아파트)
+    'jg-2': 'https://upload.wikimedia.org/wikipedia/commons/f/f6/Korea-Seoul-Wangsimni.jpg', // 대구역센트럴자이 (진짜 한국 대단지 자이 아파트 전경)
+    'jg-3': 'https://upload.wikimedia.org/wikipedia/commons/a/ae/Jongno-gu_ordinary_houses.jpg', // 삼덕동상가주택
+    'jg-4': 'https://upload.wikimedia.org/wikipedia/commons/e/ec/Bukchon_Hanok_Village_2013-09-02.jpg', // 대봉동한옥 (진짜 리모델링 한옥)
+    'jg-5': 'https://upload.wikimedia.org/wikipedia/commons/a/ae/Jongno-gu_ordinary_houses.jpg', // 남산동주택
+    'ds-1': 'https://upload.wikimedia.org/wikipedia/commons/1/14/Ordinary_apartments_in_korea.JPG', // 월성푸르지오 (대단지아파트)
+    'ds-2': 'https://upload.wikimedia.org/wikipedia/commons/a/ae/Jongno-gu_ordinary_houses.jpg', // 송현동주택
+    'ds-3': 'https://upload.wikimedia.org/wikipedia/commons/a/ae/Jongno-gu_ordinary_houses.jpg', // 상인동상가주택
+    'ds-4': 'https://upload.wikimedia.org/wikipedia/commons/6/60/Ordinary_villa_building_in_Korea.jpg', // 이곡동빌라
+    'ds-5': 'https://upload.wikimedia.org/wikipedia/commons/a/ae/Jongno-gu_ordinary_houses.jpg', // 달서구주택
+    'bg-1': 'https://upload.wikimedia.org/wikipedia/commons/f/f6/Korea-Seoul-Wangsimni.jpg', // 침산푸르지오1차 (아파트전경)
+    'bg-2': 'https://upload.wikimedia.org/wikipedia/commons/f/f6/Korea-Seoul-Wangsimni.jpg', // 침산푸르지오복층
+    'bg-3': 'https://upload.wikimedia.org/wikipedia/commons/a/ae/Jongno-gu_ordinary_houses.jpg', // 칠성동주택
+    'bg-4': 'https://upload.wikimedia.org/wikipedia/commons/6/60/Ordinary_villa_building_in_Korea.jpg', // 복현동원룸 (한국형 원룸빌라)
+    'bg-5': 'https://upload.wikimedia.org/wikipedia/commons/6/60/Ordinary_villa_building_in_Korea.jpg'  // 침산동빌라
   };
-  return images[aptId] || 'https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&w=800&q=80';
+  return images[aptId] || 'https://upload.wikimedia.org/wikipedia/commons/1/14/Ordinary_apartments_in_korea.JPG';
 }
 
 // 북마크 객체 규격화
