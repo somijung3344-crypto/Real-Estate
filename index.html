@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Antigravity Real Estate | 스마트 부동산 조회 서비스</title>
+  <!-- 구글 폰트 (Outfit, Noto Sans KR) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Outfit:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Supabase JS CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <!-- 로컬 설정 로드 -->
+  <script src="config.js"></script>
+  <!-- 메인 스타일시트 -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-slate-950 text-slate-100 font-sans overflow-hidden">
+
+  <!-- ==================== TOP HEADER ==================== -->
+  <header class="h-16 border-b border-slate-900 bg-slate-950/80 backdrop-blur-md flex items-center justify-between px-6 z-40 relative">
+    <div class="flex items-center gap-3">
+      <div class="w-8 h-8 bg-gradient-to-tr from-indigo-500 to-teal-400 rounded-lg flex items-center justify-center shadow-lg shadow-indigo-500/20">
+        <i data-lucide="building-2" class="text-white w-4 h-4"></i>
+      </div>
+      <h1 class="text-lg font-bold tracking-tight bg-gradient-to-r from-indigo-400 to-teal-400 bg-clip-text text-transparent font-display">
+        Antigravity Real Estate
+      </h1>
+    </div>
+    
+    <!-- 인증 상태 영역 -->
+    <div id="auth-header-area" class="flex items-center gap-3">
+      <!-- (비로그인 상태) -->
+      <div id="auth-logged-out" class="flex items-center gap-2">
+        <button onclick="openModal('login-modal')" class="px-4 py-2 text-xs font-semibold text-slate-300 hover:text-white transition-colors">
+          로그인
+        </button>
+        <button onclick="openModal('signup-modal')" class="px-4 py-2 text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-500 rounded-lg transition-all shadow-md shadow-indigo-600/10">
+          회원가입
+        </button>
+      </div>
+      <!-- (로그인 상태) -->
+      <div id="auth-logged-in" class="hidden flex items-center gap-4">
+        <div class="flex items-center gap-2 px-3 py-1 bg-slate-900 border border-slate-800 rounded-full">
+          <i data-lucide="user" class="w-3.5 h-3.5 text-teal-400"></i>
+          <span id="user-display-email" class="text-xs font-mono text-slate-300">test@example.com</span>
+        </div>
+        <button onclick="openModal('mypage-modal')" class="px-3.5 py-1.5 text-xs font-semibold border border-slate-800 hover:border-slate-700 hover:bg-slate-900 rounded-lg transition-all">
+          마이페이지
+        </button>
+        <button onclick="handleLogout()" class="p-2 text-slate-400 hover:text-red-400 hover:bg-red-950/20 rounded-lg transition-all" title="로그아웃">
+          <i data-lucide="log-out" class="w-4 h-4"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==================== MAIN WORKSPACE ==================== -->
+  <main class="h-[calc(100vh-4rem)] flex overflow-hidden">
+    
+    <!-- 1. 좌측 사이드바: 아파트 목록 & 필터 -->
+    <section class="w-96 border-r border-slate-900 flex flex-col h-full bg-slate-950/40 relative z-30">
+      
+      <!-- 필터 헤더 -->
+      <div class="p-4 border-b border-slate-900 space-y-3">
+        <div class="flex items-center justify-between">
+          <h2 class="text-sm font-semibold text-slate-300 flex items-center gap-2">
+            <i data-lucide="filter" class="w-4 h-4 text-indigo-400"></i>
+            <span>지역 검색 필터</span>
+          </h2>
+          <span id="region-tag" class="text-[10px] font-semibold bg-indigo-950 text-indigo-300 border border-indigo-900 px-2 py-0.5 rounded-full">
+            서울 강남구
+          </span>
+        </div>
+        
+        <!-- 검색 셀렉트 박스 -->
+        <div class="grid grid-cols-2 gap-2">
+          <select id="select-city" class="bg-slate-900 border border-slate-800 focus:border-indigo-500 rounded-lg px-3 py-2 text-xs outline-none text-white transition-all">
+            <option value="seoul">서울특별시</option>
+          </select>
+          <select id="select-district" onchange="changeDistrict(this.value)" class="bg-slate-900 border border-slate-800 focus:border-indigo-500 rounded-lg px-3 py-2 text-xs outline-none text-white transition-all">
+            <option value="gangnam">강남구</option>
+            <option value="seocho">서초구</option>
+            <option value="mapo">마포구</option>
+            <option value="yongsan">용산구</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- 아파트 단지 리스트 -->
+      <div class="flex-1 overflow-y-auto p-4 space-y-3 custom-scrollbar" id="apartment-list-container">
+        <!-- JS에서 동적 렌더링 -->
+      </div>
+    </section>
+
+    <!-- 2. 우측 메인 영역: 지도 & 하단 실거래 정보 차트 -->
+    <section class="flex-1 flex flex-col h-full relative">
+      
+      <!-- 상단 지도 캔버스 -->
+      <div class="flex-1 relative z-10" id="map-area-container">
+        <!-- JS에서 카카오 지도 SDK 또는 가상 지도 주입 -->
+      </div>
+
+      <!-- 하단 실거래 상세 정보 & 가격 추세 그래프 -->
+      <div class="h-80 border-t border-slate-900 bg-slate-950/80 backdrop-blur-md p-6 flex flex-col z-20 relative">
+        <div class="flex items-center justify-between mb-4">
+          <div class="flex items-center gap-3">
+            <div id="chart-apt-icon" class="w-10 h-10 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-center text-teal-400">
+              <i data-lucide="trending-up" class="w-5 h-5"></i>
+            </div>
+            <div>
+              <h3 id="chart-apt-name" class="font-bold text-base text-white">단지를 선택해 주세요</h3>
+              <p id="chart-apt-address" class="text-xs text-slate-500 mt-0.5">상세 실거래가 추이와 시세 변동 동향이 표시됩니다.</p>
+            </div>
+          </div>
+          
+          <!-- 추세 요약 뱃지 -->
+          <div id="chart-trend-badge" class="hidden flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold">
+            <!-- 동적 삽입 -->
+          </div>
+        </div>
+
+        <!-- 가격 그래프 차트 영역 (Pure SVG 렌더링) -->
+        <div class="flex-1 bg-slate-900/40 border border-slate-850 rounded-xl p-4 flex items-center justify-center relative" id="trend-chart-canvas">
+          <div class="text-slate-500 text-xs text-center flex flex-col items-center gap-2">
+            <i data-lucide="bar-chart-3" class="w-8 h-8 opacity-40"></i>
+            <span>지도의 마커나 왼쪽 단지 목록을 클릭하면 시세 상승/하락 추이 그래프가 나타납니다.</span>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ==================== MODALS AREA ==================== -->
+  
+  <!-- 배경 오버레이 -->
+  <div id="modal-overlay" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden transition-all" onclick="closeAllModals()"></div>
+
+  <!-- 1. 로그인 모달 -->
+  <div id="login-modal" class="modal-card">
+    <div class="flex justify-between items-center mb-6">
+      <h3 class="text-lg font-bold text-white">로그인</h3>
+      <button onclick="closeModal('login-modal')" class="p-1 hover:bg-slate-800 rounded-lg text-slate-400 hover:text-white"><i data-lucide="x" class="w-4 h-4"></i></button>
+    </div>
+    <form onsubmit="submitLogin(event)" class="space-y-4">
+      <div id="login-error-box" class="error-box"></div>
+      <div>
+        <label class="block text-[11px] font-medium text-slate-400 mb-1.5">이메일 주소</label>
+        <input type="email" id="login-email" required placeholder="name@example.com" class="input-field">
+      </div>
+      <div>
+        <label class="block text-[11px] font-medium text-slate-400 mb-1.5">비밀번호</label>
+        <input type="password" id="login-password" required placeholder="••••••••" class="input-field">
+      </div>
+      <button type="submit" id="login-submit-btn" class="submit-btn">로그인</button>
+    </form>
+    <div class="mt-6 pt-5 border-t border-slate-800 flex flex-col gap-2 text-center text-xs text-slate-400">
+      <div>아직 회원이 아니신가요? <a href="#" onclick="switchModal('login-modal', 'signup-modal')" class="text-teal-400 hover:underline">회원가입하기</a></div>
+      <div>가입 메일이 기억나지 않나요? <a href="#" onclick="switchModal('login-modal', 'find-email-modal')" class="text-indigo-400 hover:underline">이메일 찾기</a></div>
+    </div>
+  </div>
+
+  <!-- 2. 회원가입 모달 -->
+  <div id="signup-modal" class="modal-card">
+    <div class="flex justify-between items-center mb-6">
+      <h3 class="text-lg font-bold text-white">회원가입</h3>
+      <button onclick="closeModal('signup-modal')" class="p-1 hover:bg-slate-800 rounded-lg text-slate-400 hover:text-white"><i data-lucide="x" class="w-4 h-4"></i></button>
+    </div>
+    <form onsubmit="submitSignup(event)" class="space-y-4">
+      <div id="signup-error-box" class="error-box"></div>
+      <div id="signup-success-box" class="success-box"></div>
+      <div>
+        <label class="block text-[11px] font-medium text-slate-400 mb-1.5">이메일 주소</label>
+        <input type="email" id="signup-email" required placeholder="name@example.com" class="input-field">
+      </div>
+      <div>
+        <label class="block text-[11px] font-medium text-slate-400 mb-1.5">비밀번호</label>
+        <input type="password" id="signup-password" required placeholder="6자 이상 입력" class="input-field">
+      </div>
+      <div>
+        <label class="block text-[11px] font-medium text-slate-400 mb-1.5">비밀번호 확인</label>
+        <input type="password" id="signup-confirm" required placeholder="비밀번호 재입력" class="input-field">
+      </div>
+      <button type="submit" id="signup-submit-btn" class="submit-btn bg-teal-600 hover:bg-teal-500">가입하기</button>
+    </form>
+    <div class="mt-6 pt-5 border-t border-slate-800 text-center text-xs text-slate-400">
+      이미 회원이신가요? <a href="#" onclick="switchModal('signup-modal', 'login-modal')" class="text-indigo-400 hover:underline">로그인하러 가기</a>
+    </div>
+  </div>
+
+  <!-- 3. 이메일 찾기 모달 -->
+  <div id="find-email-modal" class="modal-card">
+    <div class="flex justify-between items-center mb-6">
+      <h3 class="text-lg font-bold text-white">이메일(아이디) 찾기</h3>
+      <button onclick="closeModal('find-email-modal')" class="p-1 hover:bg-slate-800 rounded-lg text-slate-400 hover:text-white"><i data-lucide="x" class="w-4 h-4"></i></button>
+    </div>
+    <form onsubmit="submitFindEmail(event)" class="space-y-4">
+      <p class="text-xs text-slate-400 leading-relaxed mb-2">가입 시 등록했던 이메일 주소의 키워드(앞자리 일부분)를 입력해 대조된 정보를 확인합니다.</p>
+      <div id="find-email-error-box" class="error-box"></div>
+      <div id="find-email-success-box" class="success-box"></div>
+      <div>
+        <label class="block text-[11px] font-medium text-slate-400 mb-1.5">이메일 검색 키워드</label>
+        <input type="text" id="find-email-hint" required placeholder="예: test" class="input-field">
+      </div>
+      <button type="submit" class="submit-btn">이메일 조회</button>
+    </form>
+    <div class="mt-6 pt-5 border-t border-slate-800 text-center text-xs text-slate-400">
+      <a href="#" onclick="switchModal('find-email-modal', 'login-modal')" class="text-indigo-400 hover:underline">로그인으로 돌아가기</a>
+    </div>
+  </div>
+
+  <!-- 4. 마이페이지 모달 (비밀번호 변경 / 회원탈퇴) -->
+  <div id="mypage-modal" class="modal-card">
+    <div class="flex justify-between items-center mb-6">
+      <h3 class="text-lg font-bold text-white">마이페이지</h3>
+      <button onclick="closeModal('mypage-modal')" class="p-1 hover:bg-slate-800 rounded-lg text-slate-400 hover:text-white"><i data-lucide="x" class="w-4 h-4"></i></button>
+    </div>
+    
+    <div class="space-y-5">
+      <!-- 기본 정보 영역 -->
+      <div class="bg-slate-900 border border-slate-800 rounded-xl p-4 flex items-center gap-3">
+        <div class="w-12 h-12 bg-gradient-to-tr from-indigo-500 to-teal-400 rounded-xl flex items-center justify-center text-white">
+          <i data-lucide="user" class="w-6 h-6"></i>
+        </div>
+        <div>
+          <p class="text-[10px] text-slate-500">접속 중인 계정</p>
+          <p id="mypage-email" class="text-sm font-semibold font-mono text-slate-100">test@example.com</p>
+        </div>
+      </div>
+
+      <!-- 비밀번호 변경 영역 -->
+      <div class="border border-slate-800 rounded-xl p-4 space-y-3">
+        <h4 class="text-xs font-semibold text-slate-300 flex items-center gap-2">
+          <i data-lucide="key-round" class="w-3.5 h-3.5 text-indigo-400"></i>
+          <span>비밀번호 재설정</span>
+        </h4>
+        <form onsubmit="submitChangePassword(event)" class="space-y-3">
+          <div id="password-error-box" class="error-box"></div>
+          <div id="password-success-box" class="success-box"></div>
+          <input type="password" id="change-password-new" required placeholder="새로운 비밀번호" class="input-field text-xs">
+          <input type="password" id="change-password-confirm" required placeholder="비밀번호 확인" class="input-field text-xs">
+          <button type="submit" class="w-full py-2 bg-indigo-600 hover:bg-indigo-500 rounded-lg text-xs font-semibold text-white transition-all">비밀번호 변경 적용</button>
+        </form>
+      </div>
+
+      <!-- 회원 탈퇴 영역 -->
+      <div class="border border-red-950/40 bg-red-950/5 rounded-xl p-4">
+        <div id="withdraw-confirm-area" class="space-y-3">
+          <h4 class="text-xs font-semibold text-red-400 flex items-center gap-2">
+            <i data-lucide="shield-alert" class="w-3.5 h-3.5 text-red-400"></i>
+            <span>회원 탈퇴</span>
+          </h4>
+          <p class="text-[11px] text-slate-500 leading-relaxed">회원 탈퇴 시 Supabase DB 및 모든 계정 데이터가 완전 소멸되어 복구할 수 없습니다.</p>
+          <button onclick="toggleWithdrawConfirm(true)" class="px-4 py-2 border border-red-900/60 hover:bg-red-950/40 rounded-lg text-xs font-semibold text-red-400 transition-all">회원 탈퇴 진행</button>
+        </div>
+        
+        <!-- 회원 탈퇴 더블체크 영역 -->
+        <div id="withdraw-check-area" class="hidden space-y-3">
+          <p class="text-xs text-red-200 font-semibold">정말로 회원 탈퇴를 하시겠습니까?</p>
+          <div class="flex gap-2">
+            <button onclick="submitWithdraw()" class="px-3 py-1.5 bg-red-600 hover:bg-red-500 rounded-lg text-xs font-semibold text-white transition-all">탈퇴 승인</button>
+            <button onclick="toggleWithdrawConfirm(false)" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 rounded-lg text-xs font-semibold text-slate-300 transition-all">취소</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 메인 스크립트 파일 로드 -->
+  <script src="app.js"></script>
+</body>
+</html>

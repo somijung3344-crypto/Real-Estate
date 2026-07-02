@@ -1,0 +1,194 @@
+/* ==================== DESIGN SYSTEM & GLOBAL STYLES ==================== */
+:root {
+  --font-sans: 'Outfit', 'Noto Sans KR', sans-serif;
+  --bg-dark: #020617; /* slate-950 */
+  --bg-card: rgba(15, 23, 42, 0.6); /* slate-900 with opacity */
+  --border-color: #0f172a; /* slate-900 */
+  --border-light: #1e293b; /* slate-800 */
+  --color-primary: #6366f1; /* indigo-500 */
+  --color-secondary: #0ea5e9; /* sky-500 */
+  --color-accent: #14b8a6; /* teal-500 */
+  --color-danger: #ef4444; /* red-500 */
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--bg-dark);
+  color: #f1f5f9;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Custom Scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #1e293b;
+  border-radius: 9999px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #334155;
+}
+
+/* ==================== BUTTONS & INPUTS ==================== */
+.input-field {
+  width: 100%;
+  background-color: #020617;
+  border: 1px solid var(--border-light);
+  color: #ffffff;
+  font-size: 13px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  outline: none;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.input-field:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 1px rgba(99, 102, 241, 0.25);
+}
+
+.submit-btn {
+  width: 100%;
+  background-color: var(--color-primary);
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 13px;
+  padding: 12px;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
+}
+
+.submit-btn:hover {
+  background-color: #4f46e5;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(99, 102, 241, 0.3);
+}
+
+.submit-btn:active {
+  transform: translateY(0);
+}
+
+/* ==================== CARDS & LAYOUTS ==================== */
+.apartment-card {
+  background-color: rgba(15, 23, 42, 0.4);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  padding: 16px;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.apartment-card:hover {
+  border-color: var(--border-light);
+  background-color: rgba(30, 41, 59, 0.2);
+  transform: translateY(-2px);
+}
+
+.apartment-card.active {
+  border-color: var(--color-primary);
+  background-color: rgba(99, 102, 241, 0.08);
+  box-shadow: 0 0 20px rgba(99, 102, 241, 0.05);
+}
+
+/* ==================== MODALS ==================== */
+.modal-card {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.95);
+  width: 90%;
+  max-width: 440px;
+  background-color: rgba(15, 23, 42, 0.8);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--border-light);
+  border-radius: 24px;
+  padding: 28px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  z-index: 100;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.modal-card.active {
+  transform: translate(-50%, -50%) scale(1);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Status Info Boxes */
+.error-box {
+  display: none;
+  padding: 12px;
+  background-color: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  color: #fca5a5;
+  font-size: 12px;
+  border-radius: 10px;
+  margin-bottom: 12px;
+}
+
+.success-box {
+  display: none;
+  padding: 12px;
+  background-color: rgba(20, 184, 166, 0.1);
+  border: 1px solid rgba(20, 184, 166, 0.2);
+  color: #99f6e4;
+  font-size: 12px;
+  border-radius: 10px;
+  margin-bottom: 12px;
+}
+
+/* ==================== MAP SCROLL OVERRIDE & MOCK GRAPH ==================== */
+#trend-chart-canvas svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.chart-line {
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 1000;
+  animation: drawLine 2s forwards ease-in-out;
+}
+
+.chart-dot {
+  opacity: 0;
+  animation: fadeIn 0.5s forwards ease-out;
+}
+
+@keyframes drawLine {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
+}
+
+/* ==================== UTILITIES ==================== */
+.hidden {
+  display: none !important;
+}
