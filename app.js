@@ -3,7 +3,7 @@ let supabaseClient = null;
 let isDummyAuth = true;
 let currentUser = null;
 
-let selectedDistrict = 'suseong'; // 기본값 대구 수성구
+let selectedDistrict = 'all'; // 기본값 대구 전체
 let apartments = [];
 let selectedApartment = null;
 let selectedPyeong = 84; // 기본 84㎡ 선택
@@ -1075,9 +1075,19 @@ function selectHomeDistrict(districtCode) {
 // ==================== REAL ESTATE CONTROLLERS ====================
 function changeDistrict(districtCode) {
   selectedDistrict = districtCode;
-  apartments = DISTRICT_DATA[districtCode].apts;
   
-  document.getElementById('region-tag').textContent = DISTRICT_DATA[districtCode].name;
+  if (districtCode === 'all') {
+    // 모든 자치구의 아파트/매물을 전부 하나로 결합
+    let allApts = [];
+    for (const key in DISTRICT_DATA) {
+      allApts = allApts.concat(DISTRICT_DATA[key].apts);
+    }
+    apartments = allApts;
+    document.getElementById('region-tag').textContent = '대구광역시 전체';
+  } else {
+    apartments = DISTRICT_DATA[districtCode].apts;
+    document.getElementById('region-tag').textContent = DISTRICT_DATA[districtCode].name;
+  }
 
   renderApartmentList();
   loadMapAndMarkers();
@@ -2111,9 +2121,26 @@ const DEFAULT_LISTINGS = [
 
 function initListingsDataset() {
   const saved = localStorage.getItem('dummy_listings_db');
+  let needReset = false;
+
   if (saved) {
-    LISTINGS_DATA = JSON.parse(saved);
+    try {
+      const parsed = JSON.parse(saved);
+      // 데이터가 비었거나 개수가 다르거나, 구버전 구글 주소(lh3.googleusercontent.com)가 포함되어 있으면 강제 리셋
+      if (!Array.isArray(parsed) || parsed.length < 22 || (parsed[0] && parsed[0].image && parsed[0].image.includes('lh3.googleusercontent.com'))) {
+        needReset = true;
+      } else {
+        LISTINGS_DATA = parsed;
+      }
+    } catch (e) {
+      needReset = true;
+    }
   } else {
+    needReset = true;
+  }
+
+  if (needReset) {
+    console.log('구버전 매물 캐시 감지 - 새 고화질 Unsplash 데이터셋으로 초기화합니다.');
     LISTINGS_DATA = [...DEFAULT_LISTINGS];
     localStorage.setItem('dummy_listings_db', JSON.stringify(LISTINGS_DATA));
   }
@@ -2405,7 +2432,9 @@ function renderLeafletMap() {
   }
   dummyCanvas.classList.remove('hidden');
 
-  const currentDistrict = DISTRICT_DATA[selectedDistrict];
+  const currentDistrict = selectedDistrict === 'all'
+    ? { lat: 35.8601, lng: 128.6000, zoom: 12 }
+    : { ...DISTRICT_DATA[selectedDistrict], zoom: 14 };
 
   loadLeaflet(() => {
     if (leafletMapInstance) {
@@ -2415,7 +2444,7 @@ function renderLeafletMap() {
 
     leafletMapInstance = L.map('dummy-map-canvas', {
       zoomControl: true
-    }).setView([currentDistrict.lat, currentDistrict.lng], 14);
+    }).setView([currentDistrict.lat, currentDistrict.lng], currentDistrict.zoom);
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; OpenStreetMap contributors'
