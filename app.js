@@ -12,7 +12,7 @@ let isDummyMap = true;
 let kakaoMapInstance = null;
 let mapMarkers = [];
 
-// ==================== EXTENDED REAL ESTATE DATASET (대구 피벗) ====================
+// ==================== EXTENDED REAL ESTATE DATASET (대구 피벗 및 매물 연동) ====================
 const DISTRICT_DATA = {
   suseong: {
     name: '대구 수성구',
@@ -61,6 +61,65 @@ const DISTRICT_DATA = {
           { date: '05.24', price: 8.9, floor: 8 },
           { date: '05.08', price: 8.7, floor: 28 },
           { date: '04.20', price: 8.8, floor: 17 }
+        ]
+      },
+      { 
+        id: 'ss-3', 
+        name: '만촌 헤리티지 단독주택', 
+        lat: 35.8523, 
+        lng: 128.6385, 
+        mockX: 75, 
+        mockY: 35, 
+        address: '수성구 만촌동 412-5', 
+        year: '2018년',
+        households: '단독 1가구',
+        trend: 'stable',
+        priceHistory59: [{ year: '2023', price: 11.0 }, { year: '2024', price: 11.5 }, { year: '2025', price: 12.0 }, { year: '2026', price: 12.5 }],
+        priceHistory84: [{ year: '2023', price: 13.5 }, { year: '2024', price: 14.0 }, { year: '2025', price: 14.5 }, { year: '2026', price: 15.0 }],
+        priceHistory114: [{ year: '2023', price: 16.0 }, { year: '2024', price: 16.5 }, { year: '2025', price: 17.0 }, { year: '2026', price: 17.5 }],
+        transactions: [
+          { date: '06.18', price: 15.0, floor: 1 },
+          { date: '04.05', price: 14.2, floor: 1 }
+        ]
+      },
+      { 
+        id: 'ss-4', 
+        name: '범어 라온프라이빗', 
+        lat: 35.8631, 
+        lng: 128.6189, 
+        mockX: 52, 
+        mockY: 30, 
+        address: '수성구 범어동 100-3', 
+        year: '2016년',
+        households: '175세대',
+        trend: 'stable',
+        priceHistory59: [{ year: '2023', price: 5.2 }, { year: '2024', price: 5.4 }, { year: '2025', price: 5.6 }, { year: '2026', price: 5.8 }],
+        priceHistory84: [{ year: '2023', price: 7.0 }, { year: '2024', price: 7.3 }, { year: '2025', price: 7.5 }, { year: '2026', price: 7.8 }],
+        priceHistory114: [{ year: '2023', price: 9.0 }, { year: '2024', price: 9.2 }, { year: '2025', price: 9.5 }, { year: '2026', price: 9.8 }],
+        transactions: [
+          { date: '06.20', price: 7.8, floor: 15 },
+          { date: '05.11', price: 7.5, floor: 8 },
+          { date: '03.28', price: 7.4, floor: 18 }
+        ]
+      },
+      { 
+        id: 'ss-5', 
+        name: '수성동일하이빌 레이크시티', 
+        lat: 35.8285, 
+        lng: 128.6134, 
+        mockX: 45, 
+        mockY: 75, 
+        address: '수성구 상동 555', 
+        year: '2009년',
+        households: '1,411세대',
+        trend: 'stable',
+        priceHistory59: [{ year: '2023', price: 4.8 }, { year: '2024', price: 4.9 }, { year: '2025', price: 5.1 }, { year: '2026', price: 5.2 }],
+        priceHistory84: [{ year: '2023', price: 6.8 }, { year: '2024', price: 7.0 }, { year: '2025', price: 7.2 }, { year: '2026', price: 7.4 }],
+        priceHistory114: [{ year: '2023', price: 8.5 }, { year: '2024', price: 8.8 }, { year: '2025', price: 9.0 }, { year: '2026', price: 9.2 }],
+        transactions: [
+          { date: '06.22', price: 7.4, floor: 12 },
+          { date: '05.30', price: 7.3, floor: 19 },
+          { date: '04.15', price: 7.1, floor: 6 }
         ]
       }
     ]
@@ -113,6 +172,63 @@ const DISTRICT_DATA = {
           { date: '05.18', price: 4.4, floor: 8 },
           { date: '05.02', price: 4.5, floor: 12 }
         ]
+      },
+      { 
+        id: 'jg-3', 
+        name: '삼덕동 단독 상가주택', 
+        lat: 35.8654, 
+        lng: 128.6087, 
+        mockX: 62, 
+        mockY: 48, 
+        address: '중구 삼덕동3가 120-4', 
+        year: '1995년',
+        households: '점포 및 주택',
+        trend: 'stable',
+        priceHistory59: [{ year: '2023', price: 7.8 }, { year: '2024', price: 8.0 }, { year: '2025', price: 8.2 }, { year: '2026', price: 8.5 }],
+        priceHistory84: [{ year: '2023', price: 9.0 }, { year: '2024', price: 9.3 }, { year: '2025', price: 9.5 }, { year: '2026', price: 9.8 }],
+        priceHistory114: [{ year: '2023', price: 11.0 }, { year: '2024', price: 11.2 }, { year: '2025', price: 11.5 }, { year: '2026', price: 11.8 }],
+        transactions: [
+          { date: '06.05', price: 9.8, floor: 1 },
+          { date: '03.12', price: 9.3, floor: 1 }
+        ]
+      },
+      { 
+        id: 'jg-4', 
+        name: '대봉동 리모델링 한옥', 
+        lat: 35.8592, 
+        lng: 128.6021, 
+        mockX: 58, 
+        mockY: 60, 
+        address: '중구 대봉동 712-14', 
+        year: '1975년(올수리)',
+        households: '단층 단독',
+        trend: 'stable',
+        priceHistory59: [{ year: '2023', price: 5.2 }, { year: '2024', price: 5.5 }, { year: '2025', price: 6.0 }, { year: '2026', price: 6.2 }],
+        priceHistory84: [{ year: '2023', price: 6.0 }, { year: '2024', price: 6.2 }, { year: '2025', price: 6.3 }, { year: '2026', price: 6.5 }],
+        priceHistory114: [{ year: '2023', price: 7.2 }, { year: '2024', price: 7.5 }, { year: '2025', price: 7.8 }, { year: '2026', price: 8.0 }],
+        transactions: [
+          { date: '05.28', price: 6.5, floor: 1 }
+        ]
+      },
+      { 
+        id: 'jg-5', 
+        name: '남산롯데캐슬센트럴스카이', 
+        lat: 35.8582, 
+        lng: 128.5872, 
+        mockX: 38, 
+        mockY: 65, 
+        address: '중구 남산동 130-2', 
+        year: '2021년',
+        households: '987세대',
+        trend: 'up',
+        priceHistory59: [{ year: '2023', price: 4.8 }, { year: '2024', price: 5.2 }, { year: '2025', price: 5.5 }, { year: '2026', price: 5.8 }],
+        priceHistory84: [{ year: '2023', price: 6.5 }, { year: '2024', price: 6.8 }, { year: '2025', price: 7.0 }, { year: '2026', price: 7.2 }],
+        priceHistory114: [{ year: '2023', price: 8.0 }, { year: '2024', price: 8.3 }, { year: '2025', price: 8.6 }, { year: '2026', price: 8.9 }],
+        transactions: [
+          { date: '06.29', price: 7.2, floor: 18 },
+          { date: '05.12', price: 7.0, floor: 25 },
+          { date: '04.05', price: 6.8, floor: 9 }
+        ]
       }
     ]
   },
@@ -142,6 +258,81 @@ const DISTRICT_DATA = {
           { date: '05.14', price: 3.9, floor: 15 },
           { date: '04.28', price: 3.8, floor: 19 }
         ]
+      },
+      { 
+        id: 'ds-2', 
+        name: '송현동 마당 넓은 주택', 
+        lat: 35.8192, 
+        lng: 128.5434, 
+        mockX: 68, 
+        mockY: 72, 
+        address: '달서구 송현동 580-12', 
+        year: '2002년',
+        households: '단독 1가구',
+        trend: 'stable',
+        priceHistory59: [{ year: '2023', price: 4.2 }, { year: '2024', price: 4.5 }, { year: '2025', price: 4.8 }, { year: '2026', price: 5.0 }],
+        priceHistory84: [{ year: '2023', price: 5.0 }, { year: '2024', price: 5.2 }, { year: '2025', price: 5.3 }, { year: '2026', price: 5.5 }],
+        priceHistory114: [{ year: '2023', price: 6.0 }, { year: '2024', price: 6.2 }, { year: '2025', price: 6.4 }, { year: '2026', price: 6.6 }],
+        transactions: [
+          { date: '06.11', price: 5.5, floor: 1 },
+          { date: '03.02', price: 5.1, floor: 1 }
+        ]
+      },
+      { 
+        id: 'ds-3', 
+        name: '상인동 임대수익 상가주택', 
+        lat: 35.8211, 
+        lng: 128.5312, 
+        mockX: 50, 
+        mockY: 65, 
+        address: '달서구 상인동 221-3', 
+        year: '2010년',
+        households: '상가 및 4가구',
+        trend: 'stable',
+        priceHistory59: [{ year: '2023', price: 7.5 }, { year: '2024', price: 7.8 }, { year: '2025', price: 8.2 }, { year: '2026', price: 8.5 }],
+        priceHistory84: [{ year: '2023', price: 8.2 }, { year: '2024', price: 8.5 }, { year: '2025', price: 8.7 }, { year: '2026', price: 8.9 }],
+        priceHistory114: [{ year: '2023', price: 9.8 }, { year: '2024', price: 10.0 }, { year: '2025', price: 10.2 }, { year: '2026', price: 10.5 }],
+        transactions: [
+          { date: '05.20', price: 8.9, floor: 1 }
+        ]
+      },
+      { 
+        id: 'ds-4', 
+        name: '이곡동 리모델링 빌라', 
+        lat: 35.8512, 
+        lng: 128.5089, 
+        mockX: 20, 
+        mockY: 25, 
+        address: '달서구 이곡동 1024-5', 
+        year: '1998년',
+        households: '8세대',
+        trend: 'stable',
+        priceHistory59: [{ year: '2023', price: 1.8 }, { year: '2024', price: 1.9 }, { year: '2025', price: 2.0 }, { year: '2026', price: 2.1 }],
+        priceHistory84: [{ year: '2023', price: 2.1 }, { year: '2024', price: 2.1 }, { year: '2025', price: 2.1 }, { year: '2026', price: 2.1 }],
+        priceHistory114: [{ year: '2023', price: 2.5 }, { year: '2024', price: 2.5 }, { year: '2025', price: 2.6 }, { year: '2026', price: 2.6 }],
+        transactions: [
+          { date: '04.14', price: 2.1, floor: 2 }
+        ]
+      },
+      { 
+        id: 'ds-5', 
+        name: '월배아이파크2차', 
+        lat: 35.8085, 
+        lng: 128.5276, 
+        mockX: 42, 
+        mockY: 90, 
+        address: '달서구 유천동 365', 
+        year: '2016년',
+        households: '2,074세대',
+        trend: 'up',
+        priceHistory59: [{ year: '2023', price: 3.2 }, { year: '2024', price: 3.4 }, { year: '2025', price: 3.6 }, { year: '2026', price: 3.8 }],
+        priceHistory84: [{ year: '2023', price: 4.2 }, { year: '2024', price: 4.4 }, { year: '2025', price: 4.6 }, { year: '2026', price: 4.8 }],
+        priceHistory114: [{ year: '2023', price: 5.5 }, { year: '2024', price: 5.8 }, { year: '2025', price: 6.0 }, { year: '2026', price: 6.3 }],
+        transactions: [
+          { date: '06.28', price: 4.8, floor: 22 },
+          { date: '06.05', price: 4.6, floor: 14 },
+          { date: '04.19', price: 4.5, floor: 7 }
+        ]
       }
     ]
   },
@@ -170,6 +361,79 @@ const DISTRICT_DATA = {
           { date: '05.29', price: 3.4, floor: 25 },
           { date: '05.12', price: 3.4, floor: 12 },
           { date: '04.25', price: 3.3, floor: 6 }
+        ]
+      },
+      { 
+        id: 'bg-2', 
+        name: '칠성동 태양광 복층주택', 
+        lat: 35.8812, 
+        lng: 128.5912, 
+        mockX: 42, 
+        mockY: 55, 
+        address: '북구 칠성동2가 302-5', 
+        year: '2020년',
+        households: '단독 1가구',
+        trend: 'stable',
+        priceHistory59: [{ year: '2023', price: 5.5 }, { year: '2024', price: 5.8 }, { year: '2025', price: 6.2 }, { year: '2026', price: 6.5 }],
+        priceHistory84: [{ year: '2023', price: 6.2 }, { year: '2024', price: 6.4 }, { year: '2025', price: 6.6 }, { year: '2026', price: 6.8 }],
+        priceHistory114: [{ year: '2023', price: 7.5 }, { year: '2024', price: 7.8 }, { year: '2025', price: 8.2 }, { year: '2026', price: 8.5 }],
+        transactions: [
+          { date: '06.14', price: 6.8, floor: 1 },
+          { date: '04.02', price: 6.3, floor: 1 }
+        ]
+      },
+      { 
+        id: 'bg-3', 
+        name: '복현동 경북대인근 원룸빌딩', 
+        lat: 35.8945, 
+        lng: 128.6212, 
+        mockX: 85, 
+        mockY: 45, 
+        address: '북구 복현동 340-10', 
+        year: '2015년',
+        households: '원룸 12가구',
+        trend: 'stable',
+        priceHistory59: [{ year: '2023', price: 9.5 }, { year: '2024', price: 9.8 }, { year: '2025', price: 10.5 }, { year: '2026', price: 11.0 }],
+        priceHistory84: [{ year: '2023', price: 10.2 }, { year: '2024', price: 10.5 }, { year: '2025', price: 10.8 }, { year: '2026', price: 11.0 }],
+        priceHistory114: [{ year: '2023', price: 11.5 }, { year: '2024', price: 12.0 }, { year: '2025', price: 12.5 }, { year: '2026', price: 13.0 }],
+        transactions: [
+          { date: '05.29', price: 11.0, floor: 1 }
+        ]
+      },
+      { 
+        id: 'bg-4', 
+        name: '침산동 리모델링 빌라', 
+        lat: 35.8892, 
+        lng: 128.5834, 
+        mockX: 30, 
+        mockY: 35, 
+        address: '북구 침산동 123-5', 
+        year: '2001년(싹올수리)',
+        households: '10세대',
+        trend: 'stable',
+        priceHistory59: [{ year: '2023', price: 2.1 }, { year: '2024', price: 2.3 }, { year: '2025', price: 2.4 }, { year: '2026', price: 2.5 }],
+        priceHistory84: [{ year: '2023', price: 2.4 }, { year: '2024', price: 2.4 }, { year: '2025', price: 2.4 }, { year: '2026', price: 2.5 }],
+        priceHistory114: [{ year: '2023', price: 2.8 }, { year: '2024', price: 2.9 }, { year: '2025', price: 2.9 }, { year: '2026', price: 3.0 }],
+        transactions: [
+          { date: '06.01', price: 2.5, floor: 3 }
+        ]
+      },
+      { 
+        id: 'bg-5', 
+        name: '동변 테라스 타운하우스', 
+        lat: 35.9285, 
+        lng: 128.5985, 
+        mockX: 55, 
+        mockY: 15, 
+        address: '북구 동변동 650', 
+        year: '2012년',
+        households: '32세대',
+        trend: 'stable',
+        priceHistory59: [{ year: '2023', price: 4.5 }, { year: '2024', price: 4.8 }, { year: '2025', price: 5.0 }, { year: '2026', price: 5.2 }],
+        priceHistory84: [{ year: '2023', price: 5.0 }, { year: '2024', price: 5.1 }, { year: '2025', price: 5.2 }, { year: '2026', price: 5.2 }],
+        priceHistory114: [{ year: '2023', price: 6.0 }, { year: '2024', price: 6.2 }, { year: '2025', price: 6.4 }, { year: '2026', price: 6.5 }],
+        transactions: [
+          { date: '06.05', price: 5.2, floor: 1 }
         ]
       }
     ]
@@ -1056,16 +1320,11 @@ function triggerRoadviewAction() {
 
 function initKakaoRoadview(lat, lng) {
   const container = document.getElementById('roadview-canvas');
-  const fallback = document.getElementById('roadview-fallback');
-  const extLink = document.getElementById('roadview-external-link');
-  
-  // 외부 공식 맵 로드뷰 URL 연계
-  extLink.href = `https://map.kakao.com/link/roadview/${lat},${lng}`;
+  if (!container) return;
   
   if (window.kakao && window.kakao.maps && window.kakao.maps.Roadview) {
     try {
       const position = new window.kakao.maps.LatLng(lat, lng);
-      // 1. 기존 캔버스 노드 정리
       container.innerHTML = '';
       
       const roadview = new window.kakao.maps.Roadview(container);
@@ -1073,49 +1332,46 @@ function initKakaoRoadview(lat, lng) {
       
       roadviewClient.getNearestPanoId(position, 50, function(panoId) {
         if (panoId === null) {
-          // 로드뷰 서비스 불가 구역 대응
-          fallback.classList.remove('hidden');
-          container.appendChild(fallback);
+          showRoadviewFallback(container, lat, lng);
         } else {
-          fallback.classList.add('hidden');
           roadview.setPanoId(panoId, position);
         }
       });
     } catch (e) {
       console.error(e);
-      fallback.classList.remove('hidden');
-      container.appendChild(fallback);
+      showRoadviewFallback(container, lat, lng);
     }
   } else {
-    // API 미로드 상태일 때 폴백 뷰 노출 + 이미지 매칭
-    fallback.classList.remove('hidden');
-    
-    // 로드뷰 로딩 대신, 아파트 대표 사진을 띄워서 사용자 친화적으로 노출!
-    const aptImgUrl = selectedApartment ? getAptImage(selectedApartment.id) : '';
-    let imageHtml = '';
-    if (aptImgUrl) {
-      imageHtml = `
-        <div class="relative w-full max-w-sm h-48 rounded-xl overflow-hidden border border-slate-200 shadow-sm mx-auto mb-3">
-          <img class="w-full h-full object-cover" src="${aptImgUrl}" alt="아파트 대표 사진">
-          <div class="absolute inset-0 bg-slate-900/10"></div>
-        </div>
-      `;
-    }
-    
-    fallback.innerHTML = `
+    showRoadviewFallback(container, lat, lng);
+  }
+}
+
+function showRoadviewFallback(container, lat, lng) {
+  const aptImgUrl = selectedApartment ? getAptImage(selectedApartment.id) : '';
+  let imageHtml = '';
+  if (aptImgUrl) {
+    imageHtml = `
+      <div class="relative w-full max-w-sm h-48 rounded-xl overflow-hidden border border-slate-200 shadow-sm mx-auto mb-3">
+        <img class="w-full h-full object-cover" src="${aptImgUrl}" alt="아파트 대표 사진">
+        <div class="absolute inset-0 bg-slate-900/10"></div>
+      </div>
+    `;
+  }
+  
+  container.innerHTML = `
+    <div class="absolute inset-0 flex flex-col items-center justify-center bg-slate-100 text-center p-6 gap-3 text-slate-500">
       <span class="material-symbols-outlined text-secondary text-[36px] mb-2">image</span>
-      <span class="text-sm font-bold text-slate-700">${selectedApartment ? selectedApartment.name : '아파트'} 전경 사진</span>
+      <span class="text-sm font-bold text-slate-700">${selectedApartment ? selectedApartment.name : '단지'} 전경 사진</span>
       ${imageHtml}
       <p class="text-xs text-text-muted leading-relaxed mb-3">
         카카오 지도 SDK 미작동 상태로 모의 구동 중입니다.<br>
         실제 3D 거리 뷰를 감상하려면 아래 공식 카카오 맵 서비스를 연결하세요.
       </p>
-      <a id="roadview-external-link" href="https://map.kakao.com/link/roadview/${lat},${lng}" target="_blank" class="px-5 py-2.5 bg-[#0058be] hover:opacity-90 rounded-xl text-xs font-bold text-white transition-all shadow-md inline-flex items-center gap-1">
+      <a href="https://map.kakao.com/link/roadview/${lat},${lng}" target="_blank" class="px-5 py-2.5 bg-[#0058be] hover:opacity-90 rounded-xl text-xs font-bold text-white transition-all shadow-md inline-flex items-center gap-1">
         <span class="material-symbols-outlined text-[16px]">open_in_new</span> 카카오맵에서 3D 로드뷰 바로 보기
       </a>
-    `;
-    container.appendChild(fallback);
-  }
+    </div>
+  `;
 }
 
 // ==================== PRICE TREND CHART LOGIC (PURE SVG) ====================
@@ -1319,13 +1575,28 @@ async function toggleBookmarkAction() {
 // 아파트 대표 이미지 반환
 function getAptImage(aptId) {
   const images = {
-    'ss-1': 'https://lh3.googleusercontent.com/aida-public/AB6AXuB7gM7P1E3g_HBRnAtZK5XA0ttEiVRY4byaSQoXhXyfqJsb5r1U_A5a5Y85trN6FinOGGS4CnozbSgXayrcEfIfk4uiD9OIOC7eTQ4KNLJiD2mh2_SZmZnXMHFInT33MH9dzp5hukP-OBvL-GFO6YKERqltGulOlSYrHFiJluA8NJQ2r_q3hzPbOGuP0B7HBC-TVxPFyguHe-rMqT452LDq5PMfcEfwu-4-gCRObLUZMgsq2uiDc7ph-aKZksfD9eBh0srKFMI2-hY',
-    'ss-2': 'https://lh3.googleusercontent.com/aida-public/AB6AXuC7ouLEZi-RK94AxesM9GYOU3N350IEALFcFWFz1urUsUTG87hnNkV6ijG5nyFYZOscWVbxqc0eSBA_jru4IR3d_TvE-cA4aWvBxFf91ohSEZJAB4bNLAilgqyHV7k80lUBnyCRHxxyTPmMb2CQRWlcRRoJpi5ykVRO02jbcesnOQKSICJGjWTEHagAhr0DYdqVt9_SvRaFFs4tJNGS4Wg-cMbuvCXeHfcmyx1vn5Vf73j1JU8Jv_K-I4sXrndokhTGe47iQ9BEp9Q',
-    'jg-1': 'https://lh3.googleusercontent.com/aida-public/AB6AXuCkby8FE76Lrn-VoFI8cBgSZld7biVcePnpTlcxbpxveZFNO5w1-Runt_2-x85I2n5fPCY3TM18uID9sjekTjsR-XjOETN2eeCiHmOX07gOvRqG0-4V6MLz-rBnDTYKeMsioNAl-HboTH0Ei7koaDqQfDO7_MQENXJP_aLqOVSR4nKN0pacmg-kEwYbqHrA7MtTgk1xd_TRNfbrhNw_VNmEms6mB7RK8vu8KEFs0r3MsyGQDtoY5wlrzWwjrlBn0oNhaVre9EQHLvQ',
-    'jg-2': 'https://lh3.googleusercontent.com/aida-public/AB6AXuCkby8FE76Lrn-VoFI8cBgSZld7biVcePnpTlcxbpxveZFNO5w1-Runt_2-x85I2n5fPCY3TM18uID9sjekTjsR-XjOETN2eeCiHmOX07gOvRqG0-4V6MLz-rBnDTYKeMsioNAl-HboTH0Ei7koaDqQfDO7_MQENXJP_aLqOVSR4nKN0pacmg-kEwYbqHrA7MtTgk1xd_TRNfbrhNw_VNmEms6mB7RK8vu8KEFs0r3MsyGQDtoY5wlrzWwjrlBn0oNhaVre9EQHLvQ',
-    'ds-1': 'https://lh3.googleusercontent.com/aida-public/AB6AXuDSCCqgR0cg3YuMDyeI-IouRplkYkinMXKKfEtlKOaG6wxwwe1VlA-wYvWBUB0jmHhKrvDvwqHxIq8LK8l8vrju6y4FkJ2YDHABrl9H76FvVY9WaMP_ryjJSErprgHsJiiMio4VbuM2wky2UzV1EVgq-m9Ryz4wUuX2YgGAaClaDZgTm8A8lWTc72RDBrmrnSF5gThe7f_dPNbAud5EqE9AxzkE1yq8RQUE71LhmTC3erCNaoRvt4xJC8Z-O2N4VAyxyV3r_1ZxV4o'
+    'ss-1': 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=800&q=80',
+    'ss-2': 'https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&w=800&q=80',
+    'ss-3': 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80',
+    'ss-4': 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=800&q=80',
+    'ss-5': 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800&q=80',
+    'jg-1': 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=800&q=80',
+    'jg-2': 'https://images.unsplash.com/photo-1570129477492-45c003edd2be?auto=format&fit=crop&w=800&q=80',
+    'jg-3': 'https://images.unsplash.com/photo-1605276374104-dee2a0ed3cd6?auto=format&fit=crop&w=800&q=80',
+    'jg-4': 'https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?auto=format&fit=crop&w=800&q=80',
+    'jg-5': 'https://images.unsplash.com/photo-1600565193348-f74bd3c7ccdf?auto=format&fit=crop&w=800&q=80',
+    'ds-1': 'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=800&q=80',
+    'ds-2': 'https://images.unsplash.com/photo-1598257006458-087169a1f08d?auto=format&fit=crop&w=800&q=80',
+    'ds-3': 'https://images.unsplash.com/photo-1507089947368-19c1da9775ae?auto=format&fit=crop&w=800&q=80',
+    'ds-4': 'https://images.unsplash.com/photo-1513584684374-8bab748fbf90?auto=format&fit=crop&w=800&q=80',
+    'ds-5': 'https://images.unsplash.com/photo-1580587771525-78b9dba3b914?auto=format&fit=crop&w=800&q=80',
+    'bg-1': 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=800&q=80',
+    'bg-2': 'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=800&q=80',
+    'bg-3': 'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=800&q=80',
+    'bg-4': 'https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&w=800&q=80',
+    'bg-5': 'https://images.unsplash.com/photo-1600585154526-990dced4db0d?auto=format&fit=crop&w=800&q=80'
   };
-  return images[aptId] || 'https://lh3.googleusercontent.com/aida-public/AB6AXuDSCCqgR0cg3YuMDyeI-IouRplkYkinMXKKfEtlKOaG6wxwwe1VlA-wYvWBUB0jmHhKrvDvwqHxIq8LK8l8vrju6y4FkJ2YDHABrl9H76FvVY9WaMP_ryjJSErprgHsJiiMio4VbuM2wky2UzV1EVgq-m9Ryz4wUuX2YgGAaClaDZgTm8A8lWTc72RDBrmrnSF5gThe7f_dPNbAud5EqE9AxzkE1yq8RQUE71LhmTC3erCNaoRvt4xJC8Z-O2N4VAyxyV3r_1ZxV4o';
+  return images[aptId] || 'https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&w=800&q=80';
 }
 
 // 북마크 객체 규격화
@@ -1494,7 +1765,7 @@ const DEFAULT_LISTINGS = [
     pyeong: 34,
     floor: '41층 / 54층',
     direction: '남동향',
-    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuB7gM7P1E3g_HBRnAtZK5XA0ttEiVRY4byaSQoXhXyfqJsb5r1U_A5a5Y85trN6FinOGGS4CnozbSgXayrcEfIfk4uiD9OIOC7eTQ4KNLJiD2mh2_SZmZnXMHFInT33MH9dzp5hukP-OBvL-GFO6YKERqltGulOlSYrHFiJluA8NJQ2r_q3hzPbOGuP0B7HBC-TVxPFyguHe-rMqT452LDq5PMfcEfwu-4-gCRObLUZMgsq2uiDc7ph-aKZksfD9eBh0srKFMI2-hY',
+    image: 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=800&q=80',
     description: '앞산과 수성못 조망이 매우 우수한 최고급 세대입니다. 거실 대리석 마감 및 프리미엄 올수리 상태입니다.',
     broker: '제니스명품공인중개사',
     contact: '053-745-1234',
@@ -1510,7 +1781,7 @@ const DEFAULT_LISTINGS = [
     pyeong: 45,
     floor: '28층 / 54층',
     direction: '남서향',
-    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuB7gM7P1E3g_HBRnAtZK5XA0ttEiVRY4byaSQoXhXyfqJsb5r1U_A5a5Y85trN6FinOGGS4CnozbSgXayrcEfIfk4uiD9OIOC7eTQ4KNLJiD2mh2_SZmZnXMHFInT33MH9dzp5hukP-OBvL-GFO6YKERqltGulOlSYrHFiJluA8NJQ2r_q3hzPbOGuP0B7HBC-TVxPFyguHe-rMqT452LDq5PMfcEfwu-4-gCRObLUZMgsq2uiDc7ph-aKZksfD9eBh0srKFMI2-hY',
+    image: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800&q=80',
     description: '소유주 사정상 급매로 진행하는 특가 매물입니다. 방 4개, 욕실 2개 구조로 넓고 아늑합니다.',
     broker: '수성탑공인중개사',
     contact: '053-741-5588',
@@ -1526,7 +1797,7 @@ const DEFAULT_LISTINGS = [
     pyeong: 34,
     floor: '18층 / 49층',
     direction: '남향',
-    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuC7ouLEZi-RK94AxesM9GYOU3N350IEALFcFWFz1urUsUTG87hnNkV6ijG5nyFYZOscWVbxqc0eSBA_jru4IR3d_TvE-cA4aWvBxFf91ohSEZJAB4bNLAilgqyHV7k80lUBnyCRHxxyTPmMb2CQRWlcRRoJpi5ykVRO02jbcesnOQKSICJGjWTEHagAhr0DYdqVt9_SvRaFFs4tJNGS4Wg-cMbuvCXeHfcmyx1vn5Vf73j1JU8Jv_K-I4sXrndokhTGe47iQ9BEp9Q',
+    image: 'https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&w=800&q=80',
     description: '2호선 범어역 도보 2분 거리의 초역세권 대단지입니다. 젊은 신혼부부에게 강력 추천하는 깨끗한 매물입니다.',
     broker: '범어푸르지오공인',
     contact: '053-752-9900',
@@ -1542,7 +1813,7 @@ const DEFAULT_LISTINGS = [
     pyeong: 34,
     floor: '35층 / 49층',
     direction: '남서향',
-    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuC7ouLEZi-RK94AxesM9GYOU3N350IEALFcFWFz1urUsUTG87hnNkV6ijG5nyFYZOscWVbxqc0eSBA_jru4IR3d_TvE-cA4aWvBxFf91ohSEZJAB4bNLAilgqyHV7k80lUBnyCRHxxyTPmMb2CQRWlcRRoJpi5ykVRO02jbcesnOQKSICJGjWTEHagAhr0DYdqVt9_SvRaFFs4tJNGS4Wg-cMbuvCXeHfcmyx1vn5Vf73j1JU8Jv_K-I4sXrndokhTGe47iQ9BEp9Q',
+    image: 'https://images.unsplash.com/photo-1600565193348-f74bd3c7ccdf?auto=format&fit=crop&w=800&q=80',
     description: '채광과 통풍이 우수한 판상형 구조입니다. 선호 학군인 범어초 배정 단지로 입지가 최상입니다.',
     broker: '학군단지전문중개',
     contact: '053-759-4400',
@@ -1550,7 +1821,7 @@ const DEFAULT_LISTINGS = [
   },
   {
     id: 'lst-5',
-    aptId: '',
+    aptId: 'ss-3',
     title: '수성구 만촌동 명품 단독형 전원주택',
     district: 'suseong',
     type: 'house',
@@ -1558,7 +1829,7 @@ const DEFAULT_LISTINGS = [
     pyeong: 65,
     floor: '지하 1층 ~ 지상 2층',
     direction: '남동향',
-    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBHK9nEjDKpky8XrzSy1Clg0FvVKs1S1xCUKQZgrvxMJGl-yDvs3pufihRgNO4hWm-DrNF5iZ669q9E1jhEDPunqrPvywrNvqIiG1pjYNypbVL4NjnOeMH6K5BGmjc84Fx_pLCyYPgoK8jL9QUJITBU9x6di2x20_vgv7n9s3M-GJzLUyQIsqwNn_4wgl_KAQs0g83RAvUwpHOTrHvj9ZGG0xbq2r6kHENN-28OXS_RgwKzjfQcq4-oNqi9t5BCshqrQIq_aRyXysY',
+    image: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80',
     description: '만촌동 고급 단독주택지 내에 위치한 대저택입니다. 넓은 전용 마당과 2대 전용 차고지가 완비되어 있습니다.',
     broker: '만촌헤리티지공인중개사',
     contact: '053-744-8899',
@@ -1566,7 +1837,7 @@ const DEFAULT_LISTINGS = [
   },
   {
     id: 'lst-6',
-    aptId: '',
+    aptId: 'ss-4',
     title: '수성구 범어동 신축 고급 다세대 빌라',
     district: 'suseong',
     type: 'house',
@@ -1574,7 +1845,7 @@ const DEFAULT_LISTINGS = [
     pyeong: 28,
     floor: '3층 / 5층',
     direction: '남향',
-    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBHK9nEjDKpky8XrzSy1Clg0FvVKs1S1xCUKQZgrvxMJGl-yDvs3pufihRgNO4hWm-DrNF5iZ669q9E1jhEDPunqrPvywrNvqIiG1pjYNypbVL4NjnOeMH6K5BGmjc84Fx_pLCyYPgoK8jL9QUJITBU9x6di2x20_vgv7n9s3M-GJzLUyQIsqwNn_4wgl_KAQs0g83RAvUwpHOTrHvj9ZGG0xbq2r6kHENN-28OXS_RgwKzjfQcq4-oNqi9t5BCshqrQIq_aRyXysY',
+    image: 'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=800&q=80',
     description: '최신 트렌드 인테리어와 엘리베이터가 완비된 신축 빌라입니다. 주차 대수 세대당 1.2대 가능합니다.',
     broker: '범어에셋공인',
     contact: '053-756-1122',
@@ -1590,7 +1861,7 @@ const DEFAULT_LISTINGS = [
     pyeong: 34,
     floor: '22층 / 36층',
     direction: '남향',
-    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCkby8FE76Lrn-VoFI8cBgSZld7biVcePnpTlcxbpxveZFNO5w1-Runt_2-x85I2n5fPCY3TM18uID9sjekTjsR-XjOETN2eeCiHmOX07gOvRqG0-4V6MLz-rBnDTYKeMsioNAl-HboTH0Ei7koaDqQfDO7_MQENXJP_aLqOVSR4nKN0pacmg-kEwYbqHrA7MtTgk1xd_TRNfbrhNw_VNmEms6mB7RK8vu8KEFs0r3MsyGQDtoY5wlrzWwjrlBn0oNhaVre9EQHLvQ',
+    image: 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=800&q=80',
     description: '남산동 대장 단지로 준공 4년 차의 명품 자이 대단지입니다. 막힘없는 해가 잘 드는 로얄 매물입니다.',
     broker: '남산자이공인중개사',
     contact: '053-255-8800',
@@ -1606,7 +1877,7 @@ const DEFAULT_LISTINGS = [
     pyeong: 24,
     floor: '12층 / 36층',
     direction: '동향',
-    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCkby8FE76Lrn-VoFI8cBgSZld7biVcePnpTlcxbpxveZFNO5w1-Runt_2-x85I2n5fPCY3TM18uID9sjekTjsR-XjOETN2eeCiHmOX07gOvRqG0-4V6MLz-rBnDTYKeMsioNAl-HboTH0Ei7koaDqQfDO7_MQENXJP_aLqOVSR4nKN0pacmg-kEwYbqHrA7MtTgk1xd_TRNfbrhNw_VNmEms6mB7RK8vu8KEFs0r3MsyGQDtoY5wlrzWwjrlBn0oNhaVre9EQHLvQ',
+    image: 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=800&q=80',
     description: '군더더기 없는 확장형 평면 구조로 관리비가 저렴하고 매우 깨끗한 컨디션입니다.',
     broker: '가온공인중개사',
     contact: '053-253-1133',
@@ -1622,7 +1893,7 @@ const DEFAULT_LISTINGS = [
     pyeong: 34,
     floor: '15층 / 39층',
     direction: '남서향',
-    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCkby8FE76Lrn-VoFI8cBgSZld7biVcePnpTlcxbpxveZFNO5w1-Runt_2-x85I2n5fPCY3TM18uID9sjekTjsR-XjOETN2eeCiHmOX07gOvRqG0-4V6MLz-rBnDTYKeMsioNAl-HboTH0Ei7koaDqQfDO7_MQENXJP_aLqOVSR4nKN0pacmg-kEwYbqHrA7MtTgk1xd_TRNfbrhNw_VNmEms6mB7RK8vu8KEFs5trN6FinOGGS4CnozbSgXayrcEfIfk4uiD9OIOC7eTQ4KNLJiD2mh2_SZmZnXMHFInT33MH9dzp5hukP-OBvL-GFO6YKERqltGulOlSYrHFiJluA8NJQ2r_q3hzPbOGuP0B7HBC-TVxPFyguHe-rMqT452LDq5PMfcEfwu-4-gCRObLUZMgsq2uiDc7ph-aKZksfD9eBh0srKFMI2-hY',
+    image: 'https://images.unsplash.com/photo-1570129477492-45c003edd2be?auto=format&fit=crop&w=800&q=80',
     description: '대구역 도보 5분 거리로 출퇴근 및 상권 이용이 매우 극대화된 최고 명문 대단지 아파트입니다.',
     broker: '센트럴자이공인',
     contact: '053-424-7700',
@@ -1630,7 +1901,7 @@ const DEFAULT_LISTINGS = [
   },
   {
     id: 'lst-10',
-    aptId: '',
+    aptId: 'jg-3',
     title: '중구 삼덕동 감성 골목 단독 상가주택',
     district: 'junggu',
     type: 'house',
@@ -1638,7 +1909,7 @@ const DEFAULT_LISTINGS = [
     pyeong: 40,
     floor: '지상 1층 ~ 2층',
     direction: '남향',
-    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBHK9nEjDKpky8XrzSy1Clg0FvVKs1S1xCUKQZgrvxMJGl-yDvs3pufihRgNO4hWm-DrNF5iZ669q9E1jhEDPunqrPvywrNvqIiG1pjYNypbVL4NjnOeMH6K5BGmjc84Fx_pLCyYPgoK8jL9QUJITBU9x6di2x20_vgv7n9s3M-GJzLUyQIsqwNn_4wgl_KAQs0g83RAvUwpHOTrHvj9ZGG0xbq2r6kHENN-28OXS_RgwKzjfQcq4-oNqi9t5BCshqrQIq_aRyXysY',
+    image: 'https://images.unsplash.com/photo-1605276374104-dee2a0ed3cd6?auto=format&fit=crop&w=800&q=80',
     description: '삼덕동 핫플레이스 내에 위치한 단독주택으로, 1층을 이색 카페나 공방으로 개조하기 적합합니다.',
     broker: '삼덕부동산 공인중개사',
     contact: '053-252-0088',
@@ -1646,7 +1917,7 @@ const DEFAULT_LISTINGS = [
   },
   {
     id: 'lst-11',
-    aptId: '',
+    aptId: 'jg-4',
     title: '중구 대봉동 한옥 리모델링 단독주택',
     district: 'junggu',
     type: 'house',
@@ -1654,7 +1925,7 @@ const DEFAULT_LISTINGS = [
     pyeong: 32,
     floor: '1층 단층 한옥',
     direction: '남동향',
-    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBHK9nEjDKpky8XrzSy1Clg0FvVKs1S1xCUKQZgrvxMJGl-yDvs3pufihRgNO4hWm-DrNF5iZ669q9E1jhEDPunqrPvywrNvqIiG1pjYNypbVL4NjnOeMH6K5BGmjc84Fx_pLCyYPgoK8jL9QUJITBU9x6di2x20_vgv7n9s3M-GJzLUyQIsqwNn_4wgl_KAQs0g83RAvUwpHOTrHvj9ZGG0xbq2r6kHENN-28OXS_RgwKzjfQcq4-oNqi9t5BCshqrQIq_aRyXysY',
+    image: 'https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?auto=format&fit=crop&w=800&q=80',
     description: '전통 한옥의 목조 서까래를 그대로 보존하며 내부 화장실과 주방을 전면 현대식 올수리한 유니크한 주택입니다.',
     broker: '한옥전문 공인중개사',
     contact: '053-421-4900',
@@ -1670,7 +1941,7 @@ const DEFAULT_LISTINGS = [
     pyeong: 34,
     floor: '14층 / 30층',
     direction: '남서향',
-    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDSCCqgR0cg3YuMDyeI-IouRplkYkinMXKKfEtlKOaG6wxwwe1VlA-wYvWBUB0jmHhKrvDvwqHxIq8LK8l8vrju6y4FkJ2YDHABrl9H76FvVY9WaMP_ryjJSErprgHsJiiMio4VbuM2wky2UzV1EVgq-m9Ryz4wUuX2YgGAaClaDZgTm8A8lWTc72RDBrmrnSF5gThe7f_dPNbAud5EqE9AxzkE1yq8RQUE71LhmTC3erCNaoRvt4xJC8Z-O2N4VAyxyV3r_1ZxV4o',
+    image: 'https://images.unsplash.com/photo-1582407947304-fd86f028f716?auto=format&fit=crop&w=800&q=80',
     description: '소음 없는 안동에 자리하여 조용하고 쾌적합니다. 단지 내 커뮤니티 및 헬스장 이용이 편리합니다.',
     broker: '월성푸른공인중개사',
     contact: '053-631-8811',
@@ -1686,7 +1957,7 @@ const DEFAULT_LISTINGS = [
     pyeong: 45,
     floor: '9층 / 30층',
     direction: '남향',
-    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDSCCqgR0cg3YuMDyeI-IouRplkYkinMXKKfEtlKOaG6wxwwe1VlA-wYvWBUB0jmHhKrvDvwqHxIq8LK8l8vrju6y4FkJ2YDHABrl9H76FvVY9WaMP_ryjJSErprgHsJiiMio4VbuM2wky2UzV1EVgq-m9Ryz4wUuX2YgGAaClaDZgTm8A8lWTc72RDBrmrnSF5gThe7f_dPNbAud5EqE9AxzkE1yq8RQUE71LhmTC3erCNaoRvt4xJC8Z-O2N4VAyxyV3r_1ZxV4o',
+    image: 'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=800&q=80',
     description: '시세 대비 저렴한 초급매물입니다. 넓은 다용도실 보유로 수납력이 좋습니다.',
     broker: '달서탑공인중개사',
     contact: '053-636-0099',
@@ -1694,7 +1965,7 @@ const DEFAULT_LISTINGS = [
   },
   {
     id: 'lst-14',
-    aptId: '',
+    aptId: 'ds-2',
     title: '달서구 송현동 앞산 인근 마당 넓은 주택',
     district: 'dalseo',
     type: 'house',
@@ -1702,7 +1973,7 @@ const DEFAULT_LISTINGS = [
     pyeong: 48,
     floor: '지상 1층 ~ 2층',
     direction: '남향',
-    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBHK9nEjDKpky8XrzSy1Clg0FvVKs1S1xCUKQZgrvxMJGl-yDvs3pufihRgNO4hWm-DrNF5iZ669q9E1jhEDPunqrPvywrNvqIiG1pjYNypbVL4NjnOeMH6K5BGmjc84Fx_pLCyYPgoK8jL9QUJITBU9x6di2x20_vgv7n9s3M-GJzLUyQIsqwNn_4wgl_KAQs0g83RAvUwpHOTrHvj9ZGG0xbq2r6kHENN-28OXS_RgwKzjfQcq4-oNqi9t5BCshqrQIq_aRyXysY',
+    image: 'https://images.unsplash.com/photo-1598257006458-087169a1f08d?auto=format&fit=crop&w=800&q=80',
     description: '앞산 순환도로와 근접해 쾌적한 숲세권 혜택을 누리는 단독주택입니다. 정원에 아름다운 나무가 심겨 있습니다.',
     broker: '송현힐링부동산',
     contact: '053-625-7722',
@@ -1710,7 +1981,7 @@ const DEFAULT_LISTINGS = [
   },
   {
     id: 'lst-15',
-    aptId: '',
+    aptId: 'ds-3',
     title: '달서구 상인동 상인역 도보 8분 상가주택',
     district: 'dalseo',
     type: 'house',
@@ -1718,7 +1989,7 @@ const DEFAULT_LISTINGS = [
     pyeong: 38,
     floor: '지상 1층 ~ 3층',
     direction: '남서향',
-    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBHK9nEjDKpky8XrzSy1Clg0FvVKs1S1xCUKQZgrvxMJGl-yDvs3pufihRgNO4hWm-DrNF5iZ669q9E1jhEDPunqrPvywrNvqIiG1pjYNypbVL4NjnOeMH6K5BGmjc84Fx_pLCyYPgoK8jL9QUJITBU9x6di2x20_vgv7n9s3M-GJzLUyQIsqwNn_4wgl_KAQs0g83RAvUwpHOTrHvj9ZGG0xbq2r6kHENN-28OXS_RgwKzjfQcq4-oNqi9t5BCshqrQIq_aRyXysY',
+    image: 'https://images.unsplash.com/photo-1507089947368-19c1da9775ae?auto=format&fit=crop&w=800&q=80',
     description: '1층 소형 상가에서 안정적인 월세 임대수익이 나오고 있는 상가주택 매물입니다.',
     broker: '상인빌딩전문공인',
     contact: '053-644-3311',
@@ -1726,7 +1997,7 @@ const DEFAULT_LISTINGS = [
   },
   {
     id: 'lst-16',
-    aptId: '',
+    aptId: 'ds-4',
     title: '달서구 이곡동 조용하고 쾌적한 다세대 빌라',
     district: 'dalseo',
     type: 'house',
@@ -1734,7 +2005,7 @@ const DEFAULT_LISTINGS = [
     pyeong: 24,
     floor: '2층 / 4층',
     direction: '남동향',
-    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBHK9nEjDKpky8XrzSy1Clg0FvVKs1S1xCUKQZgrvxMJGl-yDvs3pufihRgNO4hWm-DrNF5iZ669q9E1jhEDPunqrPvywrNvqIiG1pjYNypbVL4NjnOeMH6K5BGmjc84Fx_pLCyYPgoK8jL9QUJITBU9x6di2x20_vgv7n9s3M-GJzLUyQIsqwNn_4wgl_KAQs0g83RAvUwpHOTrHvj9ZGG0xbq2r6kHENN-28OXS_RgwKzjfQcq4-oNqi9t5BCshqrQIq_aRyXysY',
+    image: 'https://images.unsplash.com/photo-1513584684374-8bab748fbf90?auto=format&fit=crop&w=800&q=80',
     description: '학군 인근의 조용하고 실속 있는 소형 빌라로 누수 방수 수리가 전면 완료되었습니다.',
     broker: '성서사랑공인',
     contact: '053-582-8989',
@@ -1750,7 +2021,7 @@ const DEFAULT_LISTINGS = [
     pyeong: 34,
     floor: '25층 / 30층',
     direction: '동향',
-    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDSCCqgR0cg3YuMDyeI-IouRplkYkinMXKKfEtlKOaG6wxwwe1VlA-wYvWBUB0jmHhKrvDvwqHxIq8LK8l8vrju6y4FkJ2YDHABrl9H76FvVY9WaMP_ryjJSErprgHsJiiMio4VbuM2wky2UzV1EVgq-m9Ryz4wUuX2YgGAaClaDZgTm8A8lWTc72RDBrmrnSF5gThe7f_dPNbAud5EqE9AxzkE1yq8RQUE71LhmTC3erCNaoRvt4xJC8Z-O2N4VAyxyV3r_1ZxV4o',
+    image: 'https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&w=800&q=80',
     description: '신천 강변 산책로가 바로 내다보이는 막힘없는 뷰를 자랑하는 추천 세대입니다.',
     broker: '침산강변부동산',
     contact: '053-353-9000',
@@ -1766,7 +2037,7 @@ const DEFAULT_LISTINGS = [
     pyeong: 34,
     floor: '4층 / 30층',
     direction: '남향',
-    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDSCCqgR0cg3YuMDyeI-IouRplkYkinMXKKfEtlKOaG6wxwwe1VlA-wYvWBUB0jmHhKrvDvwqHxIq8LK8l8vrju6y4FkJ2YDHABrl9H76FvVY9WaMP_ryjJSErprgHsJiiMio4VbuM2wky2UzV1EVgq-m9Ryz4wUuX2YgGAaClaDZgTm8A8lWTc72RDBrmrnSF5gThe7f_dPNbAud5EqE9AxzkE1yq8RQUE71LhmTC3erCNaoRvt4xJC8Z-O2N4VAyxyV3r_1ZxV4o',
+    image: 'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=800&q=80',
     description: '단지 내의 정원이 앞마당처럼 보이고 해가 잘 드는 가성비 우수 저층 아파트입니다.',
     broker: '푸르지오탑공인',
     contact: '053-356-8844',
@@ -1774,7 +2045,7 @@ const DEFAULT_LISTINGS = [
   },
   {
     id: 'lst-19',
-    aptId: '',
+    aptId: 'bg-2',
     title: '북구 칠성동 단독 복층 전원주택',
     district: 'bukgu',
     type: 'house',
@@ -1782,7 +2053,7 @@ const DEFAULT_LISTINGS = [
     pyeong: 44,
     floor: '1~2층 복층형',
     direction: '남동향',
-    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBHK9nEjDKpky8XrzSy1Clg0FvVKs1S1xCUKQZgrvxMJGl-yDvs3pufihRgNO4hWm-DrNF5iZ669q9E1jhEDPunqrPvywrNvqIiG1pjYNypbVL4NjnOeMH6K5BGmjc84Fx_pLCyYPgoK8jL9QUJITBU9x6di2x20_vgv7n9s3M-GJzLUyQIsqwNn_4wgl_KAQs0g83RAvUwpHOTrHvj9ZGG0xbq2r6kHENN-28OXS_RgwKzjfQcq4-oNqi9t5BCshqrQIq_aRyXysY',
+    image: 'https://images.unsplash.com/photo-1580587771525-78b9dba3b914?auto=format&fit=crop&w=800&q=80',
     description: '대구역 유통단지 인근의 목조 단독주택으로 태양광 발전기 완비되어 전기세가 대폭 절약됩니다.',
     broker: '칠성대구공인중개사',
     contact: '053-352-7711',
@@ -1790,7 +2061,7 @@ const DEFAULT_LISTINGS = [
   },
   {
     id: 'lst-20',
-    aptId: '',
+    aptId: 'bg-3',
     title: '북구 복현동 경북대 테크노문 인근 원룸건물',
     district: 'bukgu',
     type: 'house',
@@ -1798,7 +2069,7 @@ const DEFAULT_LISTINGS = [
     pyeong: 70,
     floor: '지상 1층 ~ 4층',
     direction: '남향',
-    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBHK9nEjDKpky8XrzSy1Clg0FvVKs1S1xCUKQZgrvxMJGl-yDvs3pufihRgNO4hWm-DrNF5iZ669q9E1jhEDPunqrPvywrNvqIiG1pjYNypbVL4NjnOeMH6K5BGmjc84Fx_pLCyYPgoK8jL9QUJITBU9x6di2x20_vgv7n9s3M-GJzLUyQIsqwNn_4wgl_KAQs0g83RAvUwpHOTrHvj9ZGG0xbq2r6kHENN-28OXS_RgwKzjfQcq4-oNqi9t5BCshqrQIq_aRyXysY',
+    image: 'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=800&q=80',
     description: '경북대 테크노문 바로 인근에 있어 대학생 원룸 임대 수요가 일 년 내내 가득 차는 알짜배기 건물입니다.',
     broker: '경북대원룸하우스',
     contact: '053-954-2200',
@@ -1806,7 +2077,7 @@ const DEFAULT_LISTINGS = [
   },
   {
     id: 'lst-21',
-    aptId: '',
+    aptId: 'bg-4',
     title: '북구 침산동 조용한 골목의 리모델링 빌라',
     district: 'bukgu',
     type: 'house',
@@ -1814,7 +2085,7 @@ const DEFAULT_LISTINGS = [
     pyeong: 26,
     floor: '4층 / 5층',
     direction: '남서향',
-    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBHK9nEjDKpky8XrzSy1Clg0FvVKs1S1xCUKQZgrvxMJGl-yDvs3pufihRgNO4hWm-DrNF5iZ669q9E1jhEDPunqrPvywrNvqIiG1pjYNypbVL4NjnOeMH6K5BGmjc84Fx_pLCyYPgoK8jL9QUJITBU9x6di2x20_vgv7n9s3M-GJzLUyQIsqwNn_4wgl_KAQs0g83RAvUwpHOTrHvj9ZGG0xbq2r6kHENN-28OXS_RgwKzjfQcq4-oNqi9t5BCshqrQIq_aRyXysY',
+    image: 'https://images.unsplash.com/photo-1600585154526-990dced4db0d?auto=format&fit=crop&w=800&q=80',
     description: '샷시부터 내외부 화장실 타일까지 최근 인테리어 리모델링을 싹 끝내어 새집 같습니다.',
     broker: '침산하우징부동산',
     contact: '053-355-1100',
@@ -1822,7 +2093,7 @@ const DEFAULT_LISTINGS = [
   },
   {
     id: 'lst-22',
-    aptId: '',
+    aptId: 'bg-5',
     title: '북구 동변동 테라스 타운하우스',
     district: 'bukgu',
     type: 'house',
@@ -1830,7 +2101,7 @@ const DEFAULT_LISTINGS = [
     pyeong: 38,
     floor: '1층 단독 테라스 세대',
     direction: '남동향',
-    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBHK9nEjDKpky8XrzSy1Clg0FvVKs1S1xCUKQZgrvxMJGl-yDvs3pufihRgNO4hWm-DrNF5iZ669q9E1jhEDPunqrPvywrNvqIiG1pjYNypbVL4NjnOeMH6K5BGmjc84Fx_pLCyYPgoK8jL9QUJITBU9x6di2x20_vgv7n9s3M-GJzLUyQIsqwNn_4wgl_KAQs0g83RAvUwpHOTrHvj9ZGG0xbq2r6kHENN-28OXS_RgwKzjfQcq4-oNqi9t5BCshqrQIq_aRyXysY',
+    image: 'https://images.unsplash.com/photo-1600585154526-990dced4db0d?auto=format&fit=crop&w=800&q=80',
     description: '단독 야외 테라스가 설치되어 있어 텃밭 가꾸기나 바비큐장으로 이용 가능한 동변동 타운하우스입니다.',
     broker: '타운하우스월드',
     contact: '053-982-1200',
@@ -1893,6 +2164,9 @@ function renderListings() {
     const badgeText = item.type === 'apt' ? '아파트' : '단독주택/빌라';
     const districtText = DISTRICT_DATA[item.district]?.name || '대구시';
     
+    // 관심매물 저장 상태 확인
+    const isBookmarked = item.aptId ? checkIsBookmarked(item.aptId) : false;
+    
     let tagsHtml = '';
     if (item.tags) {
       item.tags.forEach(tag => {
@@ -1903,12 +2177,16 @@ function renderListings() {
     card.innerHTML = `
       <div class="relative h-44 w-full overflow-hidden bg-slate-100">
         <img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" src="${item.image}" alt="${item.title}">
-        <div class="absolute top-3 left-3 bg-primary-container/85 backdrop-blur-md px-2.5 py-0.5 rounded-full flex items-center gap-1">
+        <div class="absolute top-3 left-3 bg-primary-container/85 backdrop-blur-md px-2.5 py-0.5 rounded-full flex items-center gap-1 z-10">
           <span class="text-[9px] font-bold text-white">${districtText}</span>
         </div>
-        <div class="absolute top-3 right-3 bg-white/95 backdrop-blur-md px-2 py-0.5 rounded text-[8px] font-bold text-secondary-container shadow-sm border border-slate-200">
+        <div class="absolute top-3 right-12 bg-white/95 backdrop-blur-md px-2 py-0.5 rounded text-[8px] font-bold text-secondary-container shadow-sm border border-slate-200 z-10">
           ${badgeText}
         </div>
+        <!-- 찜하기(관심매물) 버튼 -->
+        <button onclick="toggleListingBookmarkAction(event, '${item.aptId}', '${item.title}', '${item.price}', '${item.district}')" class="absolute top-2.5 right-2.5 w-8 h-8 bg-black/35 hover:bg-black/50 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:scale-110 transition-all z-20" title="관심매물 저장">
+          <span class="material-symbols-outlined text-[18px] ${isBookmarked ? 'text-rose-500 fill-current' : ''}">favorite</span>
+        </button>
       </div>
       <div class="p-5 flex flex-col flex-grow justify-between space-y-4">
         <div class="space-y-2">
@@ -2177,27 +2455,89 @@ function renderLeafletMap() {
   });
 }
 
-function openApiConfigModal() {
-  document.getElementById('cfg-supabase-url').value = window.APP_CONFIG.SUPABASE_URL || '';
-  document.getElementById('cfg-supabase-key').value = window.APP_CONFIG.SUPABASE_ANON_KEY && !window.APP_CONFIG.SUPABASE_ANON_KEY.includes('dummy') ? window.APP_CONFIG.SUPABASE_ANON_KEY : '';
-  document.getElementById('cfg-kakao-key').value = window.APP_CONFIG.KAKAO_MAP_CLIENT_KEY || '';
-  
-  openModal('api-config-modal');
+// 매물 거래소 관심매물(북마크) 토글 액션
+async function toggleListingBookmarkAction(event, aptId, aptName, price, districtKey) {
+  if (event) event.stopPropagation();
+  if (!currentUser) {
+    alert('북마크 기능은 로그인 후 이용하실 수 있습니다.');
+    openModal('login-modal');
+    return;
+  }
+
+  const isBookmarked = checkIsBookmarked(aptId);
+  let bookmarks = getBookmarksFromStorage();
+
+  if (isDummyAuth) {
+    if (isBookmarked) {
+      bookmarks = bookmarks.filter(b => b.aptId !== aptId);
+    } else {
+      // DISTRICT_DATA에서 단지 주소 및 평형 매핑 정보 찾기
+      const matchedApt = DISTRICT_DATA[districtKey]?.apts.find(a => a.id === aptId);
+      bookmarks.push({
+        aptId: aptId,
+        aptName: aptName.split(' ')[0], // 단지명만 간략 노출
+        recentPrice: `${price}억`,
+        districtKey: districtKey,
+        address: matchedApt ? matchedApt.address : '대구시',
+        pyeong: matchedApt ? matchedApt.pyeong : 84
+      });
+    }
+    saveBookmarksToStorage(bookmarks);
+    renderListings();
+    showToast(isBookmarked ? '⭐ 관심매물에서 삭제되었습니다.' : '❤️ 관심매물에 추가되었습니다.', 'success');
+  } else {
+    try {
+      if (isBookmarked) {
+        const { error } = await supabaseClient
+          .from('bookmarks')
+          .delete()
+          .eq('user_id', currentUser.id)
+          .eq('apt_id', aptId);
+        if (error) throw error;
+      } else {
+        const { error } = await supabaseClient
+          .from('bookmarks')
+          .insert({
+            user_id: currentUser.id,
+            apt_id: aptId,
+            apt_name: aptName.split(' ')[0],
+            recent_price: `${price}억`
+          });
+        if (error) throw error;
+      }
+      renderListings();
+      showToast(isBookmarked ? '⭐ 관심매물에서 삭제되었습니다.' : '❤️ 관심매물에 추가되었습니다.', 'success');
+    } catch (err) {
+      console.error('Supabase bookmarks toggle error:', err);
+      alert('북마크 동기화 중 오류가 발생했습니다: ' + err.message);
+    }
+  }
 }
 
-function submitApiConfig(e) {
-  e.preventDefault();
-  const url = document.getElementById('cfg-supabase-url').value.trim();
-  const key = document.getElementById('cfg-supabase-key').value.trim();
-  const kakaoKey = document.getElementById('cfg-kakao-key').value.trim();
-  
-  const configOverride = {
-    SUPABASE_URL: url || 'https://tccsssdwegnehlzetjdh.supabase.co',
-    SUPABASE_ANON_KEY: key || 'dummy-anon-key-12345',
-    KAKAO_MAP_CLIENT_KEY: kakaoKey || ''
-  };
-  
-  localStorage.setItem('APP_CONFIG_OVERRIDE', JSON.stringify(configOverride));
-  alert('설정이 저장되었습니다. 시스템을 적용하기 위해 페이지가 새로고침됩니다.');
-  window.location.reload();
+// 화면 하단에 부드럽게 나타나는 토스트 메시지 함수
+function showToast(message, type = 'success') {
+  // 기존 토스트 제거
+  const exist = document.getElementById('app-toast-alert');
+  if (exist) exist.remove();
+
+  const toast = document.createElement('div');
+  toast.id = 'app-toast-alert';
+  toast.className = 'fixed bottom-24 left-1/2 -translate-x-1/2 px-5 py-3 rounded-full bg-slate-900/90 text-white font-bold text-xs shadow-2xl flex items-center gap-2 transition-all duration-300 transform translate-y-4 opacity-0 z-50';
+  toast.innerHTML = `
+    <span class="material-symbols-outlined text-[16px] text-secondary">info</span>
+    <span>${message}</span>
+  `;
+
+  document.body.appendChild(toast);
+
+  // 애니메이션 효과 적용
+  setTimeout(() => {
+    toast.classList.remove('translate-y-4', 'opacity-0');
+  }, 50);
+
+  // 2.5초 뒤 제거
+  setTimeout(() => {
+    toast.classList.add('translate-y-4', 'opacity-0');
+    setTimeout(() => toast.remove(), 300);
+  }, 2500);
 }
