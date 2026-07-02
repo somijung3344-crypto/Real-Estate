@@ -478,6 +478,14 @@ function applyConfigOverrides() {
 
 // ==================== APP INITIALIZATION ====================
 function initApp() {
+  // 0-A. 데이터 버전 관리 및 로컬 저장소 캐시 강제 리셋
+  const APP_VERSION = 'v2.2.0';
+  if (localStorage.getItem('ESTATE_APP_VERSION') !== APP_VERSION) {
+    localStorage.removeItem('dummy_listings_db');
+    localStorage.setItem('ESTATE_APP_VERSION', APP_VERSION);
+    console.log('최신 패치 버전 적용: 구버전 캐시가 강제 초기화되었습니다.');
+  }
+
   // 0. 로컬 저장소 API 키 오버라이드 병합
   applyConfigOverrides();
 
