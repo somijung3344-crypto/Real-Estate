@@ -176,8 +176,28 @@ const DISTRICT_DATA = {
   }
 };
 
+// Mock 데이터셋 속성 초기화
+function initMockDataset() {
+  for (const districtKey in DISTRICT_DATA) {
+    const district = DISTRICT_DATA[districtKey];
+    if (district.apts) {
+      district.apts.forEach(apt => {
+        apt.pyeong = 84;
+        if (apt.priceHistory84 && apt.priceHistory84.length > 0) {
+          apt.recentPrice = apt.priceHistory84[apt.priceHistory84.length - 1].price;
+        } else {
+          apt.recentPrice = 0;
+        }
+      });
+    }
+  }
+}
+
 // ==================== APP INITIALIZATION ====================
-document.addEventListener('DOMContentLoaded', () => {
+function initApp() {
+  // 0. 로컬 더미 데이터 초기화
+  initMockDataset();
+
   // 1. Supabase 연동 초기화
   initSupabase();
 
@@ -189,7 +209,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // 4. Lucide 아이콘 초기 활성화
   lucide.createIcons();
-});
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initApp);
+} else {
+  initApp();
+}
 
 // Supabase 초기 설정
 function initSupabase() {
@@ -216,14 +242,24 @@ function switchSection(sectionId) {
   document.getElementById('section-analysis').classList.add('hidden');
   document.getElementById('section-bookmarks').classList.add('hidden');
 
-  // 2. 모든 네비게이션 탭 비활성화
+  // 2. 모든 네비게이션 비활성화 (데스크톱 & 모바일)
   document.getElementById('nav-home').classList.remove('active');
   document.getElementById('nav-analysis').classList.remove('active');
   document.getElementById('nav-bookmarks').classList.remove('active');
 
-  // 3. 대상 페이지 노출 및 탭 활성화
+  const navHomeMobile = document.getElementById('nav-home-mobile');
+  const navAnalysisMobile = document.getElementById('nav-analysis-mobile');
+  const navBookmarksMobile = document.getElementById('nav-bookmarks-mobile');
+  if (navHomeMobile) navHomeMobile.classList.remove('active');
+  if (navAnalysisMobile) navAnalysisMobile.classList.remove('active');
+  if (navBookmarksMobile) navBookmarksMobile.classList.remove('active');
+
+  // 3. 대상 페이지 노출 및 활성화 (데스크톱 & 모바일)
   document.getElementById(`section-${sectionId}`).classList.remove('hidden');
   document.getElementById(`nav-${sectionId}`).classList.add('active');
+  
+  const activeMobileNav = document.getElementById(`nav-${sectionId}-mobile`);
+  if (activeMobileNav) activeMobileNav.classList.add('active');
 
   // 4. 저장소 탭 로드 시 북마크 리스트 새로 렌더링
   if (sectionId === 'bookmarks') {
@@ -642,6 +678,19 @@ function toggleWithdrawConfirm(show) {
   }
 }
 
+// 홈 화면에서 지역 선택 시 분석실 탭으로 전환 및 자치구 설정
+function selectHomeDistrict(districtCode) {
+  selectedDistrict = districtCode;
+  
+  // 자치구 select 엘리먼트 값 변경
+  const selectElem = document.getElementById('select-district');
+  if (selectElem) {
+    selectElem.value = districtCode;
+  }
+  
+  switchSection('analysis');
+}
+
 // ==================== REAL ESTATE CONTROLLERS ====================
 function changeDistrict(districtCode) {
   selectedDistrict = districtCode;
@@ -742,16 +791,18 @@ function resetDetailPanel() {
 }
 
 // 평형 선택 토글 제어
-function changePyeongFilter(pyeongSize) {
+function selectPyeong(pyeongSize) {
   selectedPyeong = pyeongSize;
   
-  // 버튼 액티브 클래스 업데이트
-  const buttons = document.querySelectorAll('#pyeong-filter-wrapper button');
-  buttons.forEach(btn => {
-    if (btn.textContent.includes(pyeongSize)) {
-      btn.classList.add('active');
-    } else {
-      btn.classList.remove('active');
+  const sizes = [59, 84, 114];
+  sizes.forEach(size => {
+    const btn = document.getElementById(`pyeong-${size}`);
+    if (btn) {
+      if (size === pyeongSize) {
+        btn.className = "px-2.5 py-1 text-[11px] font-bold bg-secondary text-white rounded-lg";
+      } else {
+        btn.className = "px-2.5 py-1 text-[11px] font-bold bg-white border border-outline-variant text-slate-600 rounded-lg hover:border-secondary";
+      }
     }
   });
 
@@ -1259,27 +1310,35 @@ async function renderBookmarksView() {
     
     list.forEach(item => {
       const card = document.createElement('div');
-      card.className = 'bookmark-card';
+      card.className = 'bg-surface-container-lowest p-5 rounded-xl border border-outline-variant/30 shadow-[0_4px_20px_rgba(26,43,75,0.05)] transition-all duration-300 relative overflow-hidden group hover:-translate-y-1';
+      
+      const regionText = item.address.split(' ')[1] || '대구시';
       
       card.innerHTML = `
-        <div class="flex justify-between items-start">
-          <div class="flex items-center gap-2 cursor-pointer" onclick="selectSearchApartment('${item.districtKey}', '${item.aptId}')">
-            <div class="w-8 h-8 bg-slate-100 text-indigo-600 rounded-lg flex items-center justify-center">
-              <i data-lucide="building" class="w-4.5 h-4.5"></i>
-            </div>
-            <div>
-              <h4 class="font-bold text-sm text-slate-800 hover:text-indigo-650 transition-colors">${item.aptName}</h4>
-              <p class="text-[10px] text-slate-400 font-mono mt-0.5">${item.address}</p>
-            </div>
+        <div class="flex justify-between items-start mb-4">
+          <div class="cursor-pointer" onclick="selectSearchApartment('${item.districtKey}', '${item.aptId}')">
+            <span class="px-2 py-0.5 bg-primary-container text-on-primary-container text-[10px] font-medium rounded-md mb-2 inline-block">${regionText}</span>
+            <h3 class="font-title-md text-title-md text-text-primary group-hover:text-secondary transition-colors font-bold">${item.aptName}</h3>
           </div>
-          <!-- 북마크 즉시 해제 버튼 -->
-          <button onclick="removeBookmarkDirectly('${item.aptId}')" class="p-1 text-red-500 hover:bg-slate-50 rounded-lg transition-colors">
-            <i data-lucide="heart" class="w-4 h-4 fill-current"></i>
+          <button onclick="removeBookmarkDirectly('${item.aptId}')" class="text-heart-accent p-1 active:scale-90 transition-transform">
+            <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">favorite</span>
           </button>
         </div>
-        <div class="flex justify-between items-center bg-slate-50 p-2.5 rounded-xl border border-slate-100 text-[11px] font-mono mt-2">
-          <span class="text-slate-450">${item.pyeong}평형</span>
-          <span class="text-slate-700 font-semibold">최근 실거래가 <strong class="text-indigo-600 font-bold ml-1">${item.recentPrice}</strong></span>
+        <div class="space-y-4">
+          <div class="flex justify-between items-end">
+            <div>
+              <p class="text-[11px] text-text-secondary mb-1">최근 실거래가</p>
+              <p class="font-headline-md text-headline-md text-primary font-bold">${item.recentPrice}</p>
+            </div>
+            <div class="text-right">
+              <span class="text-slate-450 text-[11px] font-mono font-semibold">${item.pyeong}평형</span>
+              <p class="text-[10px] text-text-muted mt-0.5 truncate max-w-[140px]" title="${item.address}">${item.address}</p>
+            </div>
+          </div>
+          <button onclick="selectSearchApartment('${item.districtKey}', '${item.aptId}')" class="w-full py-2.5 mt-2 rounded-lg border border-secondary text-secondary font-medium text-xs hover:bg-secondary hover:text-white transition-all flex justify-center items-center gap-2">
+            분석 리포트 보기
+            <span class="material-symbols-outlined text-[16px]">analytics</span>
+          </button>
         </div>
       `;
       container.appendChild(card);
