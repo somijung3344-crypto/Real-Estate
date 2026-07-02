@@ -479,7 +479,7 @@ function applyConfigOverrides() {
 // ==================== APP INITIALIZATION ====================
 function initApp() {
   // 0-A. 데이터 버전 관리 및 로컬 저장소 캐시 강제 리셋
-  const APP_VERSION = 'v2.7.0';
+  const APP_VERSION = 'v2.8.0';
   if (localStorage.getItem('ESTATE_APP_VERSION') !== APP_VERSION) {
     localStorage.removeItem('dummy_listings_db');
     localStorage.setItem('ESTATE_APP_VERSION', APP_VERSION);
@@ -567,7 +567,20 @@ function switchSection(sectionId) {
 
   // 5. 분석실 로드 시 아파트 미선택 상태 대응
   if (sectionId === 'analysis') {
-    changeDistrict(selectedDistrict);
+    if (!selectedApartment) {
+      changeDistrict(selectedDistrict);
+    } else {
+      const currentDistrict = Object.keys(DISTRICT_DATA).find(key => 
+        DISTRICT_DATA[key].apts.some(a => a.id === selectedApartment.id)
+      );
+      if (currentDistrict) {
+        selectedDistrict = currentDistrict;
+        const districtSelect = document.getElementById('select-district');
+        if (districtSelect) districtSelect.value = currentDistrict;
+      }
+      renderApartmentSummary(selectedApartment);
+      loadMapAndMarkers();
+    }
   }
 
   // 6. 매물 거래소 로드 시 목록 렌더링
@@ -1601,10 +1614,11 @@ function normalizeBookmark(item) {
     }
   });
 
-  // DB에 잘못 들어간 구 이름 오염(예: '북구', '중구', '수성구', '달서구') 강제 보정 및 원래 매물 타이틀로 복구
+  // DB에 잘못 들어간 구 이름 오염(예: '북구', '중구', '수성구', '달서구') 및 축소 저장된 단지명 강제 보정 및 원래 매물 타이틀로 복구
   let rawName = item.aptName || item.apt_name;
   const isDistrictNameOnly = ['북구', '중구', '수성구', '달서구', '대구 전체', '대구시', '알 수 없는 단지', '아파트'].includes(rawName);
-  if (!rawName || isDistrictNameOnly) {
+  const isShortAptName = meta && rawName === meta.name;
+  if (!rawName || isDistrictNameOnly || isShortAptName) {
     const matchedListing = DEFAULT_LISTINGS.find(l => l.aptId === targetId);
     if (matchedListing) {
       rawName = matchedListing.title;
