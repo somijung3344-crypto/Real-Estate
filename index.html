@@ -22,6 +22,11 @@
   
   <!-- 로컬 설정 로드 -->
   <script src="config.js"></script>
+  <script>
+    // 브라우저 강력 캐싱 찌꺼기 무조건 지우기
+    localStorage.removeItem('ESTATE_API_CONFIG');
+    localStorage.removeItem('APP_CONFIG_OVERRIDE');
+  </script>
 
   <!-- Tailwind Config -->
   <script id="tailwind-config">

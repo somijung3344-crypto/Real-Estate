@@ -517,7 +517,9 @@ if (document.readyState === 'loading') {
 // Supabase 초기 설정
 function initSupabase() {
   const config = window.APP_CONFIG;
-  if (config && config.SUPABASE_URL && !config.SUPABASE_URL.includes('dummy-project')) {
+  if (config && config.SUPABASE_URL && config.SUPABASE_ANON_KEY && 
+      config.SUPABASE_URL.trim() !== '' && config.SUPABASE_ANON_KEY.trim() !== '' && 
+      !config.SUPABASE_URL.includes('dummy-project')) {
     try {
       supabaseClient = window.supabase.createClient(config.SUPABASE_URL, config.SUPABASE_ANON_KEY);
       isDummyAuth = false;
