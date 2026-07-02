@@ -479,7 +479,7 @@ function applyConfigOverrides() {
 // ==================== APP INITIALIZATION ====================
 function initApp() {
   // 0-A. 데이터 버전 관리 및 로컬 저장소 캐시 강제 리셋
-  const APP_VERSION = 'v2.4.0';
+  const APP_VERSION = 'v2.5.0';
   if (localStorage.getItem('ESTATE_APP_VERSION') !== APP_VERSION) {
     localStorage.removeItem('dummy_listings_db');
     localStorage.setItem('ESTATE_APP_VERSION', APP_VERSION);
@@ -1365,7 +1365,7 @@ function initKakaoRoadview(lat, lng) {
 }
 
 function showRoadviewFallback(container, lat, lng) {
-  const isApt = selectedApartment ? selectedApartment.id.startsWith('ss') || selectedApartment.id.startsWith('jg') || selectedApartment.id.startsWith('ds') || selectedApartment.id.startsWith('bg') : true;
+  const isApt = selectedApartment ? !(selectedApartment.name.includes('주택') || selectedApartment.name.includes('한옥') || selectedApartment.name.includes('빌라') || selectedApartment.name.includes('타운하우스') || selectedApartment.name.includes('원룸') || selectedApartment.name.includes('하우스') || selectedApartment.name.includes('빌딩')) : true;
   const iconName = isApt ? 'apartment' : 'bungalow';
   const aptName = selectedApartment ? selectedApartment.name : '선택 단지';
 
