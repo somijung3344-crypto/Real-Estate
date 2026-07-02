@@ -1,14 +1,21 @@
-/* ==================== DESIGN SYSTEM & GLOBAL STYLES ==================== */
+/* ==================== 1. DESIGN SYSTEM & RESET ==================== */
 :root {
   --font-sans: 'Outfit', 'Noto Sans KR', sans-serif;
-  --bg-dark: #020617; /* slate-950 */
-  --bg-card: rgba(15, 23, 42, 0.6); /* slate-900 with opacity */
-  --border-color: #0f172a; /* slate-900 */
-  --border-light: #1e293b; /* slate-800 */
-  --color-primary: #6366f1; /* indigo-500 */
-  --color-secondary: #0ea5e9; /* sky-500 */
-  --color-accent: #14b8a6; /* teal-500 */
-  --color-danger: #ef4444; /* red-500 */
+  --bg-slate-950: #020617;
+  --bg-slate-900: #0f172a;
+  --bg-slate-800: #1e293b;
+  --bg-slate-700: #334155;
+  
+  --color-indigo: #6366f1;
+  --color-indigo-hover: #4f46e5;
+  --color-teal: #14b8a6;
+  --color-teal-hover: #0d9488;
+  --color-red: #ef4444;
+  --color-blue: #3b82f6;
+  
+  --border-slate-900: #0f172a;
+  --border-slate-800: #1e293b;
+  --border-slate-700: #334155;
 }
 
 * {
@@ -19,10 +26,10 @@
 
 body {
   font-family: var(--font-sans);
-  background-color: var(--bg-dark);
+  background-color: var(--bg-slate-950);
   color: #f1f5f9;
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  overflow: hidden;
 }
 
 /* Custom Scrollbar */
@@ -33,100 +40,105 @@ body {
   background: transparent;
 }
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: #1e293b;
+  background: var(--bg-slate-800);
   border-radius: 9999px;
 }
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: #334155;
+  background: var(--bg-slate-700);
 }
 
-/* ==================== BUTTONS & INPUTS ==================== */
-.input-field {
-  width: 100%;
-  background-color: #020617;
-  border: 1px solid var(--border-light);
-  color: #ffffff;
-  font-size: 13px;
-  padding: 12px 14px;
-  border-radius: 12px;
-  outline: none;
-  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+/* ==================== 2. COMPONENT DECORATION & LAYOUTS ==================== */
+
+/* Header & Sidebar Structure */
+header {
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.4);
 }
 
-.input-field:focus {
-  border-color: var(--color-primary);
-  box-shadow: 0 0 0 1px rgba(99, 102, 241, 0.25);
-}
-
-.submit-btn {
-  width: 100%;
-  background-color: var(--color-primary);
-  color: #ffffff;
-  font-weight: 600;
-  font-size: 13px;
-  padding: 12px;
-  border-radius: 12px;
-  border: none;
+/* Apartment Card Style (Justify-Between & Neon Glow) */
+.apartment-card {
+  background: rgba(15, 23, 42, 0.45);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border-slate-900);
+  border-radius: 18px;
+  padding: 18px;
   cursor: pointer;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
+  flex-direction: column;
+  gap: 12px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.submit-btn:hover {
-  background-color: #4f46e5;
-  transform: translateY(-1px);
-  box-shadow: 0 6px 16px rgba(99, 102, 241, 0.3);
-}
-
-.submit-btn:active {
-  transform: translateY(0);
-}
-
-/* ==================== CARDS & LAYOUTS ==================== */
-.apartment-card {
-  background-color: rgba(15, 23, 42, 0.4);
-  border: 1px solid var(--border-color);
-  border-radius: 16px;
-  padding: 16px;
-  cursor: pointer;
-  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+.apartment-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.05) 0%, rgba(20, 184, 166, 0.05) 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
 }
 
 .apartment-card:hover {
-  border-color: var(--border-light);
-  background-color: rgba(30, 41, 59, 0.2);
-  transform: translateY(-2px);
+  transform: translateY(-3px);
+  border-color: rgba(99, 102, 241, 0.35);
+  background: rgba(30, 41, 59, 0.25);
+  box-shadow: 0 10px 25px -5px rgba(99, 102, 241, 0.15),
+              0 0 15px rgba(20, 184, 166, 0.05);
+}
+
+.apartment-card:hover::before {
+  opacity: 1;
 }
 
 .apartment-card.active {
-  border-color: var(--color-primary);
-  background-color: rgba(99, 102, 241, 0.08);
-  box-shadow: 0 0 20px rgba(99, 102, 241, 0.05);
+  border-color: var(--color-indigo);
+  background: rgba(99, 102, 241, 0.08);
+  box-shadow: 0 0 25px rgba(99, 102, 241, 0.12) inset,
+              0 8px 20px -6px rgba(99, 102, 241, 0.25);
 }
 
-/* ==================== MODALS ==================== */
+/* Inner card text row alignment */
+.card-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.card-footer-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+/* ==================== 3. MODALS SYSTEM (Alignment & Form Layout) ==================== */
 .modal-card {
   position: fixed;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%) scale(0.95);
+  transform: translate(-50%, -50%) scale(0.96);
   width: 90%;
-  max-width: 440px;
-  background-color: rgba(15, 23, 42, 0.8);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid var(--border-light);
-  border-radius: 24px;
-  padding: 28px;
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  max-width: 450px;
+  background: rgba(10, 15, 30, 0.85);
+  backdrop-filter: blur(25px);
+  -webkit-backdrop-filter: blur(25px);
+  border: 1px solid var(--border-slate-800);
+  border-radius: 28px;
+  padding: 32px;
+  box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.7);
   z-index: 100;
   opacity: 0;
   pointer-events: none;
-  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .modal-card.active {
@@ -135,30 +147,206 @@ body {
   pointer-events: auto;
 }
 
-/* Status Info Boxes */
+/* Form input spacing and layout */
+.modal-card form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.input-field {
+  width: 100%;
+  background-color: rgba(2, 6, 23, 0.8);
+  border: 1px solid var(--border-slate-800);
+  color: #ffffff;
+  font-size: 13px;
+  padding: 13px 16px;
+  border-radius: 12px;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.input-field:focus {
+  border-color: var(--color-indigo);
+  box-shadow: 0 0 0 1px rgba(99, 102, 241, 0.25);
+  background-color: rgba(2, 6, 23, 0.95);
+}
+
+.submit-btn {
+  width: 100%;
+  background-color: var(--color-indigo);
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 13px;
+  padding: 13px;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.25s ease;
+  box-shadow: 0 4px 15px rgba(99, 102, 241, 0.25);
+}
+
+.submit-btn:hover {
+  background-color: var(--color-indigo-hover);
+  box-shadow: 0 6px 20px rgba(99, 102, 241, 0.35);
+  transform: translateY(-1px);
+}
+
+.submit-btn:active {
+  transform: translateY(0);
+}
+
+/* Status message boxes inside modals */
 .error-box {
   display: none;
-  padding: 12px;
+  padding: 12px 16px;
   background-color: rgba(239, 68, 68, 0.1);
   border: 1px solid rgba(239, 68, 68, 0.2);
   color: #fca5a5;
   font-size: 12px;
-  border-radius: 10px;
-  margin-bottom: 12px;
+  border-radius: 12px;
+  line-height: 1.5;
 }
 
 .success-box {
   display: none;
-  padding: 12px;
+  padding: 12px 16px;
   background-color: rgba(20, 184, 166, 0.1);
   border: 1px solid rgba(20, 184, 166, 0.2);
   color: #99f6e4;
   font-size: 12px;
-  border-radius: 10px;
-  margin-bottom: 12px;
+  border-radius: 12px;
+  line-height: 1.5;
 }
 
-/* ==================== MAP SCROLL OVERRIDE & MOCK GRAPH ==================== */
+/* ==================== 4. TAILWIND-COMPATIBLE UTILITY LAYOUT CLASSSETS ==================== */
+/* Flexbox Utilities */
+.flex { display: flex !important; }
+.flex-col { flex-direction: column !important; }
+.items-center { align-items: center !important; }
+.justify-between { justify-content: space-between !important; }
+.justify-center { justify-content: center !important; }
+.flex-1 { flex: 1 1 0% !important; }
+
+/* Grid Utilities */
+.grid { display: grid !important; }
+.grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+.gap-2 { gap: 0.5rem !important; }
+.gap-3 { gap: 0.75rem !important; }
+.gap-4 { gap: 1rem !important; }
+
+/* Spacing Utilities */
+.space-y-3 > * + * { margin-top: 0.75rem !important; }
+.space-y-4 > * + * { margin-top: 1rem !important; }
+.space-y-5 > * + * { margin-top: 1.25rem !important; }
+
+.p-4 { padding: 1rem !important; }
+.p-5 { padding: 1.25rem !important; }
+.p-6 { padding: 1.5rem !important; }
+.px-3 { padding-left: 0.75rem !important; padding-right: 0.75rem !important; }
+.px-4 { padding-left: 1rem !important; padding-right: 1rem !important; }
+.px-6 { padding-left: 1.5rem !important; padding-right: 1.5rem !important; }
+.py-1.5 { padding-top: 0.375rem !important; padding-bottom: 0.375rem !important; }
+.py-2 { padding-top: 0.5rem !important; padding-bottom: 0.5rem !important; }
+.py-4 { padding-top: 1rem !important; padding-bottom: 1rem !important; }
+.py-12 { padding-top: 3rem !important; padding-bottom: 3rem !important; }
+.pt-3 { padding-top: 0.75rem !important; }
+.pt-5 { padding-top: 1.25rem !important; }
+.mb-2 { margin-bottom: 0.5rem !important; }
+.mb-3 { margin-bottom: 0.75rem !important; }
+.mb-4 { margin-bottom: 1rem !important; }
+.mb-6 { margin-bottom: 1.5rem !important; }
+.mt-0.5 { margin-top: 0.125rem !important; }
+.mt-1 { margin-top: 0.25rem !important; }
+.mt-2 { margin-top: 0.5rem !important; }
+.mt-3 { margin-top: 0.75rem !important; }
+.mt-6 { margin-top: 1.5rem !important; }
+
+/* Sizing Utilities */
+.h-16 { height: 4rem !important; }
+.h-80 { height: 20rem !important; }
+.w-8 { width: 2rem !important; }
+.h-8 { height: 2rem !important; }
+.w-10 { width: 2.5rem !important; }
+.h-10 { height: 2.5rem !important; }
+.w-12 { width: 3rem !important; }
+.h-12 { height: 3rem !important; }
+.w-96 { width: 24rem !important; }
+.w-full { width: 100% !important; }
+.h-full { height: 100% !important; }
+
+/* Positioning Utilities */
+.relative { position: relative !important; }
+.absolute { position: absolute !important; }
+.fixed { position: fixed !important; }
+.inset-0 { top: 0 !important; right: 0 !important; bottom: 0 !important; left: 0 !important; }
+.z-10 { z-index: 10 !important; }
+.z-20 { z-index: 20 !important; }
+.z-30 { z-index: 30 !important; }
+.z-40 { z-index: 40 !important; }
+.z-50 { z-index: 50 !important; }
+
+/* Border Utilities */
+.border-b { border-bottom: 1px solid var(--border-slate-900) !important; }
+.border-r { border-right: 1px solid var(--border-slate-900) !important; }
+.border-t { border-top: 1px solid var(--border-slate-900) !important; }
+.border-slate-800 { border-color: var(--border-slate-800) !important; }
+.border-slate-900 { border-color: var(--border-slate-900) !important; }
+
+/* Background & Blur Utilities */
+.bg-slate-950 { background-color: var(--bg-slate-950) !important; }
+.bg-slate-900 { background-color: var(--bg-slate-900) !important; }
+.bg-slate-900\/50 { background-color: rgba(15, 23, 42, 0.5) !important; }
+.bg-slate-900\/40 { background-color: rgba(15, 23, 42, 0.4) !important; }
+.bg-slate-950\/80 { background-color: rgba(2, 6, 23, 0.8) !important; }
+.backdrop-blur-md { backdrop-filter: blur(12px) !important; -webkit-backdrop-filter: blur(12px) !important; }
+.bg-gradient-to-tr { background-image: linear-gradient(to top right, var(--color-indigo), var(--color-teal)) !important; }
+.bg-black\/60 { background-color: rgba(0, 0, 0, 0.6) !important; }
+
+/* Typography Utilities */
+.text-xs { font-size: 0.75rem !important; }
+.text-sm { font-size: 0.875rem !important; }
+.text-base { font-size: 1rem !important; }
+.text-lg { font-size: 1.125rem !important; }
+.text-3xl { font-size: 1.875rem !important; }
+.text-4xl { font-size: 2.25rem !important; }
+.font-bold { font-weight: 700 !important; }
+.font-semibold { font-weight: 600 !important; }
+.font-extrabold { font-weight: 800 !important; }
+.font-mono { font-family: monospace !important; }
+.text-center { text-align: center !important; }
+.text-slate-100 { color: #f1f5f9 !important; }
+.text-slate-300 { color: #cbd5e1 !important; }
+.text-slate-400 { color: #94a3b8 !important; }
+.text-slate-500 { color: #64748b !important; }
+.text-teal-400 { color: #2dd4bf !important; }
+.text-indigo-400 { color: #818cf8 !important; }
+.text-red-400 { color: #f87171 !important; }
+.text-blue-400 { color: #60a5fa !important; }
+
+/* Border Radius Utilities */
+.rounded-lg { border-radius: 0.5rem !important; }
+.rounded-xl { border-radius: 0.75rem !important; }
+.rounded-2xl { border-radius: 1rem !important; }
+.rounded-full { border-radius: 9999px !important; }
+
+/* Display & Transition */
+.hidden { display: none !important; }
+.overflow-hidden { overflow: hidden !important; }
+.overflow-y-auto { overflow-y: auto !important; }
+.transition-all { transition: all 0.2s ease !important; }
+
+/* ==================== 5. SVG CHART DECORATION ==================== */
 #trend-chart-canvas svg {
   width: 100%;
   height: 100%;
@@ -168,12 +356,13 @@ body {
 .chart-line {
   stroke-dasharray: 1000;
   stroke-dashoffset: 1000;
-  animation: drawLine 2s forwards ease-in-out;
+  animation: drawLine 1.8s forwards cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .chart-dot {
   opacity: 0;
-  animation: fadeIn 0.5s forwards ease-out;
+  animation: fadeIn 0.4s forwards ease-out;
+  animation-delay: 1.2s;
 }
 
 @keyframes drawLine {
@@ -186,9 +375,4 @@ body {
   to {
     opacity: 1;
   }
-}
-
-/* ==================== UTILITIES ==================== */
-.hidden {
-  display: none !important;
 }

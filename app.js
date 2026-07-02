@@ -456,12 +456,18 @@ function renderApartmentList() {
     card.onclick = () => selectApartment(apt);
 
     card.innerHTML = `
-      <div class="flex justify-between items-start mb-2">
-        <h4 class="font-bold text-sm text-slate-100">${apt.name}</h4>
+      <div class="card-header-row">
+        <div class="flex items-center gap-2">
+          <i data-lucide="building" class="w-4 h-4 text-indigo-400"></i>
+          <h4 class="font-bold text-sm text-slate-100">${apt.name}</h4>
+        </div>
         <span class="text-[10px] ${trendClass}">${trendIcon} ${trendText}</span>
       </div>
-      <p class="text-xs text-slate-400 font-mono">${apt.address}</p>
-      <div class="flex justify-between items-center mt-3 pt-3 border-t border-slate-900/60">
+      <div class="flex items-center gap-1.5 text-xs text-slate-400 mt-1">
+        <i data-lucide="map-pin" class="w-3.5 h-3.5 text-slate-500"></i>
+        <span class="font-mono">${apt.address}</span>
+      </div>
+      <div class="card-footer-row mt-2 pt-2.5 border-t border-slate-900/60">
         <span class="text-[11px] text-slate-500">${apt.pyeong}평형</span>
         <span class="text-xs font-semibold text-white font-mono">최근 실거래 <strong class="text-teal-400 text-sm">${apt.recentPrice}억</strong></span>
       </div>
@@ -469,6 +475,9 @@ function renderApartmentList() {
 
     container.appendChild(card);
   });
+  
+  // 새로 추가된 카드의 Lucide 아이콘 활성화
+  lucide.createIcons();
 }
 
 // 아파트 선택 이벤트
