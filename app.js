@@ -479,7 +479,7 @@ function applyConfigOverrides() {
 // ==================== APP INITIALIZATION ====================
 function initApp() {
   // 0-A. 데이터 버전 관리 및 로컬 저장소 캐시 강제 리셋
-  const APP_VERSION = 'v2.6.0';
+  const APP_VERSION = 'v2.7.0';
   if (localStorage.getItem('ESTATE_APP_VERSION') !== APP_VERSION) {
     localStorage.removeItem('dummy_listings_db');
     localStorage.setItem('ESTATE_APP_VERSION', APP_VERSION);
@@ -1583,27 +1583,39 @@ async function toggleBookmarkAction() {
 }
 
 // 아파트 대표 이미지 반환
-// 아파트 대표 이미지 반환
 function getAptImage(aptId) {
-  return 'https://png.pngtree.com/png-clipart/20221216/big/pngtree-house-property-logo-real-estate-design-buildings-clipart-png-image_8750111.png';
+  return 'house_logo.png';
 }
 
 // 북마크 객체 규격화
 function normalizeBookmark(item) {
   let meta = null;
   let districtKey = item.districtKey || 'suseong';
+  const targetId = item.aptId || item.apt_id;
   
   Object.keys(DISTRICT_DATA).forEach(key => {
-    const matched = DISTRICT_DATA[key].apts.find(a => a.id === (item.aptId || item.apt_id));
+    const matched = DISTRICT_DATA[key].apts.find(a => a.id === targetId);
     if (matched) {
       meta = matched;
       districtKey = key;
     }
   });
 
+  // DB에 잘못 들어간 구 이름 오염(예: '북구', '중구', '수성구', '달서구') 강제 보정 및 원래 매물 타이틀로 복구
+  let rawName = item.aptName || item.apt_name;
+  const isDistrictNameOnly = ['북구', '중구', '수성구', '달서구', '대구 전체', '대구시', '알 수 없는 단지', '아파트'].includes(rawName);
+  if (!rawName || isDistrictNameOnly) {
+    const matchedListing = DEFAULT_LISTINGS.find(l => l.aptId === targetId);
+    if (matchedListing) {
+      rawName = matchedListing.title;
+    } else if (meta) {
+      rawName = meta.name;
+    }
+  }
+
   return {
-    aptId: item.aptId || item.apt_id,
-    aptName: item.aptName || item.apt_name || (meta ? meta.name : '아파트'),
+    aptId: targetId,
+    aptName: rawName || (meta ? meta.name : '알 수 없는 단지'),
     recentPrice: item.recentPrice || item.recent_price || (meta ? `${meta.recentPrice}억` : '0억'),
     districtKey: districtKey,
     address: meta ? meta.address : (item.address || '주소 정보 없음'),
@@ -2105,9 +2117,9 @@ function initListingsDataset() {
   if (saved) {
     try {
       const parsed = JSON.parse(saved);
-      // 데이터가 비었거나 개수가 다르거나, 구버전 구글 주소(lh3.googleusercontent.com) 또는 구버전 센트럴자이 이미지 주소가 포함되어 있으면 강제 리셋
+      // 데이터가 비었거나 개수가 다르거나, 구버전 구글 주소(lh3) 또는 Unsplash 이미지 흔적이 있으면 강제 리셋
       const hasLegacyImage = parsed.some(item => 
-        item.image && (item.image.includes('lh3.googleusercontent.com') || item.image.includes('photo-1570129477492'))
+        item.image && (item.image.includes('lh3.googleusercontent.com') || item.image.includes('unsplash.com') || item.image.includes('photo-15'))
       );
       
       if (!Array.isArray(parsed) || parsed.length < 22 || hasLegacyImage) {
@@ -2123,13 +2135,13 @@ function initListingsDataset() {
   }
 
   if (needReset) {
-    console.log('구버전 매물 캐시 감지 - 새 고화질 Unsplash 데이터셋으로 초기화합니다.');
+    console.log('구버전 매물 캐시 감지 - 새 로컬 이미지 데이터셋으로 초기화합니다.');
     LISTINGS_DATA = [...DEFAULT_LISTINGS];
   }
 
-  // 매물 데이터 로드 및 초기화 시 아파트 타입의 이미지를 getAptImage 실물 아파트 전경 이미지와 1:1 완벽 동기화
+  // 모든 종류의 매물(아파트/주택/빌라)의 대표 이미지를 house_logo.png 로 1:1 완벽 동기화
   LISTINGS_DATA.forEach(item => {
-    if (item.type === 'apt' && item.aptId) {
+    if (item.aptId) {
       item.image = getAptImage(item.aptId);
     }
   });
@@ -2492,7 +2504,7 @@ async function toggleListingBookmarkAction(event, aptId, aptName, price, distric
   const isBookmarked = checkIsBookmarked(aptId);
   let bookmarks = getBookmarksFromStorage();
   const matchedApt = DISTRICT_DATA[districtKey]?.apts.find(a => a.id === aptId);
-  const cleanAptName = matchedApt ? matchedApt.name : aptName;
+  const cleanAptName = aptName; // 매물 거래소 카드에 쓰여있던 긴 매물 타이틀 그대로 보존
 
   if (isDummyAuth) {
     if (isBookmarked) {
