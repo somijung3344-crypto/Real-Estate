@@ -479,11 +479,13 @@ function applyConfigOverrides() {
 // ==================== APP INITIALIZATION ====================
 function initApp() {
   // 0-A. 데이터 버전 관리 및 로컬 저장소 캐시 강제 리셋
-  const APP_VERSION = 'v2.8.0';
+  const APP_VERSION = 'v2.9.0';
   if (localStorage.getItem('ESTATE_APP_VERSION') !== APP_VERSION) {
     localStorage.removeItem('dummy_listings_db');
+    localStorage.removeItem('ESTATE_API_CONFIG'); // 오버라이드 API 설정 강제 초기화
+    localStorage.removeItem('APP_CONFIG_OVERRIDE'); // 구버전 API 설정 강제 초기화
     localStorage.setItem('ESTATE_APP_VERSION', APP_VERSION);
-    console.log('최신 패치 버전 적용: 구버전 캐시가 강제 초기화되었습니다.');
+    console.log('최신 패치 버전 적용: 구버전 캐시 및 API 설정 오버라이드가 강제 초기화되었습니다.');
   }
 
   // 0. 로컬 저장소 API 키 오버라이드 병합
