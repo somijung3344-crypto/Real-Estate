@@ -479,7 +479,7 @@ function applyConfigOverrides() {
 // ==================== APP INITIALIZATION ====================
 function initApp() {
   // 0-A. 데이터 버전 관리 및 로컬 저장소 캐시 강제 리셋
-  const APP_VERSION = 'v2.3.0';
+  const APP_VERSION = 'v2.4.0';
   if (localStorage.getItem('ESTATE_APP_VERSION') !== APP_VERSION) {
     localStorage.removeItem('dummy_listings_db');
     localStorage.setItem('ESTATE_APP_VERSION', APP_VERSION);
@@ -1365,22 +1365,17 @@ function initKakaoRoadview(lat, lng) {
 }
 
 function showRoadviewFallback(container, lat, lng) {
-  const aptImgUrl = selectedApartment ? getAptImage(selectedApartment.id) : '';
-  let imageHtml = '';
-  if (aptImgUrl) {
-    imageHtml = `
-      <div class="relative w-full max-w-sm h-48 rounded-xl overflow-hidden border border-slate-200 shadow-sm mx-auto mb-3">
-        <img class="w-full h-full object-cover" src="${aptImgUrl}" alt="아파트 대표 사진">
-        <div class="absolute inset-0 bg-slate-900/10"></div>
-      </div>
-    `;
-  }
-  
+  const isApt = selectedApartment ? selectedApartment.id.startsWith('ss') || selectedApartment.id.startsWith('jg') || selectedApartment.id.startsWith('ds') || selectedApartment.id.startsWith('bg') : true;
+  const iconName = isApt ? 'apartment' : 'bungalow';
+  const aptName = selectedApartment ? selectedApartment.name : '선택 단지';
+
   container.innerHTML = `
     <div class="absolute inset-0 flex flex-col items-center justify-center bg-slate-100 text-center p-6 gap-3 text-slate-500">
-      <span class="material-symbols-outlined text-secondary text-[36px] mb-2">image</span>
-      <span class="text-sm font-bold text-slate-700">${selectedApartment ? selectedApartment.name : '단지'} 전경 사진</span>
-      ${imageHtml}
+      <div class="w-full max-w-sm h-44 bg-gradient-to-br from-slate-100 to-slate-200 rounded-2xl flex flex-col items-center justify-center text-slate-400 gap-1.5 border border-slate-200 shadow-sm mb-1">
+        <span class="material-symbols-outlined text-[42px] text-slate-350">${iconName}</span>
+        <span class="text-[10px] font-bold text-slate-400 tracking-wider">단지 전경 이미지 준비중</span>
+      </div>
+      <span class="text-sm font-bold text-slate-700">${aptName} 주변 환경</span>
       <p class="text-xs text-text-muted leading-relaxed mb-3">
         카카오 지도 SDK 미작동 상태로 모의 구동 중입니다.<br>
         실제 3D 거리 뷰를 감상하려면 아래 공식 카카오 맵 서비스를 연결하세요.
@@ -2229,9 +2224,13 @@ function renderListings() {
       });
     }
 
+    const iconName = item.type === 'apt' ? 'apartment' : 'bungalow';
+
     card.innerHTML = `
-      <div class="relative h-44 w-full overflow-hidden bg-slate-100">
-        <img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" src="${item.image}" alt="${item.title}">
+      <div class="relative h-44 w-full bg-gradient-to-br from-slate-100 to-slate-200/90 flex flex-col items-center justify-center text-slate-400 select-none border-b border-slate-100 group">
+        <span class="material-symbols-outlined text-[36px] text-slate-350 transition-transform duration-500 group-hover:scale-110">${iconName}</span>
+        <span class="text-[9px] font-bold text-slate-400 mt-1 uppercase tracking-wider">대표 이미지 준비중</span>
+
         <div class="absolute top-3 left-3 bg-primary-container/85 backdrop-blur-md px-2.5 py-0.5 rounded-full flex items-center gap-1 z-10">
           <span class="text-[9px] font-bold text-white">${districtText}</span>
         </div>
@@ -2358,7 +2357,10 @@ function openInquiryModal(listingId) {
   document.getElementById('inquiry-error-box').style.display = 'none';
   document.getElementById('inquiry-success-box').style.display = 'none';
 
-  document.getElementById('inquiry-listing-img').src = listing.image;
+  const iconEl = document.getElementById('inquiry-listing-icon');
+  if (iconEl) {
+    iconEl.textContent = listing.type === 'apt' ? 'apartment' : 'bungalow';
+  }
   document.getElementById('inquiry-listing-badge').textContent = listing.type === 'apt' ? '아파트' : '주택/빌라';
   document.getElementById('inquiry-listing-title').textContent = listing.title;
   document.getElementById('inquiry-listing-details').textContent = `${listing.pyeong}평형 · ${listing.floor} · ${listing.direction}`;
