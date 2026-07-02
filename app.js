@@ -1592,27 +1592,26 @@ async function toggleBookmarkAction() {
 
 // 아파트 대표 이미지 반환
 function getAptImage(aptId) {
-  const images = {
-    'ss-1': 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=800&q=80',
-    'ss-2': 'https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&w=800&q=80',
-    'ss-3': 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80',
-    'ss-4': 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=800&q=80',
-    'ss-5': 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800&q=80',
-    'jg-1': 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=800&q=80',
-    'jg-2': 'https://images.unsplash.com/photo-1570129477492-45c003edd2be?auto=format&fit=crop&w=800&q=80',
-    'jg-3': 'https://images.unsplash.com/photo-1605276374104-dee2a0ed3cd6?auto=format&fit=crop&w=800&q=80',
-    'jg-4': 'https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?auto=format&fit=crop&w=800&q=80',
-    'jg-5': 'https://images.unsplash.com/photo-1600565193348-f74bd3c7ccdf?auto=format&fit=crop&w=800&q=80',
-    'ds-1': 'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=800&q=80',
-    'ds-2': 'https://images.unsplash.com/photo-1598257006458-087169a1f08d?auto=format&fit=crop&w=800&q=80',
-    'ds-3': 'https://images.unsplash.com/photo-1507089947368-19c1da9775ae?auto=format&fit=crop&w=800&q=80',
-    'ds-4': 'https://images.unsplash.com/photo-1513584684374-8bab748fbf90?auto=format&fit=crop&w=800&q=80',
-    'ds-5': 'https://images.unsplash.com/photo-1580587771525-78b9dba3b914?auto=format&fit=crop&w=800&q=80',
-    'bg-1': 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=800&q=80',
-    'bg-2': 'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=800&q=80',
-    'bg-3': 'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=800&q=80',
-    'bg-4': 'https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&w=800&q=80',
-    'bg-5': 'https://images.unsplash.com/photo-1600585154526-990dced4db0d?auto=format&fit=crop&w=800&q=80'
+    'ss-1': 'https://images.unsplash.com/photo-1582407947304-fd86f028f716?auto=format&fit=crop&w=800&q=80', // 범어두산위브더제니스 (초고층)
+    'ss-2': 'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=800&q=80', // 범어센트럴푸르지오 (신축아파트)
+    'ss-3': 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80', // 만촌전원주택
+    'ss-4': 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=800&q=80', // 범어신축빌라
+    'ss-5': 'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=800&q=80', // 범어빌라
+    'jg-1': 'https://images.unsplash.com/photo-1513584684374-8bab748fbf90?auto=format&fit=crop&w=800&q=80', // 남산자이하늘채 (대단지아파트)
+    'jg-2': 'https://images.unsplash.com/photo-1554469384-e58fac16e23a?auto=format&fit=crop&w=800&q=80', // 대구역센트럴자이 (사용자 점검 - 도심 아파트 빌딩 전경)
+    'jg-3': 'https://images.unsplash.com/photo-1605276374104-dee2a0ed3cd6?auto=format&fit=crop&w=800&q=80', // 삼덕동상가주택
+    'jg-4': 'https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?auto=format&fit=crop&w=800&q=80', // 대봉동한옥
+    'jg-5': 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=800&q=80', // 남산동주택
+    'ds-1': 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800&q=80', // 월성푸르지오 (대단지아파트)
+    'ds-2': 'https://images.unsplash.com/photo-1580587771525-78b9dba3b914?auto=format&fit=crop&w=800&q=80', // 송현동주택
+    'ds-3': 'https://images.unsplash.com/photo-1507089947368-19c1da9775ae?auto=format&fit=crop&w=800&q=80', // 상인동상가주택
+    'ds-4': 'https://images.unsplash.com/photo-1600585154526-990dced4db0d?auto=format&fit=crop&w=800&q=80', // 이곡동빌라
+    'ds-5': 'https://images.unsplash.com/photo-1600585154363-67eb9e2e2099?auto=format&fit=crop&w=800&q=80', // 달서구주택
+    'bg-1': 'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=800&q=80', // 침산푸르지오1차 (아파트전경)
+    'bg-2': 'https://images.unsplash.com/photo-1572120360610-d971b9d7767c?auto=format&fit=crop&w=800&q=80', // 침산푸르지오복층
+    'bg-3': 'https://images.unsplash.com/photo-1512915922686-57c11dde9b6b?auto=format&fit=crop&w=800&q=80', // 칠성동주택
+    'bg-4': 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=800&q=80', // 복현동원룸
+    'bg-5': 'https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&w=800&q=80'  // 침산동빌라
   };
   return images[aptId] || 'https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&w=800&q=80';
 }
@@ -1911,7 +1910,7 @@ const DEFAULT_LISTINGS = [
     pyeong: 34,
     floor: '15층 / 39층',
     direction: '남서향',
-    image: 'https://images.unsplash.com/photo-1570129477492-45c003edd2be?auto=format&fit=crop&w=800&q=80',
+    image: 'https://images.unsplash.com/photo-1554469384-e58fac16e23a?auto=format&fit=crop&w=800&q=80',
     description: '대구역 도보 5분 거리로 출퇴근 및 상권 이용이 매우 극대화된 최고 명문 대단지 아파트입니다.',
     broker: '센트럴자이공인',
     contact: '053-424-7700',
@@ -2134,8 +2133,12 @@ function initListingsDataset() {
   if (saved) {
     try {
       const parsed = JSON.parse(saved);
-      // 데이터가 비었거나 개수가 다르거나, 구버전 구글 주소(lh3.googleusercontent.com)가 포함되어 있으면 강제 리셋
-      if (!Array.isArray(parsed) || parsed.length < 22 || (parsed[0] && parsed[0].image && parsed[0].image.includes('lh3.googleusercontent.com'))) {
+      // 데이터가 비었거나 개수가 다르거나, 구버전 구글 주소(lh3.googleusercontent.com) 또는 구버전 센트럴자이 이미지 주소가 포함되어 있으면 강제 리셋
+      const hasLegacyImage = parsed.some(item => 
+        item.image && (item.image.includes('lh3.googleusercontent.com') || item.image.includes('photo-1570129477492'))
+      );
+      
+      if (!Array.isArray(parsed) || parsed.length < 22 || hasLegacyImage) {
         needReset = true;
       } else {
         LISTINGS_DATA = parsed;
@@ -2150,8 +2153,17 @@ function initListingsDataset() {
   if (needReset) {
     console.log('구버전 매물 캐시 감지 - 새 고화질 Unsplash 데이터셋으로 초기화합니다.');
     LISTINGS_DATA = [...DEFAULT_LISTINGS];
-    localStorage.setItem('dummy_listings_db', JSON.stringify(LISTINGS_DATA));
   }
+
+  // 매물 데이터 로드 및 초기화 시 아파트 타입의 이미지를 getAptImage 실물 아파트 전경 이미지와 1:1 완벽 동기화
+  LISTINGS_DATA.forEach(item => {
+    if (item.type === 'apt' && item.aptId) {
+      item.image = getAptImage(item.aptId);
+    }
+  });
+
+  // 변경된 데이터를 로컬스토리지에 재저장
+  localStorage.setItem('dummy_listings_db', JSON.stringify(LISTINGS_DATA));
 }
 
 function renderListings() {
