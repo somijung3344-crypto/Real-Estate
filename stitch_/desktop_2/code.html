@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+
+<html lang="ko"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>내 저장소 | Daegu Real Estate</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "primary-fixed-dim": "#b6c6ef",
+                    "inverse-primary": "#b6c6ef",
+                    "on-tertiary": "#ffffff",
+                    "surface-variant": "#e4e2e5",
+                    "outline-variant": "#c5c6cf",
+                    "heart-accent": "#F43F5E",
+                    "tertiary-container": "#292c2e",
+                    "secondary-fixed-dim": "#adc6ff",
+                    "primary": "#031635",
+                    "on-tertiary-container": "#909395",
+                    "surface-container-lowest": "#ffffff",
+                    "on-error": "#ffffff",
+                    "tertiary-fixed-dim": "#c4c7c9",
+                    "background": "#fbf8fc",
+                    "surface-container": "#efedf0",
+                    "on-secondary-fixed-variant": "#004395",
+                    "surface-bright": "#fbf8fc",
+                    "on-secondary-container": "#fefcff",
+                    "on-primary-container": "#8293b8",
+                    "tertiary": "#141819",
+                    "on-primary-fixed": "#081b3a",
+                    "outline": "#75777f",
+                    "surface-container-low": "#f5f3f6",
+                    "secondary-fixed": "#d8e2ff",
+                    "on-primary-fixed-variant": "#364768",
+                    "primary-container": "#1a2b4b",
+                    "on-error-container": "#93000a",
+                    "text-muted": "#94A3B8",
+                    "error-container": "#ffdad6",
+                    "on-secondary-fixed": "#001a42",
+                    "on-surface-variant": "#44474e",
+                    "on-surface": "#1b1b1e",
+                    "on-tertiary-fixed": "#191c1e",
+                    "on-background": "#1b1b1e",
+                    "secondary": "#0058be",
+                    "tertiary-fixed": "#e0e3e5",
+                    "error": "#ba1a1a",
+                    "on-primary": "#ffffff",
+                    "surface": "#fbf8fc",
+                    "inverse-on-surface": "#f2f0f3",
+                    "success-green": "#10B981",
+                    "surface-container-high": "#e9e7eb",
+                    "on-secondary": "#ffffff",
+                    "inverse-surface": "#303033",
+                    "text-primary": "#0F172A",
+                    "text-secondary": "#475569",
+                    "surface-tint": "#4e5e81",
+                    "primary-fixed": "#d8e2ff",
+                    "danger-red": "#EF4444",
+                    "surface-dim": "#dbd9dc",
+                    "on-tertiary-fixed-variant": "#444749",
+                    "surface-container-highest": "#e4e2e5",
+                    "secondary-container": "#2170e4"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "section-gap": "4rem",
+                    "gutter": "1.5rem",
+                    "container-max": "1280px",
+                    "stack-md": "1rem",
+                    "stack-sm": "0.5rem",
+                    "stack-lg": "2rem",
+                    "margin-mobile": "1rem"
+            },
+            "fontFamily": {
+                    "label-md": ["Noto Sans KR"],
+                    "headline-md": ["Noto Sans KR"],
+                    "body-md": ["Noto Sans KR"],
+                    "headline-lg-mobile": ["Noto Sans KR"],
+                    "title-md": ["Noto Sans KR"],
+                    "headline-lg": ["Noto Sans KR"],
+                    "caption": ["Noto Sans KR"],
+                    "body-lg": ["Noto Sans KR"],
+                    "display-lg": ["Noto Sans KR"]
+            },
+            "fontSize": {
+                    "label-md": ["13px", {"lineHeight": "1.2", "fontWeight": "500"}],
+                    "headline-md": ["20px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                    "body-md": ["14px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "headline-lg-mobile": ["22px", {"lineHeight": "1.3", "fontWeight": "700"}],
+                    "title-md": ["18px", {"lineHeight": "1.5", "fontWeight": "600"}],
+                    "headline-lg": ["28px", {"lineHeight": "1.3", "fontWeight": "700"}],
+                    "caption": ["12px", {"lineHeight": "1.4", "fontWeight": "400"}],
+                    "body-lg": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "display-lg": ["36px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #fbf8fc;
+            font-family: 'Noto Sans KR', sans-serif;
+            color: #1b1b1e;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .sparkline-container {
+            width: 100%;
+            height: 40px;
+        }
+        .premium-card {
+            background: #FFFFFF;
+            box-shadow: 0 4px 20px rgba(26, 43, 75, 0.05);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .premium-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 30px rgba(26, 43, 75, 0.1);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+<!-- TopNavBar -->
+<header class="fixed top-0 w-full z-50 flex justify-between items-center px-gutter h-16 max-w-container-max mx-auto bg-surface shadow-sm left-1/2 -translate-x-1/2">
+<div class="flex items-center gap-8">
+<h1 class="font-headline-md text-headline-md font-bold text-primary">Daegu Real Estate</h1>
+<nav class="hidden md:flex gap-6">
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors" href="#">홈</a>
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors" href="#">분석실</a>
+<a class="font-body-md text-body-md text-primary font-bold border-b-2 border-primary" href="#">내 저장소</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<button class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors">로그인</button>
+<button class="bg-primary text-on-primary px-4 py-2 rounded-lg font-body-md text-body-md hover:opacity-90 transition-opacity">회원가입</button>
+</div>
+</header>
+<main class="mt-16 flex-grow container mx-auto max-w-container-max px-gutter py-12">
+<!-- Header Section -->
+<section class="mb-12 flex justify-between items-end">
+<div>
+<h2 class="font-display-lg text-display-lg text-primary mb-2">내 저장소</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant">관심 단지로 등록한 아파트 4곳을 관리하고 분석합니다.</p>
+</div>
+<div class="flex gap-2">
+<button class="flex items-center gap-2 px-4 py-2 bg-surface-container-high rounded-lg text-on-surface hover:bg-surface-dim transition-colors">
+<span class="material-symbols-outlined text-[20px]">sort</span>
+<span class="font-label-md text-label-md">최근 저장순</span>
+</button>
+</div>
+</section>
+<!-- Bento Grid Content -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="storage-grid">
+<!-- Card 1: 범어 센트럴 푸르지오 -->
+<div class="premium-card rounded-xl overflow-hidden flex flex-col group">
+<div class="relative h-48 w-full overflow-hidden">
+<img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="A professional architectural photograph of a sleek, modern apartment building in Daegu called Beomeo Central Prugio. The building features large glass balconies and a clean, high-end facade. It is captured during a clear blue sky afternoon with soft, warm sunlight highlighting the textures of the stone and glass. The atmosphere is sophisticated and premium, representing luxury urban living." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC7ouLEZi-RK94AxesM9GYOU3N350IEALFcFWFz1urUsUTG87hnNkV6ijG5nyFYZOscWVbxqc0eSBA_jru4IR3d_TvE-cA4aWvBxFf91ohSEZJAB4bNLAilgqyHV7k80lUBnyCRHxxyTPmMb2CQRWlcRRoJpi5ykVRO02jbcesnOQKSICJGjWTEHagAhr0DYdqVt9_SvRaFFs4tJNGS4Wg-cMbuvCXeHfcmyx1vn5Vf73j1JU8Jv_K-I4sXrndokhTGe47iQ9BEp9Q"/>
+<div class="absolute top-4 left-4 bg-primary-container/80 backdrop-blur-md px-3 py-1 rounded-full">
+<span class="font-label-md text-label-md text-white">수성구 범어동</span>
+</div>
+<button class="absolute top-4 right-4 w-10 h-10 bg-white/90 backdrop-blur-md rounded-full flex items-center justify-center text-heart-accent shadow-md hover:scale-110 transition-transform">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">favorite</span>
+</button>
+</div>
+<div class="p-6 flex flex-col flex-grow">
+<div class="flex justify-between items-start mb-4">
+<div>
+<h3 class="font-title-md text-title-md text-primary mb-1">범어 센트럴 푸르지오</h3>
+<p class="font-caption text-caption text-on-surface-variant">2019년 준공 · 817세대</p>
+</div>
+</div>
+<div class="mb-6">
+<div class="flex justify-between items-end mb-2">
+<span class="font-label-md text-label-md text-on-surface-variant">최근 실거래가 (84㎡)</span>
+<span class="font-headline-md text-headline-md text-primary">12.5억</span>
+</div>
+<div class="sparkline-container bg-surface-container-low rounded-lg p-2 flex items-end gap-1">
+<!-- Simple Sparkline Representation -->
+<div class="w-full h-[60%] bg-primary/20 rounded-t-sm"></div>
+<div class="w-full h-[40%] bg-primary/20 rounded-t-sm"></div>
+<div class="w-full h-[70%] bg-primary/20 rounded-t-sm"></div>
+<div class="w-full h-[55%] bg-primary/20 rounded-t-sm"></div>
+<div class="w-full h-[85%] bg-primary rounded-t-sm"></div>
+</div>
+<p class="mt-2 font-caption text-caption text-success-green flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">trending_up</span> 전월 대비 1.2% 상승
+                        </p>
+</div>
+<div class="mt-auto grid grid-cols-2 gap-3">
+<button class="py-3 rounded-lg bg-surface-container-highest text-on-surface hover:bg-surface-variant font-label-md text-label-md transition-colors flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[18px]">delete</span> 삭제
+                        </button>
+<button class="py-3 rounded-lg bg-primary text-white hover:opacity-90 font-label-md text-label-md transition-opacity flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[18px]">analytics</span> 분석실 이동
+                        </button>
+</div>
+</div>
+</div>
+<!-- Card 2: 두산위브더제니스 -->
+<div class="premium-card rounded-xl overflow-hidden flex flex-col group">
+<div class="relative h-48 w-full overflow-hidden">
+<img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="A grand high-rise residential skyscraper in Daegu, known as Doosan We've the Zenith. The photo is taken from a low angle to emphasize its height and majesty against a twilight sky painted with purple and orange hues. The building's windows reflect the city lights, creating a sparkling, high-end urban luxury aesthetic. Modern landscaping and minimalist street lighting are visible in the foreground." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB7gM7P1E3g_HBRnAtZK5XA0ttEiVRY4byaSQoXhXyfqJsb5r1U_A5a5Y85trN6FinOGGS4CnozbSgXayrcEfIfk4uiD9OIOC7eTQ4KNLJiD2mh2_SZmZnXMHFInT33MH9dzp5hukP-OBvL-GFO6YKERqltGulOlSYrHFiJluA8NJQ2r_q3hzPbOGuP0B7HBC-TVxPFyguHe-rMqT452LDq5PMfcEfwu-4-gCRObLUZMgsq2uiDc7ph-aKZksfD9eBh0srKFMI2-hY"/>
+<div class="absolute top-4 left-4 bg-primary-container/80 backdrop-blur-md px-3 py-1 rounded-full">
+<span class="font-label-md text-label-md text-white">수성구 범어동</span>
+</div>
+<button class="absolute top-4 right-4 w-10 h-10 bg-white/90 backdrop-blur-md rounded-full flex items-center justify-center text-heart-accent shadow-md hover:scale-110 transition-transform">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">favorite</span>
+</button>
+</div>
+<div class="p-6 flex flex-col flex-grow">
+<div class="flex justify-between items-start mb-4">
+<div>
+<h3 class="font-title-md text-title-md text-primary mb-1">두산위브더제니스</h3>
+<p class="font-caption text-caption text-on-surface-variant">2009년 준공 · 1,494세대</p>
+</div>
+</div>
+<div class="mb-6">
+<div class="flex justify-between items-end mb-2">
+<span class="font-label-md text-label-md text-on-surface-variant">최근 실거래가 (129㎡)</span>
+<span class="font-headline-md text-headline-md text-primary">24.8억</span>
+</div>
+<div class="sparkline-container bg-surface-container-low rounded-lg p-2 flex items-end gap-1">
+<div class="w-full h-[80%] bg-primary/20 rounded-t-sm"></div>
+<div class="w-full h-[75%] bg-primary/20 rounded-t-sm"></div>
+<div class="w-full h-[70%] bg-primary/20 rounded-t-sm"></div>
+<div class="w-full h-[65%] bg-danger-red rounded-t-sm"></div>
+<div class="w-full h-[60%] bg-danger-red rounded-t-sm"></div>
+</div>
+<p class="mt-2 font-caption text-caption text-danger-red flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">trending_down</span> 전월 대비 0.8% 하락
+                        </p>
+</div>
+<div class="mt-auto grid grid-cols-2 gap-3">
+<button class="py-3 rounded-lg bg-surface-container-highest text-on-surface hover:bg-surface-variant font-label-md text-label-md transition-colors flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[18px]">delete</span> 삭제
+                        </button>
+<button class="py-3 rounded-lg bg-primary text-white hover:opacity-90 font-label-md text-label-md transition-opacity flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[18px]">analytics</span> 분석실 이동
+                        </button>
+</div>
+</div>
+</div>
+<!-- Card 3: 대구역 센트럴 자이 -->
+<div class="premium-card rounded-xl overflow-hidden flex flex-col group">
+<div class="relative h-48 w-full overflow-hidden">
+<img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="Modern high-density residential towers of Daegu Station Central Xi. The image shows a contemporary apartment complex with a clean color palette of white, grey, and deep blue accents. A lush green community park and walking paths are visible between the buildings. The photo is taken in bright daylight, emphasizing a clean, family-friendly, and secure living environment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCkby8FE76Lrn-VoFI8cBgSZld7biVcePnpTlcxbpxveZFNO5w1-Runt_2-x85I2n5fPCY3TM18uID9sjekTjsR-XjOETN2eeCiHmOX07gOvRqG0-4V6MLz-rBnDTYKeMsioNAl-HboTH0Ei7koaDqQfDO7_MQENXJP_aLqOVSR4nKN0pacmg-kEwYbqHrA7MtTgk1xd_TRNfbrhNw_VNmEms6mB7RK8vu8KEFs0r3MsyGQDtoY5wlrzWwjrlBn0oNhaVre9EQHLvQ"/>
+<div class="absolute top-4 left-4 bg-primary-container/80 backdrop-blur-md px-3 py-1 rounded-full">
+<span class="font-label-md text-label-md text-white">중구 수창동</span>
+</div>
+<button class="absolute top-4 right-4 w-10 h-10 bg-white/90 backdrop-blur-md rounded-full flex items-center justify-center text-heart-accent shadow-md hover:scale-110 transition-transform">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">favorite</span>
+</button>
+</div>
+<div class="p-6 flex flex-col flex-grow">
+<div class="flex justify-between items-start mb-4">
+<div>
+<h3 class="font-title-md text-title-md text-primary mb-1">대구역 센트럴 자이</h3>
+<p class="font-caption text-caption text-on-surface-variant">2017년 준공 · 1,005세대</p>
+</div>
+</div>
+<div class="mb-6">
+<div class="flex justify-between items-end mb-2">
+<span class="font-label-md text-label-md text-on-surface-variant">최근 실거래가 (84㎡)</span>
+<span class="font-headline-md text-headline-md text-primary">5.4억</span>
+</div>
+<div class="sparkline-container bg-surface-container-low rounded-lg p-2 flex items-end gap-1">
+<div class="w-full h-[40%] bg-primary/20 rounded-t-sm"></div>
+<div class="w-full h-[45%] bg-primary/20 rounded-t-sm"></div>
+<div class="w-full h-[48%] bg-primary/20 rounded-t-sm"></div>
+<div class="w-full h-[47%] bg-primary/20 rounded-t-sm"></div>
+<div class="w-full h-[50%] bg-primary rounded-t-sm"></div>
+</div>
+<p class="mt-2 font-caption text-caption text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">horizontal_rule</span> 변동 없음
+                        </p>
+</div>
+<div class="mt-auto grid grid-cols-2 gap-3">
+<button class="py-3 rounded-lg bg-surface-container-highest text-on-surface hover:bg-surface-variant font-label-md text-label-md transition-colors flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[18px]">delete</span> 삭제
+                        </button>
+<button class="py-3 rounded-lg bg-primary text-white hover:opacity-90 font-label-md text-label-md transition-opacity flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[18px]">analytics</span> 분석실 이동
+                        </button>
+</div>
+</div>
+</div>
+<!-- Card 4: 월성 협성휴포레 -->
+<div class="premium-card rounded-xl overflow-hidden flex flex-col group">
+<div class="relative h-48 w-full overflow-hidden">
+<img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="A vibrant residential area in Wolseong-dong, Daegu, featuring the Hyupsung Huefore apartment complex. The image shows clean modern architecture with landscaped gardens and pedestrian paths. The lighting is crisp and clear, depicting a peaceful morning in a well-maintained residential district. The color palette is natural, featuring greens, greys, and the white tones of the buildings." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCR_dSlk1PTdAopT3MUtCUy2zZnMgm9O-a2JkuTiy9FGyLz83XBAfvZyyNOuveNRqb0H2zmSOjEwScomjTuz1n5M5uxGlv6uAdx-QN1nL77oxXrIv1JLpsJVoyo6d5MX9jAOdNAXhxEG90aSuuVORlIyg_lLRk_jNAcl_5271t9uFCDVBqiDHOVugjjajU2aCwWyGGVEP-Ap3d9C1km716MlSyCI1WTnGxGsRTjc2gFYBntzgJde5N9rvWxVhxIF6zXTeoieKOLmoc"/>
+<div class="absolute top-4 left-4 bg-primary-container/80 backdrop-blur-md px-3 py-1 rounded-full">
+<span class="font-label-md text-label-md text-white">달서구 월성동</span>
+</div>
+<button class="absolute top-4 right-4 w-10 h-10 bg-white/90 backdrop-blur-md rounded-full flex items-center justify-center text-heart-accent shadow-md hover:scale-110 transition-transform">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">favorite</span>
+</button>
+</div>
+<div class="p-6 flex flex-col flex-grow">
+<div class="flex justify-between items-start mb-4">
+<div>
+<h3 class="font-title-md text-title-md text-primary mb-1">월성 협성휴포레</h3>
+<p class="font-caption text-caption text-on-surface-variant">2016년 준공 · 996세대</p>
+</div>
+</div>
+<div class="mb-6">
+<div class="flex justify-between items-end mb-2">
+<span class="font-label-md text-label-md text-on-surface-variant">최근 실거래가 (84㎡)</span>
+<span class="font-headline-md text-headline-md text-primary">4.9억</span>
+</div>
+<div class="sparkline-container bg-surface-container-low rounded-lg p-2 flex items-end gap-1">
+<div class="w-full h-[50%] bg-primary/20 rounded-t-sm"></div>
+<div class="w-full h-[55%] bg-primary/20 rounded-t-sm"></div>
+<div class="w-full h-[65%] bg-primary/20 rounded-t-sm"></div>
+<div class="w-full h-[75%] bg-primary/20 rounded-t-sm"></div>
+<div class="w-full h-[82%] bg-success-green rounded-t-sm"></div>
+</div>
+<p class="mt-2 font-caption text-caption text-success-green flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">trending_up</span> 전월 대비 2.4% 상승
+                        </p>
+</div>
+<div class="mt-auto grid grid-cols-2 gap-3">
+<button class="py-3 rounded-lg bg-surface-container-highest text-on-surface hover:bg-surface-variant font-label-md text-label-md transition-colors flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[18px]">delete</span> 삭제
+                        </button>
+<button class="py-3 rounded-lg bg-primary text-white hover:opacity-90 font-label-md text-label-md transition-opacity flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[18px]">analytics</span> 분석실 이동
+                        </button>
+</div>
+</div>
+</div>
+<!-- Empty State Helper (Hidden by default) -->
+<div class="hidden col-span-full py-24 flex flex-col items-center justify-center text-center" id="empty-state">
+<div class="w-24 h-24 bg-surface-container-low rounded-full flex items-center justify-center mb-6">
+<span class="material-symbols-outlined text-[48px] text-outline">bookmark_border</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-primary mb-2">저장된 단지가 없습니다</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-8">관심 있는 아파트 단지를 저장하고 시세를 실시간으로 확인해보세요.</p>
+<button class="bg-primary text-white px-8 py-3 rounded-xl font-label-md text-label-md hover:opacity-90 transition-opacity">아파트 보러가기</button>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="w-full py-16 px-gutter flex flex-col items-center text-center mt-auto bg-surface-container-highest">
+<div class="mb-8">
+<span class="font-title-md text-title-md text-on-surface-variant font-bold">Daegu Real Estate Data</span>
+</div>
+<div class="flex gap-8 mb-8">
+<a class="font-caption text-caption text-on-surface-variant hover:underline" href="#">이용약관</a>
+<a class="font-caption text-caption text-on-surface-variant hover:underline" href="#">개인정보처리방침</a>
+<a class="font-caption text-caption text-on-surface-variant hover:underline" href="#">고객센터</a>
+</div>
+<p class="font-caption text-caption text-on-surface-variant">© 2024 Daegu Real Estate Data. All rights reserved.</p>
+</footer>
+<script>
+        // Micro-interactions for removal
+        document.querySelectorAll('button:contains("삭제")').forEach(button => {
+            button.addEventListener('click', function() {
+                const card = this.closest('.premium-card');
+                card.style.opacity = '0';
+                card.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    card.remove();
+                    checkEmpty();
+                }, 300);
+            });
+        });
+
+        // Search text helper for "삭제" button selection as querySelectorAll doesn't support :contains natively
+        const buttons = document.getElementsByTagName("button");
+        for (let i = 0; i < buttons.length; i++) {
+            if (buttons[i].textContent.includes("삭제")) {
+                buttons[i].addEventListener('click', function() {
+                    const card = this.closest('.premium-card');
+                    card.style.transition = 'all 0.3s ease';
+                    card.style.opacity = '0';
+                    card.style.transform = 'scale(0.9)';
+                    setTimeout(() => {
+                        card.style.display = 'none';
+                        checkEmpty();
+                    }, 300);
+                });
+            }
+        }
+
+        function checkEmpty() {
+            const visibleCards = Array.from(document.querySelectorAll('.premium-card')).filter(card => card.style.display !== 'none');
+            if (visibleCards.length === 0) {
+                document.getElementById('empty-state').classList.remove('hidden');
+                document.querySelector('p.text-on-surface-variant').textContent = '관심 단지로 등록한 아파트가 없습니다.';
+            } else {
+                document.querySelector('p.text-on-surface-variant').textContent = `관심 단지로 등록한 아파트 ${visibleCards.length}곳을 관리하고 분석합니다.`;
+            }
+        }
+    </script>
+</body></html>

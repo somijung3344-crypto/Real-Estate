@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+
+<html class="light" lang="ko"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>DAEGU ESTATE - 실거래가 정밀 분석</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Shared Components Logic & Style Guidance Integration -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-container-low": "#f5f3f6",
+                    "on-tertiary-fixed-variant": "#444749",
+                    "tertiary-fixed": "#e0e3e5",
+                    "on-tertiary-fixed": "#191c1e",
+                    "error": "#ba1a1a",
+                    "heart-accent": "#F43F5E",
+                    "secondary-fixed-dim": "#adc6ff",
+                    "inverse-on-surface": "#f2f0f3",
+                    "surface-container": "#efedf0",
+                    "on-primary-fixed-variant": "#364768",
+                    "surface-variant": "#e4e2e5",
+                    "danger-red": "#EF4444",
+                    "error-container": "#ffdad6",
+                    "surface-tint": "#4e5e81",
+                    "tertiary": "#141819",
+                    "primary": "#031635",
+                    "tertiary-container": "#292c2e",
+                    "on-secondary": "#ffffff",
+                    "surface-dim": "#dbd9dc",
+                    "outline-variant": "#c5c6cf",
+                    "secondary-container": "#2170e4",
+                    "primary-fixed-dim": "#b6c6ef",
+                    "on-tertiary-container": "#909395",
+                    "background": "#fbf8fc",
+                    "on-surface": "#1b1b1e",
+                    "on-primary-fixed": "#081b3a",
+                    "tertiary-fixed-dim": "#c4c7c9",
+                    "on-surface-variant": "#44474e",
+                    "inverse-primary": "#b6c6ef",
+                    "on-error": "#ffffff",
+                    "surface-container-highest": "#e4e2e5",
+                    "text-muted": "#94A3B8",
+                    "surface": "#fbf8fc",
+                    "secondary-fixed": "#d8e2ff",
+                    "surface-bright": "#fbf8fc",
+                    "on-error-container": "#93000a",
+                    "secondary": "#0058be",
+                    "outline": "#75777f",
+                    "on-tertiary": "#ffffff",
+                    "primary-fixed": "#d8e2ff",
+                    "text-primary": "#0F172A",
+                    "text-secondary": "#475569",
+                    "on-background": "#1b1b1e",
+                    "primary-container": "#1a2b4b",
+                    "success-green": "#10B981",
+                    "on-primary-container": "#8293b8",
+                    "surface-container-high": "#e9e7eb",
+                    "on-secondary-container": "#fefcff",
+                    "surface-container-lowest": "#ffffff",
+                    "inverse-surface": "#303033",
+                    "on-secondary-fixed-variant": "#004395",
+                    "on-primary": "#ffffff",
+                    "on-secondary-fixed": "#001a42"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "stack-sm": "0.5rem",
+                    "stack-lg": "2rem",
+                    "margin-mobile": "1rem",
+                    "gutter": "1.5rem",
+                    "container-max": "1280px",
+                    "section-gap": "4rem",
+                    "stack-md": "1rem"
+            },
+            "fontFamily": {
+                    "headline-lg": ["Noto Sans KR"],
+                    "headline-md": ["Noto Sans KR"],
+                    "display-lg": ["Noto Sans KR"],
+                    "body-md": ["Noto Sans KR"],
+                    "label-md": ["Noto Sans KR"],
+                    "caption": ["Noto Sans KR"],
+                    "headline-lg-mobile": ["Noto Sans KR"],
+                    "title-md": ["Noto Sans KR"],
+                    "body-lg": ["Noto Sans KR"]
+            },
+            "fontSize": {
+                    "headline-lg": ["28px", {"lineHeight": "1.3", "fontWeight": "700"}],
+                    "headline-md": ["20px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                    "display-lg": ["36px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-md": ["14px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "label-md": ["13px", {"lineHeight": "1.2", "fontWeight": "500"}],
+                    "caption": ["12px", {"lineHeight": "1.4", "fontWeight": "400"}],
+                    "headline-lg-mobile": ["22px", {"lineHeight": "1.3", "fontWeight": "700"}],
+                    "title-md": ["18px", {"lineHeight": "1.5", "fontWeight": "600"}],
+                    "body-lg": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: #fbf8fc;
+            -webkit-font-smoothing: antialiased;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+        .card-shadow {
+            shadow: 0 4px 20px rgba(26, 43, 75, 0.05);
+        }
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 1.5rem;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface">
+<!-- TopAppBar -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-4 h-16 md:px-margin-mobile bg-surface-container-lowest dark:bg-surface-container-low shadow-[0_4px_20px_rgba(26,43,75,0.05)]">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary dark:text-primary-fixed-dim" style="font-size: 24px;">domain</span>
+<h1 class="font-headline-md text-headline-md font-bold tracking-tight text-primary dark:text-primary-fixed">DAEGU ESTATE</h1>
+</div>
+<div class="hidden md:flex items-center gap-8">
+<nav class="flex gap-6">
+<a class="text-on-surface-variant dark:text-on-tertiary-container font-label-md text-label-md hover:bg-surface-container-high dark:hover:bg-surface-container-highest transition-colors px-2 py-1 rounded" href="#">홈</a>
+<a class="text-primary dark:text-primary-fixed font-bold font-label-md text-label-md border-b-2 border-primary" href="#">시장 분석</a>
+<a class="text-on-surface-variant dark:text-on-tertiary-container font-label-md text-label-md hover:bg-surface-container-high dark:hover:bg-surface-container-highest transition-colors px-2 py-1 rounded" href="#">내 저장소</a>
+</nav>
+<button class="material-symbols-outlined text-on-surface-variant p-2 rounded-full hover:bg-surface-container-high transition-colors">notifications</button>
+</div>
+<div class="md:hidden">
+<button class="material-symbols-outlined text-primary">notifications</button>
+</div>
+</header>
+<main class="max-w-[1280px] mx-auto px-4 md:px-8 pt-24 pb-32">
+<!-- Page Header -->
+<div class="mb-10 animate-fade-in">
+<div class="inline-flex items-center gap-2 px-3 py-1 bg-primary text-on-primary rounded-full mb-4">
+<span class="material-symbols-outlined text-[14px]">analytics</span>
+<span class="font-label-md text-label-md">Professional Data Analysis</span>
+</div>
+<h2 class="font-display-lg text-display-lg md:text-[36px] text-primary mb-2">실거래가 정밀 분석</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant">대구 전역 아파트 단지별 실거래 데이터와 시세 추이를 정밀 분석합니다.</p>
+</div>
+<!-- 1. Filter Bar (Bento Header) -->
+<section class="bg-surface-container-lowest rounded-xl p-6 mb-8 shadow-[0_4px_20px_rgba(26,43,75,0.05)]">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
+<div class="flex flex-col gap-2">
+<label class="font-label-md text-label-md text-on-surface-variant ml-1">자치구 선택</label>
+<select class="w-full bg-surface-container border border-outline-variant rounded-lg px-4 py-2.5 font-body-md text-body-md focus:ring-2 focus:ring-secondary focus:outline-none appearance-none">
+<option>수성구</option>
+<option>중구</option>
+<option>달서구</option>
+<option>북구</option>
+</select>
+</div>
+<div class="flex flex-col gap-2">
+<label class="font-label-md text-label-md text-on-surface-variant ml-1">단지 선택</label>
+<select class="w-full bg-surface-container border border-outline-variant rounded-lg px-4 py-2.5 font-body-md text-body-md focus:ring-2 focus:ring-secondary focus:outline-none">
+<option>범어 센트럴 푸르지오</option>
+<option>두산위브더제니스</option>
+<option>황금동 캐슬골드파크</option>
+</select>
+</div>
+<div class="flex flex-col gap-2">
+<label class="font-label-md text-label-md text-on-surface-variant ml-1">평형 선택</label>
+<div class="flex gap-2">
+<button class="flex-1 py-2.5 bg-secondary-container text-white rounded-lg font-label-md text-label-md">84㎡</button>
+<button class="flex-1 py-2.5 bg-surface-container-high text-on-surface-variant rounded-lg font-label-md text-label-md hover:bg-surface-variant transition-colors">59㎡</button>
+<button class="flex-1 py-2.5 bg-surface-container-high text-on-surface-variant rounded-lg font-label-md text-label-md hover:bg-surface-variant transition-colors">114㎡</button>
+</div>
+</div>
+<button class="bg-primary text-on-primary py-3 px-6 rounded-lg font-headline-md text-headline-md flex items-center justify-center gap-2 hover:opacity-90 transition-all active:scale-95 shadow-lg">
+<span class="material-symbols-outlined">search</span>
+                    데이터 분석하기
+                </button>
+</div>
+</section>
+<!-- Analysis Bento Grid -->
+<div class="bento-grid grid-cols-1 md:grid-cols-12">
+<!-- 2. Price Trend Chart (Large Card) -->
+<div class="md:col-span-8 bg-surface-container-lowest rounded-2xl p-8 shadow-[0_4px_20px_rgba(26,43,75,0.05)] border border-white/50">
+<div class="flex justify-between items-center mb-8">
+<div>
+<h3 class="font-headline-md text-headline-md text-primary mb-1">연도별 시세 추이</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">범어 센트럴 푸르지오 (84㎡, 최근 5년)</p>
+</div>
+<div class="flex gap-2">
+<span class="inline-flex items-center gap-1.5 px-3 py-1 bg-success-green/10 text-success-green font-label-md text-label-md rounded-full">
+                            전년 대비 +4.2%
+                        </span>
+</div>
+</div>
+<!-- Chart Placeholder -->
+<div class="relative h-64 w-full flex items-end justify-between px-2 gap-4">
+<div class="w-full h-[60%] bg-surface-container rounded-t-lg relative group">
+<div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 bg-primary text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">12.4억</div>
+</div>
+<div class="w-full h-[75%] bg-surface-container rounded-t-lg relative group">
+<div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 bg-primary text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">14.8억</div>
+</div>
+<div class="w-full h-[65%] bg-surface-container rounded-t-lg relative group">
+<div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 bg-primary text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">13.2억</div>
+</div>
+<div class="w-full h-[85%] bg-secondary-container rounded-t-lg relative group shadow-md">
+<div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 bg-primary text-white text-[10px] px-2 py-1 rounded opacity-100 transition-opacity">16.5억</div>
+</div>
+<div class="w-full h-[80%] bg-surface-container rounded-t-lg relative group">
+<div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 bg-primary text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">15.9억</div>
+</div>
+</div>
+<div class="flex justify-between mt-4 px-2 font-label-md text-label-md text-on-surface-variant">
+<span>2020</span>
+<span>2021</span>
+<span>2022</span>
+<span class="text-primary font-bold">2023</span>
+<span>2024</span>
+</div>
+</div>
+<!-- 4. Road View Placeholder (Right Small Card) -->
+<div class="md:col-span-4 flex flex-col gap-6">
+<div class="flex-1 bg-surface-container-lowest rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(26,43,75,0.05)] border border-white/50 relative group">
+<div class="w-full h-full min-h-[240px] bg-cover bg-center transition-transform duration-700 group-hover:scale-110" data-alt="A high-resolution, wide-angle cinematic shot of a modern luxury apartment complex in Daegu, South Korea. The architecture features sleek glass facades and clean lines, reflecting a clear blue sky during the golden hour. The surrounding landscape is manicured with lush greenery and elegant urban design. The overall mood is sophisticated, professional, and tranquil." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCF506v4juBFGN_hzPIycf5m_JHLUdZwgAhrM0nNQqaKrSGD1fz-v9D6wgvPqP_wmLMCau7OL-KWP70wwUtamLtT7V2CidnmcEk2BCHJ5AW81YDeBDvgqAs8SWRT1r2aBDLRhIK85bnl9G8mBdgcQLCUThsf9_xM2PHg7yja_odIca4H4u9Jg6qjICrUZRSt3O_z7wrwOqMfK6penBb2eD0n3VBkNhTGzu_G7_Lv7Lmact3iAWGPKBj_TxHxAi0kNVvHqVhfyz7u8s')">
+</div>
+<div class="absolute inset-0 bg-gradient-to-t from-primary/80 to-transparent flex flex-col justify-end p-6">
+<h4 class="font-headline-md text-headline-md text-white mb-4">단지 현장 확인</h4>
+<button class="w-full bg-white/20 backdrop-blur-md text-white border border-white/30 py-3 rounded-xl font-title-md text-title-md flex items-center justify-center gap-2 hover:bg-white/30 transition-all">
+<span class="material-symbols-outlined">streetview</span>
+                            카카오 로드뷰 보기
+                        </button>
+</div>
+</div>
+<!-- Stats Mini Card -->
+<div class="bg-primary-container p-6 rounded-2xl shadow-lg border border-primary/20">
+<div class="flex items-center justify-between mb-4">
+<span class="font-label-md text-label-md text-on-primary-container">주변 편의시설</span>
+<span class="material-symbols-outlined text-secondary-fixed-dim">storefront</span>
+</div>
+<div class="flex flex-wrap gap-2">
+<span class="px-3 py-1 bg-white/10 text-white rounded-full font-caption text-caption">지하철 500m</span>
+<span class="px-3 py-1 bg-white/10 text-white rounded-full font-caption text-caption">대형마트 800m</span>
+<span class="px-3 py-1 bg-white/10 text-white rounded-full font-caption text-caption">초품아</span>
+</div>
+</div>
+</div>
+<!-- 3. Transaction History Table (Full Width Bottom) -->
+<div class="md:col-span-12 bg-surface-container-lowest rounded-2xl p-8 shadow-[0_4px_20px_rgba(26,43,75,0.05)] border border-white/50">
+<div class="flex items-center gap-3 mb-6">
+<span class="material-symbols-outlined text-primary">history</span>
+<h3 class="font-headline-md text-headline-md text-primary">최근 실거래 내역</h3>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left">
+<thead>
+<tr class="border-b border-outline-variant">
+<th class="py-4 font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">거래일자</th>
+<th class="py-4 font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">거래금액</th>
+<th class="py-4 font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">층수</th>
+<th class="py-4 font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">상태</th>
+</tr>
+</thead>
+<tbody class="font-body-md text-body-md text-on-surface">
+<tr class="border-b border-surface-container hover:bg-surface-container-low transition-colors group">
+<td class="py-4">2024.03.12</td>
+<td class="py-4 font-bold text-primary">16억 5,000만</td>
+<td class="py-4">28층</td>
+<td class="py-4"><span class="px-2 py-0.5 bg-success-green/10 text-success-green rounded text-[12px]">정상거래</span></td>
+</tr>
+<tr class="border-b border-surface-container hover:bg-surface-container-low transition-colors">
+<td class="py-4">2024.02.28</td>
+<td class="py-4 font-bold text-primary">15억 9,000만</td>
+<td class="py-4">15층</td>
+<td class="py-4"><span class="px-2 py-0.5 bg-success-green/10 text-success-green rounded text-[12px]">정상거래</span></td>
+</tr>
+<tr class="border-b border-surface-container hover:bg-surface-container-low transition-colors">
+<td class="py-4">2024.02.15</td>
+<td class="py-4 font-bold text-primary">16억 2,000만</td>
+<td class="py-4">32층</td>
+<td class="py-4"><span class="px-2 py-0.5 bg-success-green/10 text-success-green rounded text-[12px]">정상거래</span></td>
+</tr>
+<tr class="border-b border-surface-container hover:bg-surface-container-low transition-colors">
+<td class="py-4">2024.01.10</td>
+<td class="py-4 font-bold text-primary">15억 4,000만</td>
+<td class="py-4">8층</td>
+<td class="py-4"><span class="px-2 py-0.5 bg-secondary-container/10 text-secondary-container rounded text-[12px]">직거래</span></td>
+</tr>
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="py-4">2023.12.24</td>
+<td class="py-4 font-bold text-primary">15억 8,000만</td>
+<td class="py-4">21층</td>
+<td class="py-4"><span class="px-2 py-0.5 bg-success-green/10 text-success-green rounded text-[12px]">정상거래</span></td>
+</tr>
+</tbody>
+</table>
+</div>
+<button class="w-full mt-6 py-3 text-secondary font-label-md text-label-md hover:bg-secondary/5 rounded-lg transition-colors border border-dashed border-secondary/30">
+                    전체 거래 내역 더보기
+                </button>
+</div>
+</div>
+</main>
+<!-- Floating Action Button -->
+<button class="fixed bottom-24 right-6 w-14 h-14 bg-heart-accent text-white rounded-full shadow-2xl flex items-center justify-center hover:scale-110 active:scale-90 transition-all z-40 group">
+<span class="material-symbols-outlined text-[28px]" style="font-variation-settings: 'FILL' 1;">favorite</span>
+<span class="absolute right-full mr-4 bg-primary text-white text-[12px] px-3 py-1.5 rounded-lg whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity">내 저장소에 추가</span>
+</button>
+<!-- BottomNavBar -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-2 py-3 bg-surface-container-lowest dark:bg-surface-container-low border-t border-outline-variant dark:border-outline shadow-[0_-4px_20px_rgba(26,43,75,0.03)] rounded-t-xl">
+<a class="flex flex-col items-center justify-center text-on-tertiary-fixed-variant dark:text-on-tertiary-container hover:bg-surface-container-high rounded-xl transition-all p-2" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-md text-label-md">홈</span>
+</a>
+<a class="flex flex-col items-center justify-center text-secondary-container dark:text-secondary-fixed-dim font-bold hover:bg-surface-container-high rounded-xl transition-all p-2 scale-90" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<span class="font-label-md text-label-md">시장 분석</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-tertiary-fixed-variant dark:text-on-tertiary-container hover:bg-surface-container-high rounded-xl transition-all p-2" href="#">
+<span class="material-symbols-outlined">bookmark</span>
+<span class="font-label-md text-label-md">내 저장소</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-tertiary-fixed-variant dark:text-on-tertiary-container hover:bg-surface-container-high rounded-xl transition-all p-2" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="font-label-md text-label-md">마이페이지</span>
+</a>
+</nav>
+<!-- Footer for Desktop -->
+<footer class="hidden md:block py-10 bg-surface-container-lowest border-t border-outline-variant/30">
+<div class="max-w-[1280px] mx-auto px-8 flex justify-between items-center text-on-tertiary-fixed-variant font-caption text-caption">
+<div class="flex items-center gap-6">
+<span>출처: 국토교통부 아파트 실거래가 Open API (공공데이터포털)</span>
+<a class="hover:text-primary transition-colors underline decoration-dotted underline-offset-4" href="#">이용약관</a>
+</div>
+<span>© 2026 대구 Real Estate. All rights reserved.</span>
+</div>
+</footer>
+<script>
+        // Simple micro-interaction for filter buttons
+        const sizeButtons = document.querySelectorAll('button.flex-1');
+        sizeButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                sizeButtons.forEach(b => {
+                    b.classList.remove('bg-secondary-container', 'text-white');
+                    b.classList.add('bg-surface-container-high', 'text-on-surface-variant');
+                });
+                btn.classList.remove('bg-surface-container-high', 'text-on-surface-variant');
+                btn.classList.add('bg-secondary-container', 'text-white');
+            });
+        });
+
+        // Add small scroll animation logic
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            if (window.scrollY > 20) {
+                header.classList.add('shadow-md');
+            } else {
+                header.classList.remove('shadow-md');
+            }
+        });
+    </script>
+</body></html>

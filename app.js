@@ -331,6 +331,89 @@ function clearAnalysisSearch() {
   handleAnalysisSearch('');
 }
 
+// 홈화면 대형 검색창 및 자동완성 제어
+function handleHomeSearch(val) {
+  const searchVal = val.trim().toLowerCase();
+  const autocompleteBox = document.getElementById('desktop-home-autocomplete-box');
+  if (!autocompleteBox) return;
+
+  if (searchVal.length === 0) {
+    autocompleteBox.classList.add('hidden');
+    autocompleteBox.innerHTML = '';
+    return;
+  }
+
+  let matches = [];
+  Object.keys(DISTRICT_DATA).forEach(districtKey => {
+    const district = DISTRICT_DATA[districtKey];
+    district.apts.forEach(apt => {
+      if (apt.name.toLowerCase().includes(searchVal) || apt.address.toLowerCase().includes(searchVal)) {
+        matches.push({ ...apt, districtKey });
+      }
+    });
+  });
+
+  if (matches.length === 0) {
+    autocompleteBox.innerHTML = `
+      <div class="p-3 text-[11px] text-slate-400 text-center">
+        일치하는 아파트가 없습니다.
+      </div>
+    `;
+  } else {
+    let itemsHtml = '';
+    matches.forEach(apt => {
+      itemsHtml += `
+        <button onclick="selectSearchApartment('${apt.districtKey}', '${apt.id}'); switchSection('analysis'); closeHomeAutocomplete();" class="autocomplete-item">
+          <div>
+            <span class="font-bold text-slate-700">${apt.name}</span>
+            <span class="text-slate-400 text-[10px] ml-1.5">${apt.address}</span>
+          </div>
+          <span class="item-sub text-xs text-secondary font-mono">${apt.recentPrice}억</span>
+        </button>
+      `;
+    });
+    autocompleteBox.innerHTML = itemsHtml;
+  }
+  
+  autocompleteBox.classList.remove('hidden');
+}
+
+function closeHomeAutocomplete() {
+  const autocompleteBox = document.getElementById('desktop-home-autocomplete-box');
+  if (autocompleteBox) {
+    autocompleteBox.classList.add('hidden');
+  }
+  const input = document.getElementById('desktop-home-search-input');
+  if (input) {
+    input.value = '';
+  }
+}
+
+function submitHomeSearch() {
+  const input = document.getElementById('desktop-home-search-input');
+  if (!input) return;
+  const val = input.value.trim();
+  if (val.length === 0) return;
+  
+  // 첫 번째 매치 찾아서 바로 이동
+  let firstMatch = null;
+  Object.keys(DISTRICT_DATA).forEach(districtKey => {
+    const district = DISTRICT_DATA[districtKey];
+    const matched = district.apts.find(apt => apt.name.toLowerCase().includes(val.toLowerCase()) || apt.address.toLowerCase().includes(val.toLowerCase()));
+    if (matched && !firstMatch) {
+      firstMatch = { ...matched, districtKey };
+    }
+  });
+
+  if (firstMatch) {
+    selectSearchApartment(firstMatch.districtKey, firstMatch.id);
+    switchSection('analysis');
+    closeHomeAutocomplete();
+  } else {
+    alert('일치하는 아파트 단지를 찾을 수 없습니다.');
+  }
+}
+
 // 자동완성 아이템 클릭 시 지도 포커스 연동
 function selectSearchApartment(districtKey, aptId) {
   // 1. 자치구 변경 저장 및 검색창 청소
@@ -1237,6 +1320,43 @@ async function toggleBookmarkAction() {
   }
 }
 
+// 아파트 대표 이미지 반환
+function getAptImage(aptId) {
+  const images = {
+    'ss-1': 'https://lh3.googleusercontent.com/aida-public/AB6AXuB7gM7P1E3g_HBRnAtZK5XA0ttEiVRY4byaSQoXhXyfqJsb5r1U_A5a5Y85trN6FinOGGS4CnozbSgXayrcEfIfk4uiD9OIOC7eTQ4KNLJiD2mh2_SZmZnXMHFInT33MH9dzp5hukP-OBvL-GFO6YKERqltGulOlSYrHFiJluA8NJQ2r_q3hzPbOGuP0B7HBC-TVxPFyguHe-rMqT452LDq5PMfcEfwu-4-gCRObLUZMgsq2uiDc7ph-aKZksfD9eBh0srKFMI2-hY',
+    'ss-2': 'https://lh3.googleusercontent.com/aida-public/AB6AXuC7ouLEZi-RK94AxesM9GYOU3N350IEALFcFWFz1urUsUTG87hnNkV6ijG5nyFYZOscWVbxqc0eSBA_jru4IR3d_TvE-cA4aWvBxFf91ohSEZJAB4bNLAilgqyHV7k80lUBnyCRHxxyTPmMb2CQRWlcRRoJpi5ykVRO02jbcesnOQKSICJGjWTEHagAhr0DYdqVt9_SvRaFFs4tJNGS4Wg-cMbuvCXeHfcmyx1vn5Vf73j1JU8Jv_K-I4sXrndokhTGe47iQ9BEp9Q',
+    'jg-1': 'https://lh3.googleusercontent.com/aida-public/AB6AXuCkby8FE76Lrn-VoFI8cBgSZld7biVcePnpTlcxbpxveZFNO5w1-Runt_2-x85I2n5fPCY3TM18uID9sjekTjsR-XjOETN2eeCiHmOX07gOvRqG0-4V6MLz-rBnDTYKeMsioNAl-HboTH0Ei7koaDqQfDO7_MQENXJP_aLqOVSR4nKN0pacmg-kEwYbqHrA7MtTgk1xd_TRNfbrhNw_VNmEms6mB7RK8vu8KEFs0r3MsyGQDtoY5wlrzWwjrlBn0oNhaVre9EQHLvQ',
+    'jg-2': 'https://lh3.googleusercontent.com/aida-public/AB6AXuCkby8FE76Lrn-VoFI8cBgSZld7biVcePnpTlcxbpxveZFNO5w1-Runt_2-x85I2n5fPCY3TM18uID9sjekTjsR-XjOETN2eeCiHmOX07gOvRqG0-4V6MLz-rBnDTYKeMsioNAl-HboTH0Ei7koaDqQfDO7_MQENXJP_aLqOVSR4nKN0pacmg-kEwYbqHrA7MtTgk1xd_TRNfbrhNw_VNmEms6mB7RK8vu8KEFs0r3MsyGQDtoY5wlrzWwjrlBn0oNhaVre9EQHLvQ',
+    'ds-1': 'https://lh3.googleusercontent.com/aida-public/AB6AXuDSCCqgR0cg3YuMDyeI-IouRplkYkinMXKKfEtlKOaG6wxwwe1VlA-wYvWBUB0jmHhKrvDvwqHxIq8LK8l8vrju6y4FkJ2YDHABrl9H76FvVY9WaMP_ryjJSErprgHsJiiMio4VbuM2wky2UzV1EVgq-m9Ryz4wUuX2YgGAaClaDZgTm8A8lWTc72RDBrmrnSF5gThe7f_dPNbAud5EqE9AxzkE1yq8RQUE71LhmTC3erCNaoRvt4xJC8Z-O2N4VAyxyV3r_1ZxV4o'
+  };
+  return images[aptId] || 'https://lh3.googleusercontent.com/aida-public/AB6AXuDSCCqgR0cg3YuMDyeI-IouRplkYkinMXKKfEtlKOaG6wxwwe1VlA-wYvWBUB0jmHhKrvDvwqHxIq8LK8l8vrju6y4FkJ2YDHABrl9H76FvVY9WaMP_ryjJSErprgHsJiiMio4VbuM2wky2UzV1EVgq-m9Ryz4wUuX2YgGAaClaDZgTm8A8lWTc72RDBrmrnSF5gThe7f_dPNbAud5EqE9AxzkE1yq8RQUE71LhmTC3erCNaoRvt4xJC8Z-O2N4VAyxyV3r_1ZxV4o';
+}
+
+// 북마크 객체 규격화
+function normalizeBookmark(item) {
+  let meta = null;
+  let districtKey = item.districtKey || 'suseong';
+  
+  Object.keys(DISTRICT_DATA).forEach(key => {
+    const matched = DISTRICT_DATA[key].apts.find(a => a.id === (item.aptId || item.apt_id));
+    if (matched) {
+      meta = matched;
+      districtKey = key;
+    }
+  });
+
+  return {
+    aptId: item.aptId || item.apt_id,
+    aptName: item.aptName || item.apt_name || (meta ? meta.name : '아파트'),
+    recentPrice: item.recentPrice || item.recent_price || (meta ? `${meta.recentPrice}억` : '0억'),
+    districtKey: districtKey,
+    address: meta ? meta.address : (item.address || '주소 정보 없음'),
+    pyeong: meta ? meta.pyeong : (item.pyeong || 84),
+    year: meta ? meta.year : '2010년',
+    households: meta ? meta.households : '1,000세대'
+  };
+}
+
 // 내 저장소 (북마크 탭) 대시보드 빌드
 async function renderBookmarksView() {
   const container = document.getElementById('bookmarks-grid-container');
@@ -1249,21 +1369,20 @@ async function renderBookmarksView() {
     countBadge.textContent = '0개 단지 저장됨';
     emptyView.classList.remove('hidden');
     emptyView.innerHTML = `
-      <i data-lucide="lock" class="w-10 h-10 opacity-40"></i>
+      <span class="material-symbols-outlined text-[48px] text-slate-300">lock</span>
       <span class="text-sm font-semibold text-slate-700">로그인이 필요한 메뉴입니다.</span>
       <p class="text-xs text-slate-400">북마크 기능을 이용해 나만의 관심 단지 목록을 안전하게 저장해 보세요.</p>
-      <button onclick="openModal('login-modal')" class="mt-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-500 rounded-lg text-xs font-semibold text-white transition-all">
+      <button onclick="openModal('login-modal')" class="mt-2 px-4 py-2 bg-primary hover:opacity-90 rounded-lg text-xs font-semibold text-white transition-all shadow-md">
         로그인 하기
       </button>
     `;
-    lucide.createIcons();
     return;
   }
 
   let list = [];
 
   if (isDummyAuth) {
-    list = getBookmarksFromStorage();
+    list = getBookmarksFromStorage().map(normalizeBookmark);
   } else {
     try {
       const { data, error } = await supabaseClient
@@ -1273,31 +1392,10 @@ async function renderBookmarksView() {
       
       if (error) throw error;
       
-      // DB에서 가져온 기본 키들을 로컬 아파트 메타데이터 정보와 맵핑
-      list = data.map(dbApt => {
-        let meta = null;
-        let districtKey = 'suseong';
-        
-        Object.keys(DISTRICT_DATA).forEach(key => {
-          const matched = DISTRICT_DATA[key].apts.find(a => a.id === dbApt.apt_id);
-          if (matched) {
-            meta = matched;
-            districtKey = key;
-          }
-        });
-
-        return {
-          aptId: dbApt.apt_id,
-          aptName: dbApt.apt_name,
-          recentPrice: dbApt.recent_price,
-          districtKey: districtKey,
-          address: meta ? meta.address : '주소 정보 없음',
-          pyeong: meta ? meta.pyeong : 84
-        };
-      });
+      list = data.map(normalizeBookmark);
     } catch (err) {
       console.error(err);
-      list = getBookmarksFromStorage(); // 에러 백업용으로 로컬 데이터 사용
+      list = getBookmarksFromStorage().map(normalizeBookmark);
     }
   }
 
@@ -1310,35 +1408,50 @@ async function renderBookmarksView() {
     
     list.forEach(item => {
       const card = document.createElement('div');
-      card.className = 'bg-surface-container-lowest p-5 rounded-xl border border-outline-variant/30 shadow-[0_4px_20px_rgba(26,43,75,0.05)] transition-all duration-300 relative overflow-hidden group hover:-translate-y-1';
+      card.className = 'premium-card rounded-xl overflow-hidden flex flex-col group border border-outline-variant/30 bg-surface-container-lowest shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300 relative';
       
       const regionText = item.address.split(' ')[1] || '대구시';
       
       card.innerHTML = `
-        <div class="flex justify-between items-start mb-4">
-          <div class="cursor-pointer" onclick="selectSearchApartment('${item.districtKey}', '${item.aptId}')">
-            <span class="px-2 py-0.5 bg-primary-container text-on-primary-container text-[10px] font-medium rounded-md mb-2 inline-block">${regionText}</span>
-            <h3 class="font-title-md text-title-md text-text-primary group-hover:text-secondary transition-colors font-bold">${item.aptName}</h3>
+        <div class="relative h-40 w-full overflow-hidden bg-slate-100">
+          <img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" src="${getAptImage(item.aptId)}" alt="${item.aptName}">
+          <div class="absolute top-3 left-3 bg-primary-container/85 backdrop-blur-md px-2.5 py-0.5 rounded-full">
+            <span class="text-[10px] font-semibold text-white">${regionText}</span>
           </div>
-          <button onclick="removeBookmarkDirectly('${item.aptId}')" class="text-heart-accent p-1 active:scale-90 transition-transform">
-            <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">favorite</span>
+          <button onclick="removeBookmarkDirectly('${item.aptId}')" class="absolute top-3 right-3 w-8 h-8 bg-white/90 backdrop-blur-md rounded-full flex items-center justify-center text-heart-accent shadow-md hover:scale-110 transition-transform">
+            <span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">favorite</span>
           </button>
         </div>
-        <div class="space-y-4">
-          <div class="flex justify-between items-end">
+        <div class="p-5 flex flex-col flex-grow justify-between space-y-4">
+          <div class="flex justify-between items-start">
             <div>
-              <p class="text-[11px] text-text-secondary mb-1">최근 실거래가</p>
-              <p class="font-headline-md text-headline-md text-primary font-bold">${item.recentPrice}</p>
-            </div>
-            <div class="text-right">
-              <span class="text-slate-450 text-[11px] font-mono font-semibold">${item.pyeong}평형</span>
-              <p class="text-[10px] text-text-muted mt-0.5 truncate max-w-[140px]" title="${item.address}">${item.address}</p>
+              <h3 class="font-title-md text-title-md text-primary font-bold mb-1">${item.aptName}</h3>
+              <p class="text-[11px] text-on-surface-variant font-light">${item.year} 준공 · ${item.households}</p>
             </div>
           </div>
-          <button onclick="selectSearchApartment('${item.districtKey}', '${item.aptId}')" class="w-full py-2.5 mt-2 rounded-lg border border-secondary text-secondary font-medium text-xs hover:bg-secondary hover:text-white transition-all flex justify-center items-center gap-2">
-            분석 리포트 보기
-            <span class="material-symbols-outlined text-[16px]">analytics</span>
-          </button>
+          <div class="space-y-3">
+            <div class="flex justify-between items-end">
+              <span class="text-xs text-on-surface-variant">최근 실거래가 (${item.pyeong}평형)</span>
+              <span class="font-headline-md text-headline-md text-primary font-bold">${item.recentPrice}</span>
+            </div>
+            
+            <!-- Sparkline 막대 차트 시뮬레이션 (데스크톱 데코레이션) -->
+            <div class="hidden sm:flex sparkline-container bg-surface-container-low rounded-lg p-2 items-end gap-1">
+              <div class="w-full h-[60%] bg-primary/20 rounded-t-sm"></div>
+              <div class="w-full h-[40%] bg-primary/20 rounded-t-sm"></div>
+              <div class="w-full h-[70%] bg-primary/20 rounded-t-sm"></div>
+              <div class="w-full h-[55%] bg-primary/20 rounded-t-sm"></div>
+              <div class="w-full h-[85%] bg-primary rounded-t-sm"></div>
+            </div>
+          </div>
+          <div class="grid grid-cols-2 gap-3 mt-2">
+            <button onclick="removeBookmarkDirectly('${item.aptId}')" class="py-2.5 rounded-lg bg-surface-container-high text-on-surface hover:bg-surface-variant font-label-md text-label-md transition-colors flex items-center justify-center gap-1.5 border border-outline-variant/30">
+              <span class="material-symbols-outlined text-[16px]">delete</span> 삭제
+            </button>
+            <button onclick="selectSearchApartment('${item.districtKey}', '${item.aptId}')" class="py-2.5 rounded-lg bg-primary text-white hover:opacity-90 font-label-md text-label-md transition-opacity flex items-center justify-center gap-1.5 shadow-sm">
+              <span class="material-symbols-outlined text-[16px]">analytics</span> 분석실 이동
+            </button>
+          </div>
         </div>
       `;
       container.appendChild(card);

@@ -317,146 +317,362 @@
   <!-- ==================== SECTIONS ==================== -->
 
   <!-- [SECTION 1] HOME VIEW -->
-  <section id="section-home" class="min-h-screen pt-24 pb-20 flex flex-col justify-center items-center px-4 relative overflow-hidden bg-background">
+  <section id="section-home" class="min-h-screen pt-16 flex flex-col justify-start bg-background overflow-x-hidden relative">
+    
     <!-- 배경 장식 셰이더 -->
-    <div class="absolute inset-0 -z-10 pointer-events-none opacity-40 overflow-hidden">
+    <div class="absolute inset-0 pointer-events-none opacity-40 overflow-hidden md:hidden">
       <div class="absolute top-[-10%] right-[-10%] w-[50%] h-[50%] bg-secondary-fixed opacity-20 blur-[120px] rounded-full"></div>
       <div class="absolute bottom-[-5%] left-[-5%] w-[40%] h-[40%] bg-primary-fixed opacity-10 blur-[100px] rounded-full"></div>
     </div>
 
-    <div class="w-full max-w-[1280px] mx-auto text-center space-y-12">
+    <!-- === 데스크톱 홈 화면 (웹 버전 - Stitch desktop_1 시안) === -->
+    <div class="hidden md:block w-full">
+      <!-- Hero Header Section -->
+      <header class="relative overflow-hidden bg-[#031635] text-white py-20 px-8 min-h-[460px] flex flex-col items-center justify-center text-center">
+        <!-- 배경 데코레이션 블러 -->
+        <div class="absolute inset-0 pointer-events-none opacity-20 overflow-hidden">
+          <div class="absolute top-[-20%] right-[-10%] w-[600px] h-[600px] bg-sky-500 blur-[150px] rounded-full"></div>
+          <div class="absolute bottom-[-10%] left-[-10%] w-[500px] h-[500px] bg-indigo-500 blur-[120px] rounded-full"></div>
+        </div>
+
+        <div class="relative z-10 max-w-3xl w-full space-y-6">
+          <h2 class="font-display-lg text-display-lg text-white leading-tight">
+            대구의 모든 아파트,<br/>데이터로 정교하게 분석합니다
+          </h2>
+          <p class="font-body-lg text-body-lg text-primary-fixed-dim max-w-2xl mx-auto">
+            정확한 실거래가 기반의 단지 정보와 시장 트렌드를 한 눈에 확인하세요.
+          </p>
+          
+          <!-- 대형 검색바 (데스크톱 전용) -->
+          <div class="relative group max-w-2xl mx-auto mt-8">
+            <div class="absolute inset-y-0 left-4 flex items-center pointer-events-none text-slate-400">
+              <span class="material-symbols-outlined">search</span>
+            </div>
+            <input 
+              id="desktop-home-search-input" 
+              oninput="handleHomeSearch(this.value)"
+              type="text" 
+              placeholder="단지명, 지역명 또는 지하철역을 입력하세요" 
+              class="w-full pl-12 pr-32 py-4 bg-white border-none rounded-xl text-slate-800 text-sm shadow-xl focus:ring-2 focus:ring-secondary focus:outline-none transition-all placeholder:text-slate-400"
+              autocomplete="off"
+            >
+            <button onclick="submitHomeSearch()" class="absolute right-2 top-2 bottom-2 px-6 bg-[#0058be] text-white rounded-lg font-bold text-xs hover:opacity-95 transition-all">
+              검색하기
+            </button>
+            
+            <!-- 실시간 오토컴플릿 추천 드롭다운 -->
+            <div id="desktop-home-autocomplete-box" class="absolute left-0 right-0 top-16 bg-white border border-outline-variant rounded-xl shadow-2xl max-h-52 overflow-y-auto z-50 hidden divide-y divide-slate-100 text-left">
+              <!-- JS 동적 매칭 결과 생성 주입 -->
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- Main Contents (Bento Grid 및 요약 정보) -->
+      <main class="max-w-[1200px] mx-auto px-8 py-12 space-y-12">
+        <!-- 4대 권역 시세 그리드 (Bento Style) -->
+        <section class="space-y-6">
+          <div class="flex items-end justify-between border-b border-outline-variant/30 pb-3">
+            <div>
+              <h3 class="font-headline-lg text-headline-lg text-primary font-bold">주요 지역별 시세</h3>
+              <p class="font-body-md text-body-md text-text-secondary mt-1">대구광역시 4대 핵심 권역의 평당 평균 거래가 정보입니다.</p>
+            </div>
+            <button onclick="switchSection('analysis')" class="flex items-center gap-1 text-secondary font-bold text-xs hover:underline">
+              전체 지역 보기 <span class="material-symbols-outlined text-[16px]">chevron_right</span>
+            </button>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+            <!-- 수성구 (Premium/Lead) -->
+            <div onclick="selectHomeDistrict('suseong')" class="md:col-span-2 relative overflow-hidden rounded-2xl bg-white shadow-sm border border-outline-variant/50 p-8 flex flex-col justify-between min-h-[250px] hover:shadow-md hover:-translate-y-1 transition-all cursor-pointer group">
+              <div>
+                <span class="inline-block px-3 py-1 bg-primary text-white rounded-full text-[10px] font-bold mb-4">대구의 강남</span>
+                <h4 class="font-display-lg text-3xl text-primary font-bold">수성구</h4>
+                <p class="text-xs text-text-secondary mt-1">평당 평균 시세</p>
+              </div>
+              <div class="flex items-baseline gap-1.5 mt-4">
+                <span class="text-3xl font-bold text-secondary">2,420</span>
+                <span class="text-xs text-text-secondary font-semibold">만원</span>
+                <span class="ml-3 flex items-center gap-0.5 text-danger-red text-xs font-bold">
+                  <span class="material-symbols-outlined text-[16px]">trending_up</span> 1.2%
+                </span>
+              </div>
+              <div class="absolute -right-8 -bottom-8 opacity-[0.03] pointer-events-none group-hover:scale-110 transition-transform duration-300">
+                <span class="material-symbols-outlined !text-[180px]">map</span>
+              </div>
+            </div>
+
+            <!-- 중구 -->
+            <div onclick="selectHomeDistrict('junggu')" class="rounded-2xl bg-white shadow-sm border border-outline-variant/50 p-6 flex flex-col justify-between hover:shadow-md hover:-translate-y-1 transition-all cursor-pointer">
+              <div>
+                <h4 class="font-headline-md text-headline-md text-primary font-bold">중구</h4>
+                <p class="text-xs text-text-secondary mt-1">도심 권역</p>
+              </div>
+              <div class="space-y-2">
+                <div class="flex items-baseline gap-0.5">
+                  <span class="text-2xl font-bold text-primary">1,850</span>
+                  <span class="text-[10px] text-text-secondary font-semibold">만원</span>
+                </div>
+                <div class="h-1 w-full bg-surface-container rounded-full overflow-hidden">
+                  <div class="h-full bg-secondary-container w-[75%]"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 달서구 -->
+            <div onclick="selectHomeDistrict('dalseo')" class="rounded-2xl bg-white shadow-sm border border-outline-variant/50 p-6 flex flex-col justify-between hover:shadow-md hover:-translate-y-1 transition-all cursor-pointer">
+              <div>
+                <h4 class="font-headline-md text-headline-md text-primary font-bold">달서구</h4>
+                <p class="text-xs text-text-secondary mt-1">최대 주거지역</p>
+              </div>
+              <div class="space-y-2">
+                <div class="flex items-baseline gap-0.5">
+                  <span class="text-2xl font-bold text-primary">1,480</span>
+                  <span class="text-[10px] text-text-secondary font-semibold">만원</span>
+                </div>
+                <div class="h-1 w-full bg-surface-container rounded-full overflow-hidden">
+                  <div class="h-full bg-secondary-container w-[60%]"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 북구 -->
+            <div onclick="selectHomeDistrict('bukgu')" class="rounded-2xl bg-white shadow-sm border border-outline-variant/50 p-6 flex flex-col justify-between hover:shadow-md hover:-translate-y-1 transition-all cursor-pointer">
+              <div>
+                <h4 class="font-headline-md text-headline-md text-primary font-bold">북구</h4>
+                <p class="text-xs text-text-secondary mt-1">북부 거점</p>
+              </div>
+              <div class="space-y-2">
+                <div class="flex items-baseline gap-0.5">
+                  <span class="text-2xl font-bold text-primary">1,250</span>
+                  <span class="text-[10px] text-text-secondary font-semibold">만원</span>
+                </div>
+                <div class="h-1 w-full bg-surface-container rounded-full overflow-hidden">
+                  <div class="h-full bg-secondary-container w-[50%]"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Two Column Layout: 시장 분석 & 인기 단지 -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+          <!-- 좌측 컬럼: 오늘의 지수 및 트렌드 바 차트 -->
+          <div class="lg:col-span-4 bg-primary rounded-2xl p-6 text-white flex flex-col justify-between">
+            <div class="space-y-4">
+              <div class="flex items-center gap-2 mb-2">
+                <span class="material-symbols-outlined text-secondary-fixed text-[20px]">monitoring</span>
+                <h4 class="font-title-md text-title-md font-bold">시장 트렌드 요약</h4>
+              </div>
+              <div>
+                <p class="text-[10px] text-primary-fixed-dim uppercase tracking-wider">오늘의 대구 아파트 거래 지수</p>
+                <div class="flex items-center gap-3 mt-1">
+                  <span class="text-3xl font-bold font-mono">94.8</span>
+                  <span class="px-2 py-0.5 bg-danger-red/20 text-danger-red rounded text-[10px] font-bold">보합세</span>
+                </div>
+              </div>
+              
+              <!-- Sparkline 막대 차트 데코레이션 -->
+              <div class="trend-chart-container h-24 mt-6 flex items-end justify-between gap-1.5 px-1 bg-white/5 p-3 rounded-xl border border-white/10">
+                <div class="trend-bar bg-primary-container w-full h-[40%] rounded-t-sm" style="height: 40%"></div>
+                <div class="trend-bar bg-primary-container w-full h-[35%] rounded-t-sm" style="height: 35%"></div>
+                <div class="trend-bar bg-primary-container w-full h-[55%] rounded-t-sm" style="height: 55%"></div>
+                <div class="trend-bar bg-primary-container w-full h-[70%] rounded-t-sm" style="height: 70%"></div>
+                <div class="trend-bar bg-primary-container w-full h-[60%] rounded-t-sm" style="height: 60%"></div>
+                <div class="trend-bar bg-secondary w-full h-[85%] rounded-t-sm" style="height: 85%"></div>
+              </div>
+            </div>
+            
+            <div class="border-t border-white/10 pt-4 mt-6">
+              <h5 class="text-xs font-bold text-primary-fixed-dim mb-1">오늘의 전문가 리포트</h5>
+              <p class="text-xs text-surface-variant leading-relaxed font-light">
+                수성구 범어동 중심의 상급지 갈아타기 수요가 지속되고 있으며, 신축 단지 중심의 매매가 하방 경직성이 강화되고 있습니다.
+              </p>
+            </div>
+          </div>
+
+          <!-- 우측 컬럼: 인기 단지 리스트 (사진 포함) -->
+          <div class="lg:col-span-8 flex flex-col justify-between space-y-4">
+            <div class="flex justify-between items-center px-1">
+              <h3 class="font-headline-lg text-headline-lg text-primary font-bold">실시간 인기 단지 리스트</h3>
+              <div class="flex gap-2">
+                <span class="text-xs text-text-muted font-mono font-semibold">Live 4대 단지</span>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              <!-- 단지 1: 두산위브더제니스 -->
+              <div onclick="selectSearchApartment('suseong', 'ss-1')" class="group bg-white rounded-2xl overflow-hidden shadow-sm border border-outline-variant/40 hover:-translate-y-1 hover:shadow-md transition-all cursor-pointer">
+                <div class="relative h-32 w-full overflow-hidden bg-slate-100">
+                  <img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB7gM7P1E3g_HBRnAtZK5XA0ttEiVRY4byaSQoXhXyfqJsb5r1U_A5a5Y85trN6FinOGGS4CnozbSgXayrcEfIfk4uiD9OIOC7eTQ4KNLJiD2mh2_SZmZnXMHFInT33MH9dzp5hukP-OBvL-GFO6YKERqltGulOlSYrHFiJluA8NJQ2r_q3hzPbOGuP0B7HBC-TVxPFyguHe-rMqT452LDq5PMfcEfwu-4-gCRObLUZMgsq2uiDc7ph-aKZksfD9eBh0srKFMI2-hY" alt="두산위브더제니스">
+                  <div class="absolute top-3 left-3 bg-white/95 px-2.5 py-0.5 rounded-full text-[10px] text-primary font-bold">수성구 범어동</div>
+                </div>
+                <div class="p-4 flex flex-col justify-between">
+                  <div>
+                    <h4 class="font-bold text-sm text-primary truncate">두산위브더제니스</h4>
+                    <p class="text-[10px] text-text-muted mt-0.5 truncate">수성구 범어동 179</p>
+                  </div>
+                  <div class="flex justify-between items-end mt-4">
+                    <div>
+                      <p class="text-[9px] text-text-muted">최근 실거래가 (84㎡)</p>
+                      <p class="text-sm font-bold text-primary">12억 원</p>
+                    </div>
+                    <span class="inline-block px-2 py-0.5 bg-danger-red/10 text-danger-red rounded text-[9px] font-bold">+1.2%</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 단지 2: 범어센트럴푸르지오 -->
+              <div onclick="selectSearchApartment('suseong', 'ss-2')" class="group bg-white rounded-2xl overflow-hidden shadow-sm border border-outline-variant/40 hover:-translate-y-1 hover:shadow-md transition-all cursor-pointer">
+                <div class="relative h-32 w-full overflow-hidden bg-slate-100">
+                  <img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC7ouLEZi-RK94AxesM9GYOU3N350IEALFcFWFz1urUsUTG87hnNkV6ijG5nyFYZOscWVbxqc0eSBA_jru4IR3d_TvE-cA4aWvBxFf91ohSEZJAB4bNLAilgqyHV7k80lUBnyCRHxxyTPmMb2CQRWlcRRoJpi5ykVRO02jbcesnOQKSICJGjWTEHagAhr0DYdqVt9_SvRaFFs4tJNGS4Wg-cMbuvCXeHfcmyx1vn5Vf73j1JU8Jv_K-I4sXrndokhTGe47iQ9BEp9Q" alt="범어센트럴푸르지오">
+                  <div class="absolute top-3 left-3 bg-white/95 px-2.5 py-0.5 rounded-full text-[10px] text-primary font-bold">수성구 범어동</div>
+                </div>
+                <div class="p-4 flex flex-col justify-between">
+                  <div>
+                    <h4 class="font-bold text-sm text-primary truncate">범어센트럴푸르지오</h4>
+                    <p class="text-[10px] text-text-muted mt-0.5 truncate">수성구 범어동 556-12</p>
+                  </div>
+                  <div class="flex justify-between items-end mt-4">
+                    <div>
+                      <p class="text-[9px] text-text-muted">최근 실거래가 (84㎡)</p>
+                      <p class="text-sm font-bold text-primary">9.3억 원</p>
+                    </div>
+                    <span class="inline-block px-2 py-0.5 bg-danger-red/10 text-danger-red rounded text-[9px] font-bold">+2.4%</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 하단 CTA 홍보 배너 -->
+        <section class="bg-surface-container-lowest rounded-3xl p-8 md:p-12 border border-outline-variant/50 flex flex-col md:flex-row items-center gap-8 shadow-sm">
+          <div class="flex-1 text-left space-y-6">
+            <h3 class="font-display-lg text-2xl md:text-3xl text-primary font-bold leading-tight">
+              아직 내게 맞는 집을<br class="hidden md:block"/> 찾지 못하셨나요?
+            </h3>
+            <p class="text-xs md:text-sm text-text-secondary leading-relaxed">
+              대구 지역 핵심 단지들의 실거래 정보와 공공데이터포털, Supabase의 실시간 API를 조합해 오차 없는 분석 리포트를 확인하세요.
+            </p>
+            <div class="flex flex-wrap gap-3">
+              <button onclick="switchSection('analysis')" class="px-5 py-3 bg-primary text-white rounded-xl font-bold text-xs hover:opacity-90 transition-all shadow-sm">
+                맞춤 매물 찾기
+              </button>
+              <button onclick="alert('준비 중입니다. 곧 서비스됩니다!')" class="px-5 py-3 border border-secondary text-secondary rounded-xl font-bold text-xs hover:bg-secondary/5 transition-all">
+                실거래가 알림 신청
+              </button>
+            </div>
+          </div>
+          <div class="flex-1 w-full relative">
+            <div class="aspect-video rounded-2xl overflow-hidden shadow-lg border border-outline-variant/30">
+              <img class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBHK9nEjDKpky8XrzSy1Clg0FvVKs1S1xCUKQZgrvxMJGl-yDvs3pufihRgNO4hWm-DrNF5iZ669q9E1jhEDPunqrPvywrNvqIiG1pjYNypbVL4NjnOeMH6K5BGmjc84Fx_pLCyYPgoK8jL9QUJITBU9x6di2x20_vgv7n9s3M-GJzLUyQIsqwNn_4wgl_KAQs0g83RAvUwpHOTrHvj9ZGG0xbq2r6kHENN-28OXS_RgwKzjfQcq4-oNqi9t5BCshqrQIq_aRyXysY" alt="대구 입체 데이터 지도 시각화">
+              <!-- overlay -->
+              <div class="absolute bottom-4 left-4 right-4 bg-white/80 backdrop-blur p-3.5 rounded-xl flex items-center justify-between border border-white/20">
+                <div class="flex items-center gap-2">
+                  <span class="material-symbols-outlined text-secondary text-[18px]">verified</span>
+                  <span class="text-xs font-bold text-primary">실시간 공공 API 연동</span>
+                </div>
+                <span class="text-[10px] font-bold text-success-green">LIVE</span>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <!-- === 모바일 홈 화면 (앱 버전 - 기존 디자인 보존) === -->
+    <div class="block md:hidden w-full px-4 space-y-12">
       <!-- 영문 태그라인 및 타이틀 -->
-      <div class="space-y-4 max-w-2xl mx-auto">
+      <div class="space-y-4 max-w-2xl mx-auto text-center">
         <div class="inline-flex items-center px-4 py-1.5 rounded-full bg-secondary-fixed text-on-secondary-fixed-variant font-label-md text-label-md">
           공공데이터 & Supabase 기반 무료 플랫폼
         </div>
-        <h2 class="font-display-lg text-display-lg text-primary leading-tight">
-          대구 아파트 실거래가,<br class="md:hidden"/> 한눈에 분석하세요
+        <h2 class="font-display-lg text-headline-lg-mobile text-primary leading-tight">
+          대구 아파트 실거래가,<br/> 한눈에 분석하세요
         </h2>
-        <p class="font-body-lg text-body-lg text-text-secondary">
+        <p class="text-xs text-text-secondary">
           아래의 대화형 미니 지도나 자치구별 정보 카드를 클릭하여 원하시는 지역의 실거래가 분석실로 즉시 진입해 보세요.
         </p>
       </div>
 
-      <!-- Bento Grid Map & Analysis -->
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter items-stretch max-w-5xl mx-auto text-left">
-        <!-- 대화형 4대 권역 맵 -->
-        <div class="lg:col-span-7 bg-surface-container-lowest rounded-xl p-6 shadow-[0_4px_20px_rgba(26,43,75,0.03)] border border-outline-variant/60 min-h-[360px] flex flex-col">
-          <div class="flex items-center justify-between mb-6">
-            <div class="flex items-center gap-2">
-              <span class="material-symbols-outlined text-secondary">map</span>
-              <h3 class="font-title-md text-title-md text-primary">대구시 4대 핵심 권역 (대화형 지도)</h3>
-            </div>
-            <span class="font-caption text-caption text-text-muted">지역 선택 시 분석실 자동 연동</span>
-          </div>
-          
-          <div class="flex-grow flex items-center justify-center relative map-mesh rounded-lg overflow-hidden border border-surface-variant/80 bg-slate-50/50">
-            <!-- 3x3 격자형 권역 선택 맵 -->
-            <div class="relative w-full h-full p-8 grid grid-cols-3 grid-rows-3 gap-4 aspect-video max-w-sm">
-              <div onclick="selectHomeDistrict('bukgu')" class="col-start-2 row-start-1 bg-white hover:bg-secondary/10 border border-outline-variant hover:border-secondary transition-all rounded-xl flex items-center justify-center cursor-pointer group shadow-sm">
-                <span class="font-bold text-sm text-on-surface group-hover:text-secondary">북구</span>
-              </div>
-              <div onclick="selectHomeDistrict('dalseo')" class="col-start-1 row-start-2 bg-white hover:bg-secondary/10 border border-outline-variant hover:border-secondary transition-all rounded-xl flex items-center justify-center cursor-pointer group shadow-sm aspect-square">
-                <span class="font-bold text-sm text-on-surface group-hover:text-secondary">달서구</span>
-              </div>
-              <div onclick="selectHomeDistrict('junggu')" class="col-start-2 row-start-2 bg-white border border-secondary transition-all rounded-xl flex items-center justify-center cursor-pointer shadow-md z-10 scale-105 group">
-                <span class="font-bold text-sm text-secondary">중구</span>
-              </div>
-              <div onclick="selectHomeDistrict('suseong')" class="col-start-3 row-start-2 bg-white hover:bg-secondary/10 border border-outline-variant hover:border-secondary transition-all rounded-xl flex items-center justify-center cursor-pointer group shadow-sm aspect-square">
-                <span class="font-bold text-sm text-on-surface group-hover:text-secondary">수성구</span>
-              </div>
-            </div>
+      <!-- 3x3 격자형 권역 선택 맵 -->
+      <div class="bg-surface-container-lowest rounded-xl p-5 border border-outline-variant/60 shadow-sm flex flex-col">
+        <div class="flex items-center justify-between mb-4">
+          <div class="flex items-center gap-1.5">
+            <span class="material-symbols-outlined text-secondary text-[20px]">map</span>
+            <h3 class="font-bold text-xs text-primary">대구시 4대 핵심 권역 (대화형)</h3>
           </div>
         </div>
-
-        <!-- 우측 매물 분석 요약 리스트 -->
-        <div class="lg:col-span-5 flex flex-col justify-between gap-4">
-          <div class="flex items-center gap-2 mb-1 px-1">
-            <span class="material-symbols-outlined text-secondary">grid_view</span>
-            <h3 class="font-title-md text-title-md text-primary">지역별 매물 분석 요약</h3>
-          </div>
-          
-          <!-- 수성구 -->
-          <div onclick="selectHomeDistrict('suseong')" class="bg-surface-container-lowest p-5 rounded-xl border border-outline-variant/60 shadow-[0_4px_20px_rgba(26,43,75,0.03)] hover:-translate-y-1 transition-all cursor-pointer group">
-            <div class="flex justify-between items-center mb-3">
-              <span class="font-title-md text-title-md text-primary font-bold">대구 수성구</span>
-              <span class="material-symbols-outlined text-outline group-hover:text-secondary transition-colors">arrow_forward</span>
+        
+        <div class="flex items-center justify-center relative map-mesh rounded-lg overflow-hidden border border-surface-variant/80 bg-slate-50/50 py-6">
+          <div class="relative w-full p-4 grid grid-cols-3 grid-rows-3 gap-3 aspect-video max-w-xs">
+            <div onclick="selectHomeDistrict('bukgu')" class="col-start-2 row-start-1 bg-white hover:bg-secondary/10 border border-outline-variant hover:border-secondary transition-all rounded-xl flex items-center justify-center cursor-pointer group shadow-sm">
+              <span class="font-bold text-xs text-on-surface group-hover:text-secondary">북구</span>
             </div>
-            <div class="flex justify-between items-end">
-              <span class="font-body-md text-body-md text-text-secondary font-medium">평당 평균시세</span>
-              <div>
-                <span class="font-headline-lg text-headline-lg text-secondary-container">2,420</span>
-                <span class="font-label-md text-label-md text-secondary-container ml-0.5">만</span>
-              </div>
+            <div onclick="selectHomeDistrict('dalseo')" class="col-start-1 row-start-2 bg-white hover:bg-secondary/10 border border-outline-variant hover:border-secondary transition-all rounded-xl flex items-center justify-center cursor-pointer group shadow-sm">
+              <span class="font-bold text-xs text-on-surface group-hover:text-secondary">달서구</span>
             </div>
-          </div>
-
-          <!-- 중구, 달서구, 북구 미니 그리드 -->
-          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 flex-grow">
-            <!-- 중구 -->
-            <div onclick="selectHomeDistrict('junggu')" class="bg-surface-container-lowest p-4 rounded-xl border border-outline-variant/60 shadow-[0_4px_20px_rgba(26,43,75,0.02)] hover:border-secondary transition-all cursor-pointer flex flex-col justify-between">
-              <div class="flex justify-between items-center mb-2">
-                <span class="font-bold text-xs text-primary">중구</span>
-                <span class="material-symbols-outlined text-outline text-[16px]">arrow_outward</span>
-              </div>
-              <div class="text-right">
-                <span class="font-bold text-sm text-primary">1,850</span>
-                <span class="text-[10px] text-primary ml-0.5">만</span>
-              </div>
+            <div onclick="selectHomeDistrict('junggu')" class="col-start-2 row-start-2 bg-white border border-secondary transition-all rounded-xl flex items-center justify-center cursor-pointer shadow-md z-10 scale-105 group">
+              <span class="font-bold text-xs text-secondary">중구</span>
             </div>
-            <!-- 달서구 -->
-            <div onclick="selectHomeDistrict('dalseo')" class="bg-surface-container-lowest p-4 rounded-xl border border-outline-variant/60 shadow-[0_4px_20px_rgba(26,43,75,0.02)] hover:border-secondary transition-all cursor-pointer flex flex-col justify-between">
-              <div class="flex justify-between items-center mb-2">
-                <span class="font-bold text-xs text-primary">달서구</span>
-                <span class="material-symbols-outlined text-outline text-[16px]">arrow_outward</span>
-              </div>
-              <div class="text-right">
-                <span class="font-bold text-sm text-primary">1,480</span>
-                <span class="text-[10px] text-primary ml-0.5">만</span>
-              </div>
-            </div>
-            <!-- 북구 -->
-            <div onclick="selectHomeDistrict('bukgu')" class="bg-surface-container-lowest p-4 rounded-xl border border-outline-variant/60 shadow-[0_4px_20px_rgba(26,43,75,0.02)] hover:border-secondary transition-all cursor-pointer flex flex-col justify-between">
-              <div class="flex justify-between items-center mb-2">
-                <span class="font-bold text-xs text-primary">북구</span>
-                <span class="material-symbols-outlined text-outline text-[16px]">arrow_outward</span>
-              </div>
-              <div class="text-right">
-                <span class="font-bold text-sm text-primary">1,250</span>
-                <span class="text-[10px] text-primary ml-0.5">만</span>
-              </div>
+            <div onclick="selectHomeDistrict('suseong')" class="col-start-3 row-start-2 bg-white hover:bg-secondary/10 border border-outline-variant hover:border-secondary transition-all rounded-xl flex items-center justify-center cursor-pointer group shadow-sm">
+              <span class="font-bold text-xs text-on-surface group-hover:text-secondary">수성구</span>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- 실시간 인기 단지 분석 -->
-      <div class="max-w-5xl mx-auto text-left space-y-4">
-        <h3 class="font-headline-md text-headline-md text-primary">실시간 인기 단지 분석</h3>
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          <div class="bg-white p-4 rounded-xl border border-outline-variant/50 flex items-center gap-4 hover:shadow-md transition-shadow cursor-pointer" onclick="selectSearchApartment('suseong', 'ss-1')">
-            <div class="w-10 h-10 rounded-lg bg-surface-container flex items-center justify-center shrink-0"><span class="font-bold text-sm text-primary">1</span></div>
-            <div class="flex-grow min-w-0"><h4 class="font-label-md text-label-md text-primary truncate">두산위브더제니스</h4><p class="font-caption text-caption text-text-muted">수성구 범어동</p></div>
-            <span class="material-symbols-outlined text-danger-red text-[18px]">trending_up</span>
+      <!-- 모바일 자치구 카드 목록 -->
+      <div class="space-y-3">
+        <div onclick="selectHomeDistrict('suseong')" class="bg-surface-container-lowest p-4 rounded-xl border border-outline-variant/60 shadow-sm flex justify-between items-center cursor-pointer">
+          <div>
+            <span class="font-bold text-sm text-primary">수성구 (평당 시세)</span>
+            <p class="text-[10px] text-text-muted mt-0.5">평균 2,420만 원</p>
           </div>
-          <div class="bg-white p-4 rounded-xl border border-outline-variant/50 flex items-center gap-4 hover:shadow-md transition-shadow cursor-pointer" onclick="selectSearchApartment('suseong', 'ss-2')">
-            <div class="w-10 h-10 rounded-lg bg-surface-container flex items-center justify-center shrink-0"><span class="font-bold text-sm text-primary">2</span></div>
-            <div class="flex-grow min-w-0"><h4 class="font-label-md text-label-md text-primary truncate">범어센트럴푸르지오</h4><p class="font-caption text-caption text-text-muted">수성구 범어동</p></div>
-            <span class="material-symbols-outlined text-success-green text-[18px]">trending_up</span>
+          <span class="material-symbols-outlined text-secondary">arrow_forward</span>
+        </div>
+        <div onclick="selectHomeDistrict('junggu')" class="bg-surface-container-lowest p-4 rounded-xl border border-outline-variant/60 shadow-sm flex justify-between items-center cursor-pointer">
+          <div>
+            <span class="font-bold text-sm text-primary">중구 (평당 시세)</span>
+            <p class="text-[10px] text-text-muted mt-0.5">평균 1,850만 원</p>
           </div>
-          <div class="bg-white p-4 rounded-xl border border-outline-variant/50 flex items-center gap-4 hover:shadow-md transition-shadow cursor-pointer" onclick="selectSearchApartment('junggu', 'jg-1')">
-            <div class="w-10 h-10 rounded-lg bg-surface-container flex items-center justify-center shrink-0"><span class="font-bold text-sm text-primary">3</span></div>
-            <div class="flex-grow min-w-0"><h4 class="font-label-md text-label-md text-primary truncate">남산자이하늘채</h4><p class="font-caption text-caption text-text-muted">중구 남산동</p></div>
-            <span class="material-symbols-outlined text-slate-400 text-[18px]">trending_flat</span>
+          <span class="material-symbols-outlined text-secondary">arrow_forward</span>
+        </div>
+        <div onclick="selectHomeDistrict('dalseo')" class="bg-surface-container-lowest p-4 rounded-xl border border-outline-variant/60 shadow-sm flex justify-between items-center cursor-pointer">
+          <div>
+            <span class="font-bold text-sm text-primary">달서구 (평당 시세)</span>
+            <p class="text-[10px] text-text-muted mt-0.5">평균 1,480만 원</p>
           </div>
-          <div class="bg-white p-4 rounded-xl border border-outline-variant/50 flex items-center gap-4 hover:shadow-md transition-shadow cursor-pointer" onclick="selectSearchApartment('junggu', 'jg-2')">
-            <div class="w-10 h-10 rounded-lg bg-surface-container flex items-center justify-center shrink-0"><span class="font-bold text-sm text-primary">4</span></div>
-            <div class="flex-grow min-w-0"><h4 class="font-label-md text-label-md text-primary truncate">대구역센트럴자이</h4><p class="font-caption text-caption text-text-muted">중구 수창동</p></div>
-            <span class="material-symbols-outlined text-secondary text-[18px]">trending_down</span>
+          <span class="material-symbols-outlined text-secondary">arrow_forward</span>
+        </div>
+        <div onclick="selectHomeDistrict('bukgu')" class="bg-surface-container-lowest p-4 rounded-xl border border-outline-variant/60 shadow-sm flex justify-between items-center cursor-pointer">
+          <div>
+            <span class="font-bold text-sm text-primary">북구 (평당 시세)</span>
+            <p class="text-[10px] text-text-muted mt-0.5">평균 1,250만 원</p>
+          </div>
+          <span class="material-symbols-outlined text-secondary">arrow_forward</span>
+        </div>
+      </div>
+
+      <!-- 모바일 실시간 인기 단지 분석 -->
+      <div class="space-y-3">
+        <h3 class="font-bold text-sm text-primary px-1">인기 단지 퀵 분석</h3>
+        <div class="grid grid-cols-1 gap-3">
+          <div class="bg-white p-3.5 rounded-xl border border-outline-variant/50 flex items-center gap-3 cursor-pointer" onclick="selectSearchApartment('suseong', 'ss-1')">
+            <div class="w-8 h-8 rounded-lg bg-surface-container flex items-center justify-center shrink-0"><span class="font-bold text-xs text-primary">1</span></div>
+            <div class="flex-grow min-w-0"><h4 class="font-bold text-xs text-primary truncate">두산위브더제니스</h4><p class="text-[10px] text-text-muted">수성구 범어동</p></div>
+            <span class="material-symbols-outlined text-danger-red text-[16px]">trending_up</span>
+          </div>
+          <div class="bg-white p-3.5 rounded-xl border border-outline-variant/50 flex items-center gap-3 cursor-pointer" onclick="selectSearchApartment('suseong', 'ss-2')">
+            <div class="w-8 h-8 rounded-lg bg-surface-container flex items-center justify-center shrink-0"><span class="font-bold text-xs text-primary">2</span></div>
+            <div class="flex-grow min-w-0"><h4 class="font-bold text-xs text-primary truncate">범어센트럴푸르지오</h4><p class="text-[10px] text-text-muted">수성구 범어동</p></div>
+            <span class="material-symbols-outlined text-success-green text-[16px]">trending_up</span>
           </div>
         </div>
       </div>
     </div>
+    
   </section>
 
   <!-- [SECTION 2] MARKET ANALYSIS VIEW -->
@@ -617,24 +833,22 @@
   </section>
 
   <!-- [SECTION 3] BOOKMARKS VIEW -->
-  <section id="section-bookmarks" class="hidden min-h-screen pt-24 pb-20 px-4 md:px-8 max-w-5xl mx-auto space-y-8 bg-background">
-    <div class="flex justify-between items-center border-b border-outline-variant/40 pb-4">
-      <div class="flex items-center gap-3">
-        <div class="w-10 h-10 bg-rose-50 border border-rose-100 text-rose-500 rounded-xl flex items-center justify-center">
-          <span class="material-symbols-outlined text-[24px]" style="font-variation-settings: 'FILL' 1;">favorite</span>
-        </div>
-        <div>
-          <h2 class="text-xl font-bold text-slate-800">내 저장소 (관심 단지)</h2>
-          <p class="text-xs text-slate-500 mt-0.5">내가 찜한 아파트 단지들의 최신 시세 동향을 한눈에 관리합니다.</p>
-        </div>
+  <section id="section-bookmarks" class="hidden min-h-[calc(100vh-8rem)] pt-24 pb-20 px-4 md:px-8 max-w-[1200px] mx-auto space-y-8 bg-background">
+    <!-- Header Section (Stitch desktop_2 Style) -->
+    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-end border-b border-outline-variant/30 pb-4 gap-4">
+      <div>
+        <h2 class="font-display-lg text-display-lg text-primary mb-2">내 저장소</h2>
+        <p class="font-body-lg text-body-lg text-on-surface-variant">내가 관심 단지로 찜한 아파트 목록을 한 눈에 확인하고 시세를 분석합니다.</p>
       </div>
-      <span id="bookmark-count-badge" class="text-xs font-semibold bg-surface-container border border-outline-variant text-slate-700 px-3 py-1.5 rounded-full font-mono shadow-sm">
-        0개 단지 저장됨
-      </span>
+      <div class="flex items-center gap-3 self-end sm:self-auto">
+        <span id="bookmark-count-badge" class="text-xs font-semibold bg-surface-container border border-outline-variant text-slate-700 px-3.5 py-1.5 rounded-lg font-mono shadow-sm">
+          0개 단지 저장됨
+        </span>
+      </div>
     </div>
 
-    <!-- 북마크 그리드 컨테이너 -->
-    <div id="bookmarks-grid-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <!-- 북마크 그리드 컨테이너 (반응형 3열 배분) -->
+    <div id="bookmarks-grid-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
       <!-- 동적 주입 -->
     </div>
     

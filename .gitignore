@@ -41,5 +41,5 @@ yarn-error.log*
 next-env.d.ts
 
 # API config file (local settings)
-config.js
+# config.js
 
